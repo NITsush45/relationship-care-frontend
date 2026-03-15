@@ -1,0 +1,88 @@
+{
+  "homePage": [
+    {
+      "name": "Sarah & Michael",
+      "role": "Married 7 years",
+      "content": "Relationship Care saved our marriage. We learned to communicate effectively and rediscovered our love.",
+      "rating": 5,
+      "image": "👫"
+    },
+    {
+      "name": "Jessica",
+      "role": "Post-breakup recovery",
+      "content": "The guidance I received helped me heal and grow into a stronger, more confident person.",
+      "rating": 5,
+      "image": "💖"
+    },
+    {
+      "name": "David & Alex",
+      "role": "Engaged couple",
+      "content": "Pre-marital coaching gave us the tools to build a strong foundation for our future together.",
+      "rating": 5,
+      "image": "💍"
+    }
+  ],
+  "servicesPage": [
+    {
+      "quote": "Dr. Emily Carter is absolutely amazing! Her expertise in couples therapy helped us communicate better and resolve our conflicts. She's patient, understanding, and truly cares about her clients.",
+      "name": "Emily R.",
+      "doctor": "Dr. Emily Carter"
+    },
+    {
+      "quote": "John Smith was my lifeline after my breakup. His compassionate approach and professional guidance helped me heal and rediscover my strength. I'm forever grateful for his support.",
+      "name": "John D.",
+      "doctor": "John Smith"
+    },
+    {
+      "quote": "Dr. Robert Taylor saved our marriage! His marriage guidance sessions helped us rekindle our passion and build a stronger partnership. He's an exceptional therapist with years of experience.",
+      "name": "Ross & Sarah",
+      "doctor": "Dr. Robert Taylor"
+    },
+    {
+      "quote": "I can't thank Dr. Alex Morgan enough for their support during a tough time. Their relationship counseling expertise and genuine care made all the difference in our journey together.",
+      "name": "Jim Tailor",
+      "doctor": "Dr. Alex Morgan"
+    },
+    {
+      "quote": "Dr. Jennifer Martinez is a true professional! Her marriage guidance techniques transformed our relationship. She helped us reconnect and build a foundation for a lasting partnership.",
+      "name": "Griffin & Lisa",
+      "doctor": "Dr. Jennifer Martinez"
+    },
+    {
+      "quote": "Dr. Amanda Foster's pre-marital coaching was invaluable! She prepared us for marriage with practical advice on finances, expectations, and family dynamics. Highly recommend her!",
+      "name": "Michael & Jessica",
+      "doctor": "Dr. Amanda Foster"
+    },
+    {
+      "quote": "Dr. Lisa Anderson helped me through the most difficult time of my life. Her breakup recovery program was exactly what I needed. She's empathetic, professional, and truly dedicated to her clients.",
+      "name": "Sophia M.",
+      "doctor": "Dr. Lisa Anderson"
+    }
+  ],
+  "aboutPage": [
+    {
+      "quote": "Dr. Alex Morgan's guidance completely transformed my relationship. I'll always be grateful for their help!",
+      "name": "Sophia L."
+    },
+    {
+      "quote": "Emily's conflict resolution strategies helped us turn our arguments into productive conversations.",
+      "name": "Mark T."
+    },
+    {
+      "quote": "Sarah gave me the tools to rebuild trust with my partner, and we're happier than ever now.",
+      "name": "Jessica R."
+    },
+    {
+      "quote": "John helped me move forward after a tough breakup. Life feels brighter now!",
+      "name": "Daniel W."
+    },
+    {
+      "quote": "Thanks to Dr. Alex Morgan, I learned how to communicate better with my partner. Highly recommend!",
+      "name": "Nina K."
+    },
+    {
+      "quote": "Emily's advice saved our marriage. She is truly a gem in the field of conflict resolution.",
+      "name": "Karen M."
+    }
+  ]
+}

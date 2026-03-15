@@ -1,0 +1,25 @@
+{
+  "expert": {
+    "name": "Dr. Alex Morgan",
+    "title": "Certified Relationship Expert",
+    "description": "With over 15 years of experience in relationship counseling, Dr. Alex Morgan is dedicated to helping individuals and couples build meaningful and lasting connections. Alex's mission is to provide personalized support and guidance to help clients overcome challenges and achieve happiness in their relationships.",
+    "image": "/images/mdoc.png"
+  },
+  "members": [
+    {
+      "name": "Dr. Emily Carter",
+      "specialty": "Conflict Resolution Specialist",
+      "image": "/images/femdoc.jpg"
+    },
+    {
+      "name": "John Smith",
+      "specialty": "Breakup Recovery Coach",
+      "image": "/images/doc.jpg"
+    },
+    {
+      "name": "Sarah Williams",
+      "specialty": "Patch-Up and Rekindling Expert",
+      "image": "/images/gdoc.jpg"
+    }
+  ]
+}

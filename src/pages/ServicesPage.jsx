@@ -1,54 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
-const services = [
-  {
-    title: "Relationship Advice",
-    description:
-      "Get personalized advice to navigate challenges in your relationships. Let us guide you towards a stronger and happier bond.",
-    image: "/images/rel.jpg",
-  },
-  {
-    title: "Breakup Solutions",
-    description:
-      "Healing from a breakup? We offer support to help you recover and move forward with confidence.",
-    image: "/images/break.jpg",
-  },
-  {
-    title: "Patch-Up Services",
-    description:
-      "Want to rekindle an old flame? Our experts can help you rebuild and restore meaningful connections.",
-    image: "/images/patch.jpg",
-  },
-];
-
-const testimonials = [
-  {
-    quote:
-      "Thanks to the expert advice, my partner and I were able to resolve our conflicts and grow closer than ever!",
-    name: "Emily R.",
-  },
-  {
-    quote:
-      "After my breakup, I felt lost. The guidance I received helped me heal and rediscover myself.",
-    name: "John D.",
-  },
-  {
-    quote:
-      "The patch-up services really worked wonders for my relationship!",
-    name: "Ross",
-  },
-  {
-    quote:
-      "I can't thank the team enough for their support during a tough time.",
-    name: "Jim Tailor",
-  },
-  {
-    quote:
-      "Their relationship advice was a game changer for me and my partner.",
-    name: "Griffin",
-  },
-];
+import { useNavigate } from "react-router-dom";
+import servicesData from "../data/services.json";
+import testimonialsData from "../data/testimonials.json";
+import { API_BASE } from "../config";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 50 },
@@ -64,6 +19,46 @@ const staggerContainer = {
 };
 
 const ServicesPage = () => {
+  const navigate = useNavigate();
+  const [services, setServices] = useState(servicesData);
+  const [testimonials, setTestimonials] = useState(testimonialsData.servicesPage || []);
+
+  useEffect(() => {
+    let active = true;
+
+    const loadData = async () => {
+      try {
+        const [servicesRes, testimonialsRes] = await Promise.all([
+          fetch(`${API_BASE}/api/services`),
+          fetch(`${API_BASE}/api/testimonials?section=servicesPage`),
+        ]);
+
+        if (!active) return;
+
+        if (servicesRes.ok) {
+          const servicesJson = await servicesRes.json();
+          if (Array.isArray(servicesJson)) setServices(servicesJson);
+        }
+
+        if (testimonialsRes.ok) {
+          const testimonialsJson = await testimonialsRes.json();
+          if (Array.isArray(testimonialsJson)) setTestimonials(testimonialsJson);
+        }
+      } catch (_) {
+        // Keep fallback data when API is unavailable
+      }
+    };
+
+    loadData();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const handleServiceClick = (route) => {
+    navigate(`/doctors/${route}`);
+  };
+
   return (
     <div className="bg-gradient-to-b from-pink-100 to-white min-h-screen">
       <motion.div
@@ -79,7 +74,7 @@ const ServicesPage = () => {
         </p>
       </motion.div>
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-3 gap-8 px-10"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-10"
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
@@ -87,9 +82,10 @@ const ServicesPage = () => {
         {services.map((service, index) => (
           <motion.div
             key={index}
-            className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:rotate-2 hover:shadow-2xl"
+            className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:rotate-2 hover:shadow-2xl cursor-pointer"
             variants={fadeInUp}
             whileHover={{ scale: 1.1 }}
+            onClick={() => handleServiceClick(service.route)}
           >
             <img
               src={service.image}
@@ -101,6 +97,9 @@ const ServicesPage = () => {
                 {service.title}
               </h2>
               <p className="text-gray-700 mt-4">{service.description}</p>
+              <div className="mt-4 text-pink-600 font-semibold">
+                View Doctors/Therapists ?
+              </div>
             </div>
           </motion.div>
         ))}
@@ -117,7 +116,7 @@ const ServicesPage = () => {
           What Our Clients Say
         </h2>
         <p className="text-center text-gray-600 mt-4">
-          Hear from our happy clients about their experiences.
+          Hear from our happy clients about their experiences with our expert team of Doctors & Therapists.
         </p>
         <motion.div
           className="flex gap-4 overflow-x-scroll px-10 mt-8 hide-scrollbar"
@@ -130,10 +129,15 @@ const ServicesPage = () => {
               variants={fadeInUp}
               whileHover={{ scale: 1.05 }}
             >
-              <p className="text-gray-700 italic">"{testimonial.quote}"</p>
-              <p className="text-pink-600 mt-4 font-bold text-right">
-                - {testimonial.name}
-              </p>
+              <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
+              <div className="border-t border-gray-200 pt-4">
+                <p className="text-pink-600 font-bold text-right">
+                  - {testimonial.name}
+                </p>
+                <p className="text-gray-500 text-sm text-right mt-1">
+                  About {testimonial.doctor}
+                </p>
+              </div>
             </motion.div>
           ))}
         </motion.div>

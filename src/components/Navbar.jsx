@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState(null);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -13,127 +13,155 @@ const Navbar = () => {
     }
   };
 
+  const navLinks = [
+    { to: "/", label: "Home" },
+    { to: "/services", label: "Services" },
+    { to: "/about-us", label: "About Us" },
+    { to: "/contact-us", label: "Contact Us" },
+    { to: "/blog", label: "Blog" },
+    { to: "/faqs", label: "FAQs" },
+  ];
+
   return (
-    <motion.nav
-      className="bg-pink-600 text-white shadow-md sticky top-0 z-50"
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold">
-          RelationShip
-          <span className="text-blue-400 mx-1">♥</span>
-          Care
+    <nav className="bg-gradient-to-r from-pink-600 via-pink-500 to-pink-600 text-white shadow-lg sticky top-0 z-50 animate-slideDown">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
+      </div>
+
+      <div className="container mx-auto px-6 py-4 flex justify-between items-center relative z-10">
+        <Link to="/" className="text-2xl font-bold group relative">
+          <span className="inline-block transition-transform duration-300 group-hover:scale-105">RelationShip</span>
+          <span className="text-blue-400 mx-1 inline-block animate-heartbeat">{"\u2665"}</span>
+          <span className="inline-block transition-transform duration-300 group-hover:scale-105">Care</span>
+          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-500 ease-out" />
         </Link>
-        <div className="hidden md:flex space-x-6">
-          <Link
-            to="/"
-            className="hover:text-pink-300 transition duration-300 font-medium"
-          >
-            Home
-          </Link>
-          <Link
-            to="/services"
-            className="hover:text-pink-300 transition duration-300 font-medium"
-          >
-            Services
-          </Link>
-          <Link
-            to="/about-us"
-            className="hover:text-pink-300 transition duration-300 font-medium"
-          >
-            About Us
-          </Link>
-          <Link
-            to="/contact-us"
-            className="hover:text-pink-300 transition duration-300 font-medium"
-          >
-            Contact Us
-          </Link>
-          <Link
-            to="/blog"
-            className="hover:text-pink-300 transition duration-300 font-medium"
-          >
-            Blog
-          </Link>
-          <Link
-            to="/faqs"
-            className="hover:text-pink-300 transition duration-300 font-medium"
-          >
-            FAQs
-          </Link>
+
+        <div className="hidden md:flex space-x-2">
+          {navLinks.map((link, index) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              onMouseEnter={() => setHoveredLink(index)}
+              onMouseLeave={() => setHoveredLink(null)}
+              className="relative px-4 py-2 font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+            >
+              <span className={`transition-all duration-300 ${hoveredLink === index ? "text-blue-300" : "text-white"}`}>
+                {link.label}
+              </span>
+              <span
+                className={`absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-blue-400 to-blue-300 transition-all duration-300 ${
+                  hoveredLink === index ? "w-3/4 opacity-100" : "w-0 opacity-0"
+                }`}
+              />
+              <span
+                className={`absolute inset-0 rounded-lg bg-white/5 transition-opacity duration-300 ${
+                  hoveredLink === index ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            </Link>
+          ))}
         </div>
+
         <div className="md:hidden">
           <button
             onClick={toggleMenu}
-            className="text-white focus:outline-none focus:ring-2 focus:ring-pink-400"
+            className="text-white focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg p-2 transition-all duration-300 hover:bg-white/10 active:scale-95"
+            aria-label="Toggle menu"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
+            <div className="w-6 h-6 flex flex-col justify-center items-center">
+              <span
+                className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+                  isOpen ? "rotate-45 translate-y-0.5" : "-translate-y-1"
+                }`}
               />
-            </svg>
+              <span className={`block h-0.5 w-6 bg-white transition-all duration-300 ${isOpen ? "opacity-0" : "opacity-100"}`} />
+              <span
+                className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+                  isOpen ? "-rotate-45 -translate-y-0.5" : "translate-y-1"
+                }`}
+              />
+            </div>
           </button>
         </div>
       </div>
-      {isOpen && (
-        <div className="md:hidden bg-pink-700 text-white space-y-2 px-6 py-4">
-          <Link
-            to="/"
-            className="block hover:bg-pink-500 rounded-lg px-4 py-2 font-medium"
-            onClick={handleLinkClick}
-          >
-            Home
-          </Link>
-          <Link
-            to="/services"
-            className="block hover:bg-pink-500 rounded-lg px-4 py-2 font-medium"
-            onClick={handleLinkClick}
-          >
-            Services
-          </Link>
-          <Link
-            to="/about-us"
-            className="block hover:bg-pink-500 rounded-lg px-4 py-2 font-medium"
-            onClick={handleLinkClick}
-          >
-            About Us
-          </Link>
-          <Link
-            to="/contact-us"
-            className="block hover:bg-pink-500 rounded-lg px-4 py-2 font-medium"
-            onClick={handleLinkClick}
-          >
-            Contact Us
-          </Link>
-          <Link
-            to="/blog"
-            className="block hover:bg-pink-500 rounded-lg px-4 py-2 font-medium"
-            onClick={handleLinkClick}
-          >
-            Blog
-          </Link>
-          <Link
-            to="/faqs"
-            className="block hover:bg-pink-500 rounded-lg px-4 py-2 font-medium"
-            onClick={handleLinkClick}
-          >
-            FAQs
-          </Link>
+
+      <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+        <div className="bg-pink-700 text-white space-y-2 px-6 py-4">
+          {navLinks.map((link, index) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className="block hover:bg-pink-500 rounded-lg px-4 py-2 font-medium transition-all duration-300 transform hover:translate-x-2 hover:shadow-md active:scale-95"
+              onClick={handleLinkClick}
+              style={{ animation: isOpen ? `slideInLeft 0.3s ease-out ${index * 0.05}s both` : "none" }}
+            >
+              <span className="flex items-center justify-between">
+                {link.label}
+                <span className="text-blue-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{"\u2192"}</span>
+              </span>
+            </Link>
+          ))}
         </div>
-      )}
-    </motion.nav>
+      </div>
+
+      <style>{`
+        @keyframes slideDown {
+          from {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+
+        @keyframes heartbeat {
+          0%,
+          100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.2);
+          }
+        }
+
+        @keyframes slideInLeft {
+          from {
+            transform: translateX(-20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+
+        .animate-slideDown {
+          animation: slideDown 0.5s ease-out;
+        }
+
+        .animate-shimmer {
+          animation: shimmer 3s linear infinite;
+        }
+
+        .animate-heartbeat {
+          animation: heartbeat 2s ease-in-out infinite;
+        }
+      `}</style>
+    </nav>
   );
 };
 
 export default Navbar;
+
+

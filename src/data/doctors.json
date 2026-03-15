@@ -1,0 +1,150 @@
+{
+  "doctorsByService": {
+    "relationship-counseling": [
+      {
+        "id": 1,
+        "name": "Dr. Emily Carter",
+        "specialty": "Couples Therapy & Communication",
+        "experience": "15 years",
+        "rating": 4.9,
+        "image": "/images/femdoc.jpg",
+        "bio": "Specialized in helping couples improve communication and resolve conflicts. Expert in relationship dynamics and emotional intelligence.",
+        "sessions": "60-90 min",
+        "price": "$150/session"
+      },
+      {
+        "id": 2,
+        "name": "Dr. Alex Morgan",
+        "specialty": "Relationship Counseling Expert",
+        "experience": "12 years",
+        "rating": 4.8,
+        "image": "/images/mdoc.png",
+        "bio": "Certified relationship expert with extensive experience in helping individuals and couples build meaningful connections.",
+        "sessions": "60-90 min",
+        "price": "$140/session"
+      },
+      {
+        "id": 3,
+        "name": "Dr. Sarah Williams",
+        "specialty": "Conflict Resolution Specialist",
+        "experience": "10 years",
+        "rating": 4.9,
+        "image": "/images/gdoc.jpg",
+        "bio": "Expert in conflict resolution and helping couples navigate difficult conversations with empathy and understanding.",
+        "sessions": "60-90 min",
+        "price": "$145/session"
+      }
+    ],
+    "breakup-recovery": [
+      {
+        "id": 4,
+        "name": "John Smith",
+        "specialty": "Breakup Recovery Coach",
+        "experience": "8 years",
+        "rating": 4.7,
+        "image": "/images/doc.jpg",
+        "bio": "Dedicated to helping individuals heal from heartbreak and rediscover their strength. Specialized in emotional recovery and self-discovery.",
+        "sessions": "Personalized program",
+        "price": "$120/session"
+      },
+      {
+        "id": 5,
+        "name": "Dr. Lisa Anderson",
+        "specialty": "Emotional Healing Specialist",
+        "experience": "11 years",
+        "rating": 4.8,
+        "image": "/images/femdoc.jpg",
+        "bio": "Expert in guiding individuals through the healing process after breakups, focusing on personal growth and moving forward.",
+        "sessions": "Personalized program",
+        "price": "$135/session"
+      },
+      {
+        "id": 6,
+        "name": "Dr. Michael Chen",
+        "specialty": "Post-Breakup Recovery Expert",
+        "experience": "9 years",
+        "rating": 4.6,
+        "image": "/images/mdoc.png",
+        "bio": "Specialized in helping people navigate the emotional challenges of breakups and build resilience for future relationships.",
+        "sessions": "Personalized program",
+        "price": "$130/session"
+      }
+    ],
+    "marriage-guidance": [
+      {
+        "id": 7,
+        "name": "Dr. Robert Taylor",
+        "specialty": "Marriage & Intimacy Counselor",
+        "experience": "18 years",
+        "rating": 4.9,
+        "image": "/images/mdoc.png",
+        "bio": "Expert in helping married couples rekindle passion, improve intimacy, and build lasting partnerships through evidence-based techniques.",
+        "sessions": "Ongoing support",
+        "price": "$160/session"
+      },
+      {
+        "id": 8,
+        "name": "Dr. Jennifer Martinez",
+        "specialty": "Marriage Reconnection Specialist",
+        "experience": "14 years",
+        "rating": 4.8,
+        "image": "/images/femdoc.jpg",
+        "bio": "Dedicated to helping couples reconnect, rebuild trust, and create a stronger foundation for their marriage.",
+        "sessions": "Ongoing support",
+        "price": "$155/session"
+      },
+      {
+        "id": 9,
+        "name": "Dr. David Kim",
+        "specialty": "Marriage Guidance Expert",
+        "experience": "16 years",
+        "rating": 4.9,
+        "image": "/images/doc.jpg",
+        "bio": "Specialized in marriage counseling with a focus on communication, conflict resolution, and long-term relationship planning.",
+        "sessions": "Ongoing support",
+        "price": "$165/session"
+      }
+    ],
+    "pre-marital-coaching": [
+      {
+        "id": 10,
+        "name": "Dr. Amanda Foster",
+        "specialty": "Pre-Marital Coaching Expert",
+        "experience": "13 years",
+        "rating": 4.8,
+        "image": "/images/femdoc.jpg",
+        "bio": "Expert in preparing couples for marriage through comprehensive coaching on expectations, finances, and family dynamics.",
+        "sessions": "8-week program",
+        "price": "$1,200/program"
+      },
+      {
+        "id": 11,
+        "name": "Dr. James Wilson",
+        "specialty": "Pre-Marital Preparation Specialist",
+        "experience": "10 years",
+        "rating": 4.7,
+        "image": "/images/mdoc.png",
+        "bio": "Dedicated to helping engaged couples build a strong foundation for their future together through structured pre-marital coaching.",
+        "sessions": "8-week program",
+        "price": "$1,100/program"
+      },
+      {
+        "id": 12,
+        "name": "Dr. Maria Rodriguez",
+        "specialty": "Relationship Foundation Coach",
+        "experience": "12 years",
+        "rating": 4.9,
+        "image": "/images/gdoc.jpg",
+        "bio": "Specialized in pre-marital coaching with expertise in helping couples set realistic expectations and plan for a successful marriage.",
+        "sessions": "8-week program",
+        "price": "$1,250/program"
+      }
+    ]
+  },
+  "serviceTitles": {
+    "relationship-counseling": "Relationship Counseling",
+    "breakup-recovery": "Breakup Recovery",
+    "marriage-guidance": "Marriage Guidance",
+    "pre-marital-coaching": "Pre-Marital Coaching"
+  }
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Relationship Counseling",
+    "description": "Personalized guidance to strengthen your bond and overcome challenges together.",
+    "icon": "👥",
+    "color": "from-pink-500 to-rose-500",
+    "features": ["Couples Therapy", "Communication Skills", "Conflict Resolution"],
+    "duration": "60-90 min sessions",
+    "image": "/images/rel.jpg",
+    "route": "relationship-counseling"
+  },
+  {
+    "title": "Breakup Recovery",
+    "description": "Healing support to navigate heartbreak and emerge stronger than before.",
+    "icon": "💔",
+    "color": "from-purple-500 to-indigo-500",
+    "features": ["Emotional Healing", "Self-Discovery", "Moving Forward"],
+    "duration": "Personalized program",
+    "image": "/images/break.jpg",
+    "route": "breakup-recovery"
+  },
+  {
+    "title": "Marriage Guidance",
+    "description": "Expert advice to rekindle passion and build a lasting partnership.",
+    "icon": "💍",
+    "color": "from-amber-500 to-orange-500",
+    "features": ["Reconnection", "Intimacy Building", "Future Planning"],
+    "duration": "Ongoing support",
+    "image": "/images/patch.jpg",
+    "route": "marriage-guidance"
+  },
+  {
+    "title": "Pre-Marital Coaching",
+    "description": "Prepare for a lifetime of love with our comprehensive relationship foundation program.",
+    "icon": "💑",
+    "color": "from-cyan-500 to-blue-500",
+    "features": ["Expectation Setting", "Financial Planning", "Family Dynamics"],
+    "duration": "8-week program",
+    "image": "/images/rel.jpg",
+    "route": "pre-marital-coaching"
+  }
+]

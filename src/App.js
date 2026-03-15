@@ -11,6 +11,7 @@ import FAQPage from './pages/FAQPage.jsx';
 import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
 import TermsOfService from './pages/TermsofService.jsx';
 import Footer from './components/Footer.jsx';
+import DoctorsListPage from './pages/DoctorsListPage.jsx';
 const App = () => {
     return (
         <Router>
@@ -19,6 +20,7 @@ const App = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/book" element={<BookAppointment />} />
                 <Route path="/services" element={<ServicesPage />} />
+                <Route path="/doctors/:serviceType" element={<DoctorsListPage />} />
                 <Route path="/about-us" element={<AboutPage />} />
                 <Route path="/contact-us" element={<ContactPage />} />
                 <Route path='/blog' element={<BlogPage/>}/>

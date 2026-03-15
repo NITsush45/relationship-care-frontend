@@ -148,7 +148,7 @@ const PrivacyPolicy = () => {
             If you have any questions, concerns, or requests regarding your privacy, please contact us at:
           </p>
           <p className="text-gray-600">
-            <strong>Email:</strong> xyz123@gmail.com
+            <strong>Email:</strong> relationshipcare1212@gmail.com
           </p>
         </motion.div>
 

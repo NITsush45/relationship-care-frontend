@@ -1,0 +1,22 @@
+[
+  {
+    "value": "95%",
+    "label": "Success Rate",
+    "icon": "🎯"
+  },
+  {
+    "value": "10K+",
+    "label": "Lives Changed",
+    "icon": "💝"
+  },
+  {
+    "value": "50+",
+    "label": "Expert Counselors",
+    "icon": "👨‍⚕️"
+  },
+  {
+    "value": "24/7",
+    "label": "Always-On Support",
+    "icon": "🕐"
+  }
+]
