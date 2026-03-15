@@ -30,6 +30,8 @@ const BlogPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [likedPosts, setLikedPosts] = useState({});
+  const [likeCounts, setLikeCounts] = useState({});
+  const [viewCounts, setViewCounts] = useState({});
   const [bookmarkedPosts, setBookmarkedPosts] = useState({});
   const [hoveredPost, setHoveredPost] = useState(null);
   const [activeFilter, setActiveFilter] = useState("trending");
@@ -194,6 +196,9 @@ const BlogPage = () => {
         if (res.ok) {
           setStarCounts(data.starCounts || {});
           setStarredPosts(data.starredPosts || {});
+          setLikeCounts(data.likeCounts || {});
+          setLikedPosts(data.likedPosts || {});
+          setViewCounts(data.viewCounts || {});
         }
       } catch (_) {
         // Keep UI usable even if interaction API fails
@@ -203,11 +208,60 @@ const BlogPage = () => {
     loadInteractions();
   }, [userId]);
 
-  const handleLike = (postId) => {
-    setLikedPosts(prev => ({
-      ...prev,
-      [postId]: !prev[postId]
-    }));
+  useEffect(() => {
+    if (!userId) return;
+
+    const markViewed = async () => {
+      const updates = await Promise.all(
+        blogPosts.map(async (post) => {
+          try {
+            const res = await fetch(API_BASE + "/api/blog/" + post.id + "/view", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ user_id: userId }),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (res.ok && data.viewCounts) {
+              return data.viewCounts;
+            }
+          } catch (_) {
+            return null;
+          }
+          return null;
+        })
+      );
+
+      setViewCounts((prev) => {
+        return updates.reduce((acc, item) => {
+          if (item && typeof item === "object") {
+            Object.keys(item).forEach((key) => {
+              acc[key] = item[key];
+            });
+          }
+          return acc;
+        }, { ...prev });
+      });
+    };
+
+    markViewed();
+  }, [userId]);
+
+  const handleLike = async (postId) => {
+    if (!userId) return;
+    try {
+      const res = await fetch(API_BASE + "/api/blog/" + postId + "/like", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: userId }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setLikeCounts(data.likeCounts || {});
+        setLikedPosts(data.likedPosts || {});
+      }
+    } catch (_) {
+      // Keep UI stable when like call fails
+    }
   };
 
   const handleBookmark = (postId) => {
@@ -682,10 +736,10 @@ const BlogPage = () => {
                     {/* Stats */}
                     <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
                       <span className="flex items-center gap-1">
-                        <FaEye /> 1.2k views
+                        <FaEye /> {viewCounts[String(post.id)] || 0} views
                       </span>
                       <span className="flex items-center gap-1">
-                        <FaThumbsUp /> 345 likes
+                        <FaThumbsUp /> {likeCounts[String(post.id)] || 0} likes
                       </span>
                       <button
                         type="button"
@@ -830,3 +884,11 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+
+
+
+
+
+
+
+

@@ -1,8 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleQuickLinkClick = (event, to) => {
+    event.preventDefault();
+    navigate(to);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const currentYear = new Date().getFullYear();
   const [hoveredLink, setHoveredLink] = useState(null);
 
@@ -179,6 +186,7 @@ const Footer = () => {
                   >
                     <Link
                       to={link.to}
+                      onClick={(event) => handleQuickLinkClick(event, link.to)}
                       className="group relative inline-flex items-center space-x-2 text-gray-300 hover:text-pink-400 transition-all duration-300"
                       aria-label={link.label}
                     >
@@ -360,3 +368,5 @@ const Footer = () => {
 };
 
 export default Footer;
+
+
