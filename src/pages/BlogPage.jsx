@@ -26,32 +26,7 @@ import {
 import { IoMdFlower } from "react-icons/io";
 import { API_BASE } from "../config";
 
-const BlogPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [likedPosts, setLikedPosts] = useState({});
-  const [likeCounts, setLikeCounts] = useState({});
-  const [viewCounts, setViewCounts] = useState({});
-  const [bookmarkedPosts, setBookmarkedPosts] = useState({});
-  const [hoveredPost, setHoveredPost] = useState(null);
-  const [activeFilter, setActiveFilter] = useState("trending");
-  const [newsletterEmail, setNewsletterEmail] = useState("");
-  const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
-  const [newsletterMessage, setNewsletterMessage] = useState({ type: null, text: "" });
-  const [userId, setUserId] = useState("");
-  const [starCounts, setStarCounts] = useState({});
-  const [starredPosts, setStarredPosts] = useState({});
-  const [openDiscussionPostId, setOpenDiscussionPostId] = useState(null);
-  const [discussionsByPost, setDiscussionsByPost] = useState({});
-  const [discussionInputByPost, setDiscussionInputByPost] = useState({});
-  const [discussionLoading, setDiscussionLoading] = useState({});
-
-  const categories = [
-    "All", "Relationships", "Self-Care", "Communication", 
-    "Love", "Personal Growth", "Mental Health", "Tips"
-  ];
-
-  const blogPosts = [
+const blogPosts = [
     {
       id: 1,
       title: "10 Tips for Building Stronger Relationships",
@@ -172,6 +147,33 @@ const BlogPage = () => {
       icon: <FaQuoteLeft className="text-gray-500" />
     }
   ];
+
+const BlogPage = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [likedPosts, setLikedPosts] = useState({});
+  const [likeCounts, setLikeCounts] = useState({});
+  const [viewCounts, setViewCounts] = useState({});
+  const [bookmarkedPosts, setBookmarkedPosts] = useState({});
+  const [hoveredPost, setHoveredPost] = useState(null);
+  const [activeFilter, setActiveFilter] = useState("trending");
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
+  const [newsletterMessage, setNewsletterMessage] = useState({ type: null, text: "" });
+  const [userId, setUserId] = useState("");
+  const [starCounts, setStarCounts] = useState({});
+  const [starredPosts, setStarredPosts] = useState({});
+  const [openDiscussionPostId, setOpenDiscussionPostId] = useState(null);
+  const [discussionsByPost, setDiscussionsByPost] = useState({});
+  const [discussionInputByPost, setDiscussionInputByPost] = useState({});
+  const [discussionLoading, setDiscussionLoading] = useState({});
+
+  const categories = [
+    "All", "Relationships", "Self-Care", "Communication", 
+    "Love", "Personal Growth", "Mental Health", "Tips"
+  ];
+
+  
 
 
   useEffect(() => {
@@ -884,6 +886,7 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+
 
 
 
