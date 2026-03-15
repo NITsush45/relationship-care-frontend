@@ -210,44 +210,6 @@ const BlogPage = () => {
     loadInteractions();
   }, [userId]);
 
-  useEffect(() => {
-    if (!userId) return;
-
-    const markViewed = async () => {
-      const updates = await Promise.all(
-        blogPosts.map(async (post) => {
-          try {
-            const res = await fetch(API_BASE + "/api/blog/" + post.id + "/view", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ user_id: userId }),
-            });
-            const data = await res.json().catch(() => ({}));
-            if (res.ok && data.viewCounts) {
-              return data.viewCounts;
-            }
-          } catch (_) {
-            return null;
-          }
-          return null;
-        })
-      );
-
-      setViewCounts((prev) => {
-        return updates.reduce((acc, item) => {
-          if (item && typeof item === "object") {
-            Object.keys(item).forEach((key) => {
-              acc[key] = item[key];
-            });
-          }
-          return acc;
-        }, { ...prev });
-      });
-    };
-
-    markViewed();
-  }, [userId]);
-
   const handleLike = async (postId) => {
     if (!userId) return;
     try {
@@ -273,6 +235,48 @@ const BlogPage = () => {
     }));
   };
 
+  const handleShare = async (post) => {
+    const shareUrl = post.link || window.location.href;
+    const shareText = `${post.title} - ${shareUrl}`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: post.title, text: post.excerpt, url: shareUrl });
+        return;
+      }
+    } catch (_) {
+      // fall back to clipboard
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareText);
+      alert("Link copied to clipboard");
+    } catch (_) {
+      window.prompt("Copy this link", shareUrl);
+    }
+  };
+
+  const handleViewAndOpen = async (post) => {
+    if (userId) {
+      try {
+        const res = await fetch(API_BASE + "/api/blog/" + post.id + "/view", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_id: userId }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.viewCounts) {
+          setViewCounts((prev) => ({ ...prev, ...data.viewCounts }));
+        }
+      } catch (_) {
+        // ignore
+      }
+    }
+
+    if (post.link) {
+      window.open(post.link, "_blank", "noopener,noreferrer");
+    }
+  };
   const handleStar = async (postId) => {
     if (!userId) return;
 
@@ -588,7 +592,7 @@ const BlogPage = () => {
                     
                     <div className="absolute top-4 right-4 flex gap-2">
                       <motion.button
-                        className="p-2 rounded-full bg-white/20 backdrop-blur-sm"
+                        className="p-2 rounded-full bg-white/20 backdrop-blur-sm cursor-pointer"
                         onClick={() => handleBookmark(post.id)}
                         whileHover={{ scale: 1.2, rotate: 10 }}
                         whileTap={{ scale: 0.9 }}
@@ -600,7 +604,7 @@ const BlogPage = () => {
                         )}
                       </motion.button>
                       <motion.button
-                        className="p-2 rounded-full bg-white/20 backdrop-blur-sm"
+                        className="p-2 rounded-full bg-white/20 backdrop-blur-sm cursor-pointer"
                         onClick={() => handleLike(post.id)}
                         whileHover={{ scale: 1.2, rotate: -10 }}
                         whileTap={{ scale: 0.9 }}
@@ -669,8 +673,9 @@ const BlogPage = () => {
                           <span>Discuss</span>
                         </motion.button>
                         <motion.button
-                          className="flex items-center gap-2 text-gray-600 hover:text-blue-600"
+                          className="flex items-center gap-2 text-gray-600 hover:text-blue-600 cursor-pointer"
                           whileHover={{ scale: 1.1, x: 5 }}
+                          onClick={() => handleShare(post)}
                         >
                           <FaShareAlt />
                           <span>Share</span>
@@ -678,9 +683,8 @@ const BlogPage = () => {
                       </div>
 
                       <motion.a
-                        href={post.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); handleViewAndOpen(post); }}
                         className="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-full font-medium"
                         whileHover={{ scale: 1.05, gap: 4 }}
                         whileTap={{ scale: 0.95 }}
@@ -746,7 +750,7 @@ const BlogPage = () => {
                       <button
                         type="button"
                         onClick={() => handleStar(post.id)}
-                        className={"flex items-center gap-1 " + (starredPosts[post.id] ? "text-yellow-500" : "text-gray-500")}
+                        className={"flex items-center gap-1 cursor-pointer " + (starredPosts[post.id] ? "text-yellow-500" : "text-gray-500") }
                       >
                         <FaStar /> {starCounts[String(post.id)] || 0}
                       </button>
@@ -886,6 +890,13 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+
+
+
+
+
+
+
 
 
 
