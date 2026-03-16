@@ -697,10 +697,12 @@ const BlogPage = () => {
                       </motion.div>
                     )}
                     
-                    <div className="absolute top-4 right-4 flex gap-2">
+                    <div className="absolute top-4 right-4 flex gap-2 z-20 pointer-events-auto">
                       <motion.button
                         className="p-2 rounded-full bg-white/20 backdrop-blur-sm cursor-pointer"
                         onClick={() => handleBookmark(post.id)}
+                        type="button"
+                        style={{ pointerEvents: "auto", cursor: "pointer" }}
                         whileHover={{ scale: 1.2, rotate: 10 }}
                         whileTap={{ scale: 0.9 }}
                       >
@@ -713,6 +715,8 @@ const BlogPage = () => {
                       <motion.button
                         className="p-2 rounded-full bg-white/20 backdrop-blur-sm cursor-pointer"
                         onClick={() => handleLike(post.id)}
+                        type="button"
+                        style={{ pointerEvents: "auto", cursor: "pointer" }}
                         whileHover={{ scale: 1.2, rotate: -10 }}
                         whileTap={{ scale: 0.9 }}
                       >
@@ -997,6 +1001,8 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+
+
 
 
 
