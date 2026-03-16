@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState(null);
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -23,7 +26,13 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-gradient-to-r from-pink-600 via-pink-500 to-pink-600 text-white shadow-lg sticky top-0 z-50 animate-slideDown">
+    <nav
+      className={`text-white shadow-lg sticky top-0 z-50 animate-slideDown ${
+        isDark
+          ? "bg-gradient-to-r from-[#29124f] via-[#331963] to-[#29124f]"
+          : "bg-gradient-to-r from-pink-600 via-pink-500 to-pink-600"
+      }`}
+    >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
       </div>
@@ -36,7 +45,7 @@ const Navbar = () => {
           <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-500 ease-out" />
         </Link>
 
-        <div className="hidden md:flex space-x-2">
+        <div className="hidden md:flex items-center space-x-2">
           {navLinks.map((link, index) => (
             <Link
               key={link.to}
@@ -45,7 +54,11 @@ const Navbar = () => {
               onMouseLeave={() => setHoveredLink(null)}
               className="relative px-4 py-2 font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
             >
-              <span className={`transition-all duration-300 ${hoveredLink === index ? "text-blue-300" : "text-white"}`}>
+              <span
+                className={`transition-all duration-300 ${
+                  hoveredLink === index ? "text-blue-300" : isDark ? "text-slate-100" : "text-white"
+                }`}
+              >
                 {link.label}
               </span>
               <span
@@ -60,9 +73,30 @@ const Navbar = () => {
               />
             </Link>
           ))}
+
+          <button
+            onClick={toggleTheme}
+            className="ml-2 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            title={isDark ? "Light mode" : "Dark mode"}
+          >
+            <span className="text-lg" role="img" aria-hidden="true">
+              {isDark ? "\u2600" : "\ud83c\udf19"}
+            </span>
+          </button>
         </div>
 
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            title={isDark ? "Light mode" : "Dark mode"}
+          >
+            <span className="text-lg" role="img" aria-hidden="true">
+              {isDark ? "\u2600" : "\ud83c\udf19"}
+            </span>
+          </button>
           <button
             onClick={toggleMenu}
             className="text-white focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg p-2 transition-all duration-300 hover:bg-white/10 active:scale-95"
@@ -86,12 +120,12 @@ const Navbar = () => {
       </div>
 
       <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
-        <div className="bg-pink-700 text-white space-y-2 px-6 py-4">
+        <div className={`${isDark ? "bg-[#2c145d]" : "bg-pink-700"} text-white space-y-2 px-6 py-4`}>
           {navLinks.map((link, index) => (
             <Link
               key={link.to}
               to={link.to}
-              className="block hover:bg-pink-500 rounded-lg px-4 py-2 font-medium transition-all duration-300 transform hover:translate-x-2 hover:shadow-md active:scale-95"
+              className="block hover:bg-white/10 rounded-lg px-4 py-2 font-medium transition-all duration-300 transform hover:translate-x-2 hover:shadow-md active:scale-95"
               onClick={handleLinkClick}
               style={{ animation: isOpen ? `slideInLeft 0.3s ease-out ${index * 0.05}s both` : "none" }}
             >
@@ -163,5 +197,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-

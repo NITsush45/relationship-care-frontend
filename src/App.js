@@ -12,10 +12,15 @@ import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
 import TermsOfService from './pages/TermsofService.jsx';
 import Footer from './components/Footer.jsx';
 import DoctorsListPage from './pages/DoctorsListPage.jsx';
+import { useTheme } from './context/ThemeContext';
+
 const App = () => {
+    const { theme } = useTheme();
+
     return (
         <Router>
-          <Navbar/>
+          <div className={`app-theme ${theme === "dark" ? "theme-dark dark" : "theme-light"}`}>
+            <Navbar />
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/book" element={<BookAppointment />} />
@@ -28,7 +33,8 @@ const App = () => {
                 <Route path='/privacy-policy' element={<PrivacyPolicy/>}/>
                 <Route path='/terms' element={<TermsOfService/>}/>
             </Routes>
-            <Footer/>
+          </div>
+          <Footer />
         </Router>
     );
 };
