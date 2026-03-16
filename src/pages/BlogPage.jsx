@@ -211,18 +211,6 @@ const BlogPage = () => {
 
   useEffect(() => {
     if (!userId) return;
-    const local = loadLocalInteractions();
-    if (local) {
-      setStarCounts(local.starCounts || {});
-      setStarredPosts(local.starredPosts || {});
-      setLikeCounts(local.likeCounts || {});
-      setLikedPosts(local.likedPosts || {});
-      setViewCounts(local.viewCounts || {});
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    if (!userId) return;
 
     const loadInteractions = async () => {
       try {
@@ -1009,6 +997,7 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+
 
 
 
