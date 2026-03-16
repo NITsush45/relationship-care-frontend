@@ -186,6 +186,41 @@ const BlogPage = () => {
     setUserId(id);
   }, []);
 
+  const localStorageKey = userId ? "blog_interactions_" + userId : "";
+
+  const loadLocalInteractions = () => {
+    if (!localStorageKey) return null;
+    try {
+      const raw = localStorage.getItem(localStorageKey);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : null;
+    } catch (_) {
+      return null;
+    }
+  };
+
+  const saveLocalInteractions = (next) => {
+    if (!localStorageKey) return;
+    try {
+      localStorage.setItem(localStorageKey, JSON.stringify(next));
+    } catch (_) {
+      // ignore localStorage failures
+    }
+  };
+
+  useEffect(() => {
+    if (!userId) return;
+    const local = loadLocalInteractions();
+    if (local) {
+      setStarCounts(local.starCounts || {});
+      setStarredPosts(local.starredPosts || {});
+      setLikeCounts(local.likeCounts || {});
+      setLikedPosts(local.likedPosts || {});
+      setViewCounts(local.viewCounts || {});
+    }
+  }, [userId]);
+
   useEffect(() => {
     if (!userId) return;
 
@@ -336,6 +371,25 @@ const BlogPage = () => {
   };
   const handleStar = async (postId) => {
     if (!userId) return;
+    const key = String(postId);
+    const nextStarred = !starredPosts[key];
+    const nextStarCounts = {
+      ...starCounts,
+      [key]: Math.max(0, (starCounts[key] || 0) + (nextStarred ? 1 : -1)),
+    };
+    const nextStarredPosts = { ...starredPosts, [key]: nextStarred };
+    const local = loadLocalInteractions() || {};
+
+    setStarCounts(nextStarCounts);
+    setStarredPosts(nextStarredPosts);
+    saveLocalInteractions({
+      starCounts: nextStarCounts,
+      starredPosts: nextStarredPosts,
+      likeCounts,
+      likedPosts,
+      viewCounts,
+      viewedPosts: local.viewedPosts || {},
+    });
 
     try {
       const res = await fetch(API_BASE + "/api/blog/" + postId + "/star", {
@@ -347,6 +401,14 @@ const BlogPage = () => {
       if (res.ok) {
         setStarCounts(data.starCounts || {});
         setStarredPosts(data.starredPosts || {});
+        saveLocalInteractions({
+          starCounts: data.starCounts || {},
+          starredPosts: data.starredPosts || {},
+          likeCounts,
+          likedPosts,
+          viewCounts,
+          viewedPosts: local.viewedPosts || {},
+        });
       }
     } catch (_) {
       // Keep UI stable when star call fails
@@ -947,6 +1009,9 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+
+
+
 
 
 
