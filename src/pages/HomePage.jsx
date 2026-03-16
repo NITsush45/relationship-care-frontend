@@ -644,6 +644,10 @@ const HomePage = () => {
                   Talk to an Expert
                 </motion.button>
               </motion.a>
+
+              <div className="flex items-center justify-center text-lg font-semibold text-pink-600">
+                Write your own Story
+              </div>
             </motion.div>
             
             <motion.p
@@ -667,4 +671,5 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
 
