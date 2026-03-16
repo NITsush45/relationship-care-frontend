@@ -3,6 +3,148 @@
 @tailwind utilities;
 @import "react-calendar/dist/Calendar.css";
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
 body {
-    font-family: 'Poppins', sans-serif;
-  }
+  font-family: 'Poppins', sans-serif;
+}
+
+.app-theme {
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.app-theme.theme-light {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.app-theme.theme-dark {
+  background: radial-gradient(circle at top, rgba(73, 48, 140, 0.45), transparent 60%),
+    radial-gradient(circle at 20% 20%, rgba(46, 27, 88, 0.7), transparent 55%),
+    #1b1033;
+  color: #e2e8f0;
+}
+
+/* Global dark overrides for common Tailwind utility classes */
+.app-theme.theme-dark .bg-white {
+  background-color: #241544 !important;
+}
+
+.app-theme.theme-dark .bg-white\/95 {
+  background-color: rgba(36, 21, 68, 0.95) !important;
+}
+
+.app-theme.theme-dark .bg-white\/80 {
+  background-color: rgba(36, 21, 68, 0.8) !important;
+}
+
+.app-theme.theme-dark .bg-white\/20 {
+  background-color: rgba(36, 21, 68, 0.3) !important;
+}
+
+.app-theme.theme-dark .bg-gray-50 {
+  background-color: #1f1438 !important;
+}
+
+.app-theme.theme-dark .bg-gray-100 {
+  background-color: #221642 !important;
+}
+
+.app-theme.theme-dark .bg-gray-200 {
+  background-color: #2b1b52 !important;
+}
+
+.app-theme.theme-dark .bg-gray-800 {
+  background-color: #170d2b !important;
+}
+
+.app-theme.theme-dark .bg-pink-50 {
+  background-color: #2a154d !important;
+}
+
+.app-theme.theme-dark .bg-pink-100 {
+  background-color: #32185f !important;
+}
+
+.app-theme.theme-dark .bg-pink-200 {
+  background-color: #3a1d6f !important;
+}
+
+.app-theme.theme-dark .bg-blue-50 {
+  background-color: #1c1638 !important;
+}
+
+.app-theme.theme-dark .bg-blue-100 {
+  background-color: #23204b !important;
+}
+
+.app-theme.theme-dark .bg-purple-200 {
+  background-color: #2b1a59 !important;
+}
+
+.app-theme.theme-dark .bg-blue-200 {
+  background-color: #1f1a44 !important;
+}
+
+.app-theme.theme-dark .text-gray-900 {
+  color: #f8fafc !important;
+}
+
+.app-theme.theme-dark .text-gray-800 {
+  color: #e2e8f0 !important;
+}
+
+.app-theme.theme-dark .text-gray-700 {
+  color: #d1d5e1 !important;
+}
+
+.app-theme.theme-dark .text-gray-600 {
+  color: #cbd5e1 !important;
+}
+
+.app-theme.theme-dark .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+.app-theme.theme-dark .text-gray-400 {
+  color: #94a3b8 !important;
+}
+
+.app-theme.theme-dark .border-gray-100 {
+  border-color: rgba(148, 163, 184, 0.15) !important;
+}
+
+.app-theme.theme-dark .border-gray-200 {
+  border-color: rgba(148, 163, 184, 0.25) !important;
+}
+
+.app-theme.theme-dark .border-gray-300 {
+  border-color: rgba(148, 163, 184, 0.35) !important;
+}
+
+.app-theme.theme-dark .border-pink-100 {
+  border-color: rgba(236, 72, 153, 0.2) !important;
+}
+
+.app-theme.theme-dark .border-pink-200 {
+  border-color: rgba(236, 72, 153, 0.3) !important;
+}
+
+.app-theme.theme-dark .shadow-lg,
+.app-theme.theme-dark .shadow-xl,
+.app-theme.theme-dark .shadow-2xl {
+  box-shadow: 0 10px 30px rgba(8, 4, 20, 0.65) !important;
+}
+
+.app-theme.theme-dark input,
+.app-theme.theme-dark textarea,
+.app-theme.theme-dark select {
+  background-color: #1f1438 !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(148, 163, 184, 0.35) !important;
+}
+
+.app-theme.theme-dark input::placeholder,
+.app-theme.theme-dark textarea::placeholder {
+  color: rgba(226, 232, 240, 0.6) !important;
+}
