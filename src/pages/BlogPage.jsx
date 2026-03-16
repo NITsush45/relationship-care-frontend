@@ -225,7 +225,9 @@ const BlogPage = () => {
     };
 
     loadInteractions();
-  }, [userId]);\n\n  const handleBookmark = (postId) => {
+  }, [userId]);
+
+  const handleBookmark = (postId) => {
     setBookmarkedPosts(prev => ({
       ...prev,
       [postId]: !prev[postId]
@@ -922,6 +924,17 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
