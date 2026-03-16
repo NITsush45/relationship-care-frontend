@@ -110,6 +110,21 @@ body {
   color: #94a3b8 !important;
 }
 
+.app-theme.theme-dark .text-black {
+  color: #e2e8f0 !important;
+}
+
+/* Preserve gradient text but prevent plain transparent text */
+.app-theme.theme-dark .text-transparent:not(.bg-clip-text) {
+  color: #e2e8f0 !important;
+  -webkit-text-fill-color: #e2e8f0 !important;
+}
+
+.app-theme.theme-dark .bg-clip-text.text-transparent {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
 .app-theme.theme-dark .border-gray-100 {
   border-color: rgba(148, 163, 184, 0.15) !important;
 }
