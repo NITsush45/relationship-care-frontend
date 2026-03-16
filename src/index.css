@@ -163,3 +163,28 @@ body {
 .app-theme.theme-dark textarea::placeholder {
   color: rgba(203, 213, 225, 0.55) !important;
 }
+
+/* Home page dark mode text tuning */
+.app-theme.theme-dark .home-page .text-gray-900 {
+  color: #c1ccdc !important;
+}
+
+.app-theme.theme-dark .home-page .text-gray-800 {
+  color: #b3bed0 !important;
+}
+
+.app-theme.theme-dark .home-page .text-gray-700 {
+  color: #a2aec2 !important;
+}
+
+.app-theme.theme-dark .home-page .text-gray-600 {
+  color: #93a1b6 !important;
+}
+
+.app-theme.theme-dark .home-page .text-gray-500 {
+  color: #8190a6 !important;
+}
+
+.app-theme.theme-dark .home-page .text-gray-400 {
+  color: #6f7d93 !important;
+}

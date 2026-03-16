@@ -171,7 +171,7 @@ const HomePage = () => {
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-blue-50 overflow-hidden">
+    <div className="min-h-screen home-page bg-gradient-to-b from-pink-50 via-white to-blue-50 overflow-hidden">
       {/* Enhanced Animated Background Elements */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         {hearts.map((heart) => (
@@ -667,3 +667,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
