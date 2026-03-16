@@ -188,3 +188,13 @@ body {
 .app-theme.theme-dark .home-page .text-gray-400 {
   color: #6f7d93 !important;
 }
+
+.blog-action-container {
+  pointer-events: auto !important;
+  z-index: 30;
+}
+
+.blog-action-button {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
