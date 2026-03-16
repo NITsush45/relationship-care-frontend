@@ -12,14 +12,12 @@ import {
   FaClock,
   FaTag,
   FaEye,
-  FaThumbsUp,
   FaBookOpen,
   FaFeatherAlt,
   FaQuoteLeft,
   FaLeaf,
   FaStar,
   FaRegBookmark,
-  FaRegHeart,
   FaFire,
   FaSeedling
 } from "react-icons/fa";
@@ -151,8 +149,6 @@ const blogPosts = [
 const BlogPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [likedPosts, setLikedPosts] = useState({});
-  const [likeCounts, setLikeCounts] = useState({});
   const [viewCounts, setViewCounts] = useState({});
   const [bookmarkedPosts, setBookmarkedPosts] = useState({});
   const [hoveredPost, setHoveredPost] = useState(null);
@@ -221,8 +217,6 @@ const BlogPage = () => {
         if (res.ok) {
           setStarCounts(data.starCounts || {});
           setStarredPosts(data.starredPosts || {});
-          setLikeCounts(data.likeCounts || {});
-          setLikedPosts(data.likedPosts || {});
           setViewCounts(data.viewCounts || {});
         }
       } catch (_) {
@@ -231,55 +225,7 @@ const BlogPage = () => {
     };
 
     loadInteractions();
-  }, [userId]);
-
-  const handleLike = async (postId) => {
-    if (!userId) return;
-    const key = String(postId);
-    const nextLiked = !likedPosts[key];
-    const nextLikeCounts = {
-      ...likeCounts,
-      [key]: Math.max(0, (likeCounts[key] || 0) + (nextLiked ? 1 : -1)),
-    };
-    const nextLikedPosts = { ...likedPosts, [key]: nextLiked };
-    const local = loadLocalInteractions() || {};
-
-    setLikeCounts(nextLikeCounts);
-    setLikedPosts(nextLikedPosts);
-    saveLocalInteractions({
-      starCounts,
-      starredPosts,
-      likeCounts: nextLikeCounts,
-      likedPosts: nextLikedPosts,
-      viewCounts,
-      viewedPosts: local.viewedPosts || {},
-    });
-
-    try {
-      const res = await fetch(API_BASE + "/api/blog/" + postId + "/like", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: userId }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (res.ok) {
-        setLikeCounts(data.likeCounts || {});
-        setLikedPosts(data.likedPosts || {});
-        saveLocalInteractions({
-          starCounts,
-          starredPosts,
-          likeCounts: data.likeCounts || {},
-          likedPosts: data.likedPosts || {},
-          viewCounts,
-          viewedPosts: local.viewedPosts || {},
-        });
-      }
-    } catch (_) {
-      // Keep UI stable when like call fails
-    }
-  };
-
-  const handleBookmark = (postId) => {
+  }, [userId]);\n\n  const handleBookmark = (postId) => {
     setBookmarkedPosts(prev => ({
       ...prev,
       [postId]: !prev[postId]
@@ -323,8 +269,6 @@ const BlogPage = () => {
         saveLocalInteractions({
           starCounts,
           starredPosts,
-          likeCounts,
-          likedPosts,
           viewCounts: nextViewCounts,
           viewedPosts: nextViewedPosts,
         });
@@ -342,8 +286,6 @@ const BlogPage = () => {
           saveLocalInteractions({
             starCounts,
             starredPosts,
-            likeCounts,
-            likedPosts,
             viewCounts: data.viewCounts || {},
             viewedPosts: (loadLocalInteractions() || {}).viewedPosts || {},
           });
@@ -373,8 +315,6 @@ const BlogPage = () => {
     saveLocalInteractions({
       starCounts: nextStarCounts,
       starredPosts: nextStarredPosts,
-      likeCounts,
-      likedPosts,
       viewCounts,
       viewedPosts: local.viewedPosts || {},
     });
@@ -392,8 +332,6 @@ const BlogPage = () => {
         saveLocalInteractions({
           starCounts: data.starCounts || {},
           starredPosts: data.starredPosts || {},
-          likeCounts,
-          likedPosts,
           viewCounts,
           viewedPosts: local.viewedPosts || {},
         });
@@ -712,20 +650,6 @@ const BlogPage = () => {
                           <FaRegBookmark className="text-white" />
                         )}
                       </motion.button>
-                      <motion.button
-                        className="p-2 rounded-full bg-white/20 backdrop-blur-sm cursor-pointer blog-action-button"
-                        onClick={() => handleLike(post.id)}
-                        type="button"
-                        style={{ pointerEvents: "auto", cursor: "pointer" }}
-                        whileHover={{ scale: 1.2, rotate: -10 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        {likedPosts[post.id] ? (
-                          <FaHeart className="text-red-500" />
-                        ) : (
-                          <FaRegHeart className="text-white" />
-                        )}
-                      </motion.button>
                     </div>
 
                     <motion.div
@@ -854,9 +778,6 @@ const BlogPage = () => {
                     <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
                       <span className="flex items-center gap-1">
                         <FaEye /> {viewCounts[String(post.id)] || 0} views
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <FaThumbsUp /> {likeCounts[String(post.id)] || 0} likes
                       </span>
                       <button
                         type="button"
@@ -1001,6 +922,12 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+
+
+
+
+
+
 
 
 
