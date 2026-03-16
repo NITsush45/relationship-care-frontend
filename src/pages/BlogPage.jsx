@@ -212,6 +212,26 @@ const BlogPage = () => {
 
   const handleLike = async (postId) => {
     if (!userId) return;
+    const key = String(postId);
+    const nextLiked = !likedPosts[key];
+    const nextLikeCounts = {
+      ...likeCounts,
+      [key]: Math.max(0, (likeCounts[key] || 0) + (nextLiked ? 1 : -1)),
+    };
+    const nextLikedPosts = { ...likedPosts, [key]: nextLiked };
+    const local = loadLocalInteractions() || {};
+
+    setLikeCounts(nextLikeCounts);
+    setLikedPosts(nextLikedPosts);
+    saveLocalInteractions({
+      starCounts,
+      starredPosts,
+      likeCounts: nextLikeCounts,
+      likedPosts: nextLikedPosts,
+      viewCounts,
+      viewedPosts: local.viewedPosts || {},
+    });
+
     try {
       const res = await fetch(API_BASE + "/api/blog/" + postId + "/like", {
         method: "POST",
@@ -222,6 +242,14 @@ const BlogPage = () => {
       if (res.ok) {
         setLikeCounts(data.likeCounts || {});
         setLikedPosts(data.likedPosts || {});
+        saveLocalInteractions({
+          starCounts,
+          starredPosts,
+          likeCounts: data.likeCounts || {},
+          likedPosts: data.likedPosts || {},
+          viewCounts,
+          viewedPosts: local.viewedPosts || {},
+        });
       }
     } catch (_) {
       // Keep UI stable when like call fails
@@ -258,6 +286,27 @@ const BlogPage = () => {
 
   const handleViewAndOpen = async (post) => {
     if (userId) {
+      const key = String(post.id);
+      const local = loadLocalInteractions() || {};
+      const viewedPosts = local.viewedPosts || {};
+
+      if (!viewedPosts[key]) {
+        const nextViewCounts = {
+          ...viewCounts,
+          [key]: (viewCounts[key] || 0) + 1,
+        };
+        const nextViewedPosts = { ...viewedPosts, [key]: true };
+        setViewCounts(nextViewCounts);
+        saveLocalInteractions({
+          starCounts,
+          starredPosts,
+          likeCounts,
+          likedPosts,
+          viewCounts: nextViewCounts,
+          viewedPosts: nextViewedPosts,
+        });
+      }
+
       try {
         const res = await fetch(API_BASE + "/api/blog/" + post.id + "/view", {
           method: "POST",
@@ -267,6 +316,14 @@ const BlogPage = () => {
         const data = await res.json().catch(() => ({}));
         if (res.ok && data.viewCounts) {
           setViewCounts((prev) => ({ ...prev, ...data.viewCounts }));
+          saveLocalInteractions({
+            starCounts,
+            starredPosts,
+            likeCounts,
+            likedPosts,
+            viewCounts: data.viewCounts || {},
+            viewedPosts: (loadLocalInteractions() || {}).viewedPosts || {},
+          });
         }
       } catch (_) {
         // ignore
@@ -890,6 +947,7 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+
 
 
 
