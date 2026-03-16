@@ -4,7 +4,6 @@
 @import "react-calendar/dist/Calendar.css";
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
-
 body {
   font-family: 'Poppins', sans-serif;
 }
@@ -23,7 +22,7 @@ body {
   background: radial-gradient(circle at top, rgba(73, 48, 140, 0.45), transparent 60%),
     radial-gradient(circle at 20% 20%, rgba(46, 27, 88, 0.7), transparent 55%),
     #1b1033;
-  color: #e2e8f0;
+  color: #cbd5e1;
 }
 
 /* Global dark overrides for common Tailwind utility classes */
@@ -88,37 +87,37 @@ body {
 }
 
 .app-theme.theme-dark .text-gray-900 {
-  color: #f8fafc !important;
+  color: #e2e8f0 !important;
 }
 
 .app-theme.theme-dark .text-gray-800 {
-  color: #e2e8f0 !important;
-}
-
-.app-theme.theme-dark .text-gray-700 {
-  color: #d1d5e1 !important;
-}
-
-.app-theme.theme-dark .text-gray-600 {
   color: #cbd5e1 !important;
 }
 
+.app-theme.theme-dark .text-gray-700 {
+  color: #b0bdd0 !important;
+}
+
+.app-theme.theme-dark .text-gray-600 {
+  color: #9aa9bf !important;
+}
+
 .app-theme.theme-dark .text-gray-500 {
-  color: #94a3b8 !important;
+  color: #7e8aa2 !important;
 }
 
 .app-theme.theme-dark .text-gray-400 {
-  color: #94a3b8 !important;
+  color: #6b768c !important;
 }
 
 .app-theme.theme-dark .text-black {
-  color: #e2e8f0 !important;
+  color: #cbd5e1 !important;
 }
 
 /* Preserve gradient text but prevent plain transparent text */
 .app-theme.theme-dark .text-transparent:not(.bg-clip-text) {
-  color: #e2e8f0 !important;
-  -webkit-text-fill-color: #e2e8f0 !important;
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
 }
 
 .app-theme.theme-dark .bg-clip-text.text-transparent {
@@ -156,11 +155,11 @@ body {
 .app-theme.theme-dark textarea,
 .app-theme.theme-dark select {
   background-color: #1f1438 !important;
-  color: #e2e8f0 !important;
+  color: #cbd5e1 !important;
   border-color: rgba(148, 163, 184, 0.35) !important;
 }
 
 .app-theme.theme-dark input::placeholder,
 .app-theme.theme-dark textarea::placeholder {
-  color: rgba(226, 232, 240, 0.6) !important;
+  color: rgba(203, 213, 225, 0.55) !important;
 }
