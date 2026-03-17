@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import BookAppointment from './pages/BookAppointment.jsx';
 import BlogPage from './pages/BlogPage.jsx';
 import FAQPage from './pages/FAQPage.jsx';
+import PersonalPage from './pages/PersonalPage.jsx';
 import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
 import TermsOfService from './pages/TermsofService.jsx';
 import Footer from './components/Footer.jsx';
@@ -30,6 +31,7 @@ const App = () => {
                 <Route path="/contact-us" element={<ContactPage />} />
                 <Route path='/blog' element={<BlogPage/>}/>
                 <Route path='/faqs' element={<FAQPage/>}/>
+                <Route path='/personal' element={<PersonalPage />} />
                 <Route path='/privacy-policy' element={<PrivacyPolicy/>}/>
                 <Route path='/terms' element={<TermsOfService/>}/>
             </Routes>
@@ -40,3 +42,4 @@ const App = () => {
 };
 
 export default App;
+
