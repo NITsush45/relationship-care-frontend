@@ -22,32 +22,6 @@ const BookAppointment = () => {
   const [submitError, setSubmitError] = useState("");
   const [services, setServices] = useState(bookingServicesData);
   const [timeSlots, setTimeSlots] = useState(timeSlotsData);
-  const consultationOptions = [
-    { value: "text", label: "Text", price: 20, note: "Chat-only support" },
-    { value: "call", label: "Call", price: 35, note: "Voice call" },
-    { value: "online", label: "Online Meet", price: 50, note: "Video session" },
-    { value: "in_person", label: "In-Person", price: 100, note: "Clinic visit" },
-  ];
-
-  const getConsultationLabel = (type) => {
-    const match = consultationOptions.find((opt) => opt.value === type);
-    return match ? match.label : type || "-";
-  };
-
-  const getConsultationPrice = (type) => {
-    const match = consultationOptions.find((opt) => opt.value === type);
-    return match ? match.price : 0;
-  };
-
-  const loadRazorpay = () =>
-    new Promise((resolve) => {
-      if (window.Razorpay) return resolve(true);
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
   useEffect(() => {
     // Generate floating hearts
     const heartArray = [];
@@ -130,101 +104,25 @@ const BookAppointment = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError("");
-
-    const fee = getConsultationPrice(formData.consultationType);
-    if (!fee) {
-      setIsSubmitting(false);
-      setSubmitError("Please select a consultation method.");
-      return;
-    }
-
     try {
-      const orderRes = await fetch(`${API_BASE}/api/payments/razorpay/order`, {
+      const res = await fetch(`${API_BASE}/api/appointments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: fee * 100,
-          currency: "INR",
-          receipt: `appt_${Date.now()}`,
+          ...formData,
+          date: selectedDate?.toDateString() || null,
+          time: selectedTime || null,
+          doctorId: new URLSearchParams(window.location.search).get("doctor") || null,
         }),
       });
-      const orderData = await orderRes.json().catch(() => ({}));
-      if (!orderRes.ok) {
-        throw new Error(orderData.error || "Failed to create payment order");
-      }
-
-      const razorReady = await loadRazorpay();
-      if (!razorReady) {
-        throw new Error("Unable to load Razorpay checkout");
-      }
-
-      const options = {
-        key: orderData.keyId,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: "Relationship Care",
-        description: "Consultation payment",
-        order_id: orderData.orderId,
-        prefill: {
-          name: formData.name,
-          email: formData.email,
-          contact: formData.phone,
-        },
-        theme: {
-          color: "#ec4899",
-        },
-        handler: async (response) => {
-          try {
-            const verifyRes = await fetch(`${API_BASE}/api/payments/razorpay/verify`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                order_id: response.razorpay_order_id,
-                payment_id: response.razorpay_payment_id,
-                signature: response.razorpay_signature,
-              }),
-            });
-            const verifyData = await verifyRes.json().catch(() => ({}));
-            if (!verifyRes.ok || !verifyData.verified) {
-              throw new Error("Payment verification failed");
-            }
-
-            const res = await fetch(`${API_BASE}/api/appointments`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                ...formData,
-                consultationFee: fee,
-                date: selectedDate?.toDateString() || null,
-                time: selectedTime || null,
-                doctorId: new URLSearchParams(window.location.search).get("doctor") || null,
-                paymentProvider: "razorpay",
-                paymentOrderId: response.razorpay_order_id,
-                paymentId: response.razorpay_payment_id,
-                paymentStatus: "paid",
-              }),
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.error || "Failed to book appointment");
-            setStep(4);
-          } catch (err) {
-            setSubmitError(err.message || "Payment succeeded, but booking failed.");
-          } finally {
-            setIsSubmitting(false);
-          }
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.on("payment.failed", () => {
-        setSubmitError("Payment failed. Please try again.");
-        setIsSubmitting(false);
-      });
-      rzp.open();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to book appointment");
+      setStep(4);
     } catch (err) {
       setSubmitError(
         err.message || "Unable to connect. Please check that the server is running and try again."
       );
+       } finally {
       setIsSubmitting(false);
     }
   };
@@ -478,43 +376,6 @@ const BookAppointment = () => {
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">
-                  Consultation Method *
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {consultationOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, consultationType: option.value })}
-                      className={`p-4 rounded-2xl border-2 text-left transition-all duration-300 ${
-                        formData.consultationType === option.value
-                          ? "border-pink-500 bg-pink-50 dark:bg-pink-900/20"
-                          : "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-lg font-bold text-gray-900 dark:text-white">{option.label}</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-300">{option.note}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xl font-black text-pink-600">Rs. {option.price}</p>
-                          <p className="text-xs text-gray-500">per hour</p>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="rounded-2xl bg-pink-50 dark:bg-pink-900/20 p-4">
-                <p className="text-sm text-gray-500 dark:text-gray-300">Estimated Fee</p>
-                <p className="text-2xl font-black text-pink-600">
-                  Rs. {getConsultationPrice(formData.consultationType)} / hour
-                </p>
-              </div>
                 {submitError && (
                   <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">
                     {submitError}
@@ -607,7 +468,7 @@ const BookAppointment = () => {
                     disabled={isSubmitting}
                     className="w-full px-8 py-5 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? "Processing Payment..." : "Pay & Confirm ✨"}
+                    {isSubmitting ? "Booking..." : "Confirm Booking ✨"}
                   </button>
                   
                   <button
@@ -644,15 +505,6 @@ const BookAppointment = () => {
                     <div>
                       <p className="text-sm text-gray-500 dark:text-gray-400">Service</p>
                       <p className="font-bold text-gray-900 dark:text-white">{formData.service}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">💸</span>
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Consultation</p>
-                      <p className="font-bold text-gray-900 dark:text-white">
-                        {getConsultationLabel(formData.consultationType)} � Rs. {getConsultationPrice(formData.consultationType)} / hour
-                      </p>
                     </div>
                   </div>
 
