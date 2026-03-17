@@ -46,14 +46,14 @@ const Navbar = () => {
           <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-500 ease-out" />
         </Link>
 
-        <div className="hidden md:flex items-center space-x-2">
+        <div className="hidden md:flex items-center space-x-4">
           {navLinks.map((link, index) => (
             <Link
               key={link.to}
               to={link.to}
               onMouseEnter={() => setHoveredLink(index)}
               onMouseLeave={() => setHoveredLink(null)}
-              className="relative px-4 py-2 font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+              className="relative px-5 py-2 font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
             >
               <span
                 className={`transition-all duration-300 ${
@@ -198,5 +198,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
 
 
