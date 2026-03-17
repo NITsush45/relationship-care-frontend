@@ -23,7 +23,7 @@ const Navbar = () => {
     { to: "/contact-us", label: "Contact Us" },
     { to: "/blog", label: "Blog" },
     { to: "/faqs", label: "FAQs" },
-    { to: "/personal", label: "Personal" },
+    { to: "/personal", label: "Confess" },
   ];
 
   return (
