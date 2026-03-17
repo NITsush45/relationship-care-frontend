@@ -26,11 +26,12 @@ const ServicesPage = () => {
   useEffect(() => {
     let active = true;
 
-    const loadData = async () => {
+        const loadData = async () => {
       try {
-        const [servicesRes, testimonialsRes] = await Promise.all([
+        const [servicesRes, testimonialsRes, customRes] = await Promise.all([
           fetch(`${API_BASE}/api/services`),
           fetch(`${API_BASE}/api/testimonials?section=servicesPage`),
+          fetch(`${API_BASE}/api/testimonials/custom`),
         ]);
 
         if (!active) return;
@@ -42,7 +43,21 @@ const ServicesPage = () => {
 
         if (testimonialsRes.ok) {
           const testimonialsJson = await testimonialsRes.json();
-          if (Array.isArray(testimonialsJson)) setTestimonials(testimonialsJson);
+          if (Array.isArray(testimonialsJson)) {
+            let merged = testimonialsJson;
+            if (customRes && customRes.ok) {
+              const customJson = await customRes.json();
+              if (Array.isArray(customJson) && customJson.length) {
+                const customMapped = customJson.map((item) => ({
+                  quote: item.quote,
+                  name: item.name,
+                  doctor: "Community Story",
+                }));
+                merged = [...customMapped, ...testimonialsJson];
+              }
+            }
+            setTestimonials(merged);
+          }
         }
       } catch (_) {
         // Keep fallback data when API is unavailable
@@ -147,3 +162,7 @@ const ServicesPage = () => {
 };
 
 export default ServicesPage;
+
+
+
+

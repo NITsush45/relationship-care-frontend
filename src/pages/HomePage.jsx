@@ -4,6 +4,7 @@ import servicesData from "../data/services.json";
 import testimonialsData from "../data/testimonials.json";
 import processStepsData from "../data/processSteps.json";
 import statsData from "../data/stats.json";
+import { API_BASE } from "../config";
 
 // Component definitions
 // Simple icon components
@@ -128,6 +129,10 @@ const ProcessStepCard = ({ step, index }) => {
 const HomePage = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [hearts, setHearts] = useState([]);
+  const [showStoryForm, setShowStoryForm] = useState(false);
+  const [storyName, setStoryName] = useState("");
+  const [storyText, setStoryText] = useState("");
+  const [storyStatus, setStoryStatus] = useState({ state: "idle", message: "" });
 
   useEffect(() => {
     // Generate floating hearts - reduced for better performance
@@ -156,6 +161,37 @@ const HomePage = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+  const handleStorySubmit = async (event) => {
+    event.preventDefault();
+    const trimmed = storyText.trim();
+    if (!trimmed) {
+      setStoryStatus({ state: "error", message: "Please write your story before submitting." });
+      return;
+    }
+
+    setStoryStatus({ state: "loading", message: "" });
+    try {
+      const resp = await fetch(`${API_BASE}/api/testimonials/custom`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: storyName.trim() || "Anonymous",
+          quote: trimmed,
+        }),
+      });
+
+      if (!resp.ok) {
+        const msg = await resp.json().catch(() => null);
+        throw new Error(msg?.error || "Failed to submit story");
+      }
+
+      setStoryName("");
+      setStoryText("");
+      setStoryStatus({ state: "success", message: "Thanks! Your story was added to our community." });
+    } catch (err) {
+      setStoryStatus({ state: "error", message: err.message || "Failed to submit story" });
+    }
+  };
 
   const services = servicesData;
   const testimonials = testimonialsData.homePage;
@@ -645,11 +681,76 @@ const HomePage = () => {
                 </motion.button>
               </motion.a>
 
-              <div className="flex items-center justify-center text-lg font-semibold text-pink-600">
+              <motion.button
+                type="button"
+                onClick={() => {
+                  setShowStoryForm((prev) => !prev);
+                  setStoryStatus({ state: "idle", message: "" });
+                }}
+                className="w-full sm:w-auto px-12 py-6 border-2 border-purple-400 text-purple-600 font-bold rounded-full bg-white hover:bg-purple-50 transition-all duration-300 text-lg shadow-lg"
+                whileHover={{ borderColor: "#a855f7", boxShadow: "0 10px 30px rgba(168, 85, 247, 0.2)" }}
+              >
                 Write your own Story
-              </div>
+              </motion.button>
             </motion.div>
             
+            <AnimatePresence>
+              {showStoryForm && (
+                <motion.form
+                  key="story-form"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.3 }}
+                  onSubmit={handleStorySubmit}
+                  className="mt-8 bg-white/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-xl border border-pink-100/60"
+                >
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Share your story</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <input
+                      type="text"
+                      value={storyName}
+                      onChange={(event) => setStoryName(event.target.value)}
+                      placeholder="Your name (optional)"
+                      className="w-full rounded-xl border border-gray-200 px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                    />
+                  </div>
+                  <textarea
+                    value={storyText}
+                    onChange={(event) => setStoryText(event.target.value)}
+                    placeholder="Write your experience..."
+                    rows={4}
+                    className="w-full rounded-xl border border-gray-200 px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                  />
+                  {storyStatus.message && (
+                    <p
+                      className={`mt-3 text-sm ${
+                        storyStatus.state === "error" ? "text-red-600" : "text-green-600"
+                      }`}
+                    >
+                      {storyStatus.message}
+                    </p>
+                  )}
+                  <div className="mt-5 flex flex-col sm:flex-row gap-4">
+                    <button
+                      type="submit"
+                      disabled={storyStatus.state === "loading"}
+                      className="px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-full shadow-lg disabled:opacity-70"
+                    >
+                      {storyStatus.state === "loading" ? "Submitting..." : "Submit Story"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowStoryForm(false)}
+                      className="px-6 py-3 border border-gray-300 text-gray-600 font-semibold rounded-full hover:bg-gray-50"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </motion.form>
+              )}
+            </AnimatePresence>
+
             <motion.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -671,5 +772,10 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+
+
+
+
 
 
