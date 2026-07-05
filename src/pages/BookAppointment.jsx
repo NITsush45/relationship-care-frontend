@@ -15,7 +15,6 @@ const BookAppointment = () => {
     service: "",
     gender: "",
     message: "",
-    consultationType: "",
   });
   const [hearts, setHearts] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);

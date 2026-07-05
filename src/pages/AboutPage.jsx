@@ -146,7 +146,6 @@ const AboutPage = () => {
               <p className="text-gray-600 mt-2 text-center">{selectedDoctor.experience} experience</p>
               <p className="text-gray-700 mt-4">{selectedDoctor.bio}</p>
               <p className="text-gray-600 mt-2">Sessions: {selectedDoctor.sessions}</p>
-              <p className="text-gray-600 mt-2">Price: {selectedDoctor.price}</p>
               <button onClick={closeModal} className="mt-4 bg-pink-600 text-white px-4 py-2 rounded w-full">
                 Close
               </button>

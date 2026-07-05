@@ -98,10 +98,6 @@ const DoctorsListPage = () => {
                       <span className="mr-2">??</span>
                       <span className="text-sm">{doctor.sessions}</span>
                     </div>
-                    <div className="flex items-center text-gray-600">
-                      <span className="mr-2">??</span>
-                      <span className="text-sm font-semibold">{doctor.price}</span>
-                    </div>
                   </div>
 
                   <p className="text-gray-600 text-sm mb-6 leading-relaxed">{doctor.bio}</p>
