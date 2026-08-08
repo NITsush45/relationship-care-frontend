@@ -19,7 +19,8 @@ export function clearPendingRole() {
 }
 
 /**
- * After sign-up, syncs the selected role (User / Therapist) to Clerk publicMetadata via backend.
+ * After sign-up, syncs the selected role (User / Therapist)
+ * to Clerk publicMetadata via backend.
  */
 export function useSyncUserRole() {
   const { isSignedIn, getToken } = useAuth();
@@ -28,26 +29,38 @@ export function useSyncUserRole() {
   const syncingRef = useRef(false);
 
   useEffect(() => {
-    if (!isLoaded || !isSignedIn || !user || syncingRef.current) return;
+    if (!isLoaded || !isSignedIn || !user || syncingRef.current) {
+      return;
+    }
 
     const pendingRole = getPendingRole();
     const currentRole = getUserRole(user);
 
-    if (!pendingRole && user.publicMetadata?.role) return;
+    if (!pendingRole && user.publicMetadata?.role) {
+      return;
+    }
 
-    if (pendingRole && currentRole === pendingRole && user.publicMetadata?.role) {
+    if (
+      pendingRole &&
+      currentRole === pendingRole &&
+      user.publicMetadata?.role
+    ) {
       clearPendingRole();
       return;
     }
 
     const roleToSet = pendingRole || currentRole;
-    if (!roleToSet) return;
+
+    if (!roleToSet) {
+      return;
+    }
 
     syncingRef.current = true;
 
     (async () => {
       try {
         const token = await getToken();
+
         const res = await fetch(`${API_BASE}/api/user/set-role`, {
           method: "POST",
           headers: {
@@ -55,8 +68,11 @@ export function useSyncUserRole() {
             Authorization: `Bearer ${token}`,
             "X-Session-Id": sessionId || "",
           },
-          body: JSON.stringify({ role: roleToSet }),
+          body: JSON.stringify({
+            role: roleToSet,
+          }),
         });
+
         if (res.ok) {
           await user.reload();
           clearPendingRole();
@@ -67,5 +83,5 @@ export function useSyncUserRole() {
         syncingRef.current = false;
       }
     })();
-  }, [isLoaded, isSignedIn, user, getToken]);
+  }, [isLoaded, isSignedIn, user, getToken, sessionId]);
 }

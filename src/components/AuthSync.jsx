@@ -1,4 +1,3 @@
-import React from "react";
 import { useSyncUserRole } from "../hooks/useSyncUserRole";
 
 /** Runs role sync after sign-up; renders nothing. */
