@@ -1,19 +1,127 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  Show,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+  useUser,
+} from "@clerk/react";
 import { useTheme } from "../context/ThemeContext";
+import { getUserRole } from "../utils/roles";
+
+const hasClerk = !!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
+
+function AuthNavDesktop() {
+  const { user } = useUser();
+
+  const dashboardPath =
+    getUserRole(user) === "therapist"
+      ? "/therapist-dashboard"
+      : "/user-dashboard";
+
+  return (
+    <>
+      <Show when="signed-out">
+        <SignInButton mode="modal">
+          <button className="px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-white/10">
+            Sign In
+          </button>
+        </SignInButton>
+
+        <SignUpButton mode="modal">
+          <button className="px-4 py-2 rounded-lg font-medium bg-white/10 hover:bg-white/20 transition-all duration-300">
+            Sign Up
+          </button>
+        </SignUpButton>
+      </Show>
+
+      <Show when="signed-in">
+        <Link
+          to={dashboardPath}
+          className="px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-white/10"
+        >
+          Dashboard
+        </Link>
+
+        <UserButton
+          appearance={{
+            elements: {
+              avatarBox: "w-9 h-9",
+            },
+          }}
+        />
+      </Show>
+    </>
+  );
+}
+
+function AuthNavMobile({ onLinkClick }) {
+  const { user } = useUser();
+
+  const dashboardPath =
+    getUserRole(user) === "therapist"
+      ? "/therapist-dashboard"
+      : "/user-dashboard";
+
+  return (
+    <>
+      <Show when="signed-out">
+        <SignInButton mode="modal">
+          <button
+            onClick={onLinkClick}
+            className="block w-full text-left hover:bg-white/10 rounded-lg px-4 py-2 font-medium transition-all duration-300"
+          >
+            Sign In
+          </button>
+        </SignInButton>
+
+        <SignUpButton mode="modal">
+          <button
+            onClick={onLinkClick}
+            className="block w-full text-left hover:bg-white/10 rounded-lg px-4 py-2 font-medium transition-all duration-300"
+          >
+            Sign Up
+          </button>
+        </SignUpButton>
+      </Show>
+
+      <Show when="signed-in">
+        <Link
+          to={dashboardPath}
+          onClick={onLinkClick}
+          className="block hover:bg-white/10 rounded-lg px-4 py-2 font-medium transition-all duration-300"
+        >
+          Dashboard
+        </Link>
+
+        <div className="px-4 py-2">
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox: "w-9 h-9",
+              },
+            }}
+          />
+        </div>
+      </Show>
+    </>
+  );
+}
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState(null);
+
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
   const handleLinkClick = () => {
-    if (isOpen) {
-      setIsOpen(false);
-    }
+    setIsOpen(false);
   };
 
   const navLinks = [
@@ -34,15 +142,20 @@ const Navbar = () => {
           : "bg-gradient-to-r from-pink-600 via-pink-500 to-pink-600"
       }`}
     >
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
-      </div>
-
       <div className="container mx-auto px-6 py-4 flex justify-between items-center relative z-10">
         <Link to="/" className="text-2xl font-bold group relative">
-          <span className="inline-block transition-transform duration-300 group-hover:scale-105">RelationShip</span>
-          <span className="text-blue-400 mx-1 inline-block animate-heartbeat">{"\u2665"}</span>
-          <span className="inline-block transition-transform duration-300 group-hover:scale-105">Care</span>
+          <span className="inline-block transition-transform duration-300 group-hover:scale-105">
+            RelationShip
+          </span>
+
+          <span className="text-blue-400 mx-1 inline-block animate-heartbeat">
+            {"\u2665"}
+          </span>
+
+          <span className="inline-block transition-transform duration-300 group-hover:scale-105">
+            Care
+          </span>
+
           <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-500 ease-out" />
         </Link>
 
@@ -57,16 +170,24 @@ const Navbar = () => {
             >
               <span
                 className={`transition-all duration-300 ${
-                  hoveredLink === index ? "text-blue-300" : isDark ? "text-slate-100" : "text-white"
+                  hoveredLink === index
+                    ? "text-blue-300"
+                    : isDark
+                    ? "text-slate-100"
+                    : "text-white"
                 }`}
               >
                 {link.label}
               </span>
+
               <span
                 className={`absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-blue-400 to-blue-300 transition-all duration-300 ${
-                  hoveredLink === index ? "w-3/4 opacity-100" : "w-0 opacity-0"
+                  hoveredLink === index
+                    ? "w-3/4 opacity-100"
+                    : "w-0 opacity-0"
                 }`}
               />
+
               <span
                 className={`absolute inset-0 rounded-lg bg-white/5 transition-opacity duration-300 ${
                   hoveredLink === index ? "opacity-100" : "opacity-0"
@@ -75,10 +196,14 @@ const Navbar = () => {
             </Link>
           ))}
 
+          {hasClerk && <AuthNavDesktop />}
+
           <button
             onClick={toggleTheme}
             className="ml-2 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            aria-label={
+              isDark ? "Switch to light mode" : "Switch to dark mode"
+            }
             title={isDark ? "Light mode" : "Dark mode"}
           >
             <span className="text-lg" role="img" aria-hidden="true">
@@ -91,13 +216,16 @@ const Navbar = () => {
           <button
             onClick={toggleTheme}
             className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            aria-label={
+              isDark ? "Switch to light mode" : "Switch to dark mode"
+            }
             title={isDark ? "Light mode" : "Dark mode"}
           >
             <span className="text-lg" role="img" aria-hidden="true">
               {isDark ? "\u2600" : "\ud83c\udf19"}
             </span>
           </button>
+
           <button
             onClick={toggleMenu}
             className="text-white focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg p-2 transition-all duration-300 hover:bg-white/10 active:scale-95"
@@ -106,13 +234,23 @@ const Navbar = () => {
             <div className="w-6 h-6 flex flex-col justify-center items-center">
               <span
                 className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
-                  isOpen ? "rotate-45 translate-y-0.5" : "-translate-y-1"
+                  isOpen
+                    ? "rotate-45 translate-y-0.5"
+                    : "-translate-y-1"
                 }`}
               />
-              <span className={`block h-0.5 w-6 bg-white transition-all duration-300 ${isOpen ? "opacity-0" : "opacity-100"}`} />
+
               <span
                 className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
-                  isOpen ? "-rotate-45 -translate-y-0.5" : "translate-y-1"
+                  isOpen ? "opacity-0" : "opacity-100"
+                }`}
+              />
+
+              <span
+                className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+                  isOpen
+                    ? "-rotate-45 -translate-y-0.5"
+                    : "translate-y-1"
                 }`}
               />
             </div>
@@ -120,22 +258,41 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
-        <div className={`${isDark ? "bg-[#2c145d]" : "bg-pink-700"} text-white space-y-2 px-6 py-4`}>
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div
+          className={`${
+            isDark ? "bg-[#2c145d]" : "bg-pink-700"
+          } text-white space-y-2 px-6 py-4`}
+        >
           {navLinks.map((link, index) => (
             <Link
               key={link.to}
               to={link.to}
               className="block hover:bg-white/10 rounded-lg px-4 py-2 font-medium transition-all duration-300 transform hover:translate-x-2 hover:shadow-md active:scale-95"
               onClick={handleLinkClick}
-              style={{ animation: isOpen ? `slideInLeft 0.3s ease-out ${index * 0.05}s both` : "none" }}
+              style={{
+                animation: isOpen
+                  ? `slideInLeft 0.3s ease-out ${index * 0.05}s both`
+                  : "none",
+              }}
             >
               <span className="flex items-center justify-between">
                 {link.label}
-                <span className="text-blue-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{"\u2192"}</span>
+
+                <span className="text-blue-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  {"\u2192"}
+                </span>
               </span>
             </Link>
           ))}
+
+          {hasClerk && (
+            <AuthNavMobile onLinkClick={handleLinkClick} />
+          )}
         </div>
       </div>
 
@@ -145,6 +302,7 @@ const Navbar = () => {
             transform: translateY(-100%);
             opacity: 0;
           }
+
           to {
             transform: translateY(0);
             opacity: 1;
@@ -155,6 +313,7 @@ const Navbar = () => {
           0% {
             transform: translateX(-100%);
           }
+
           100% {
             transform: translateX(100%);
           }
@@ -165,6 +324,7 @@ const Navbar = () => {
           100% {
             transform: scale(1);
           }
+
           50% {
             transform: scale(1.2);
           }
@@ -175,6 +335,7 @@ const Navbar = () => {
             transform: translateX(-20px);
             opacity: 0;
           }
+
           to {
             transform: translateX(0);
             opacity: 1;
@@ -198,7 +359,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
-

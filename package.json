@@ -4,6 +4,7 @@
     "private": true,
     "proxy": "http://localhost:5000",
     "dependencies": {
+        "@clerk/react": "^6.12.4",
         "@fullcalendar/daygrid": "^6.1.15",
         "@fullcalendar/interaction": "^6.1.15",
         "@fullcalendar/react": "^6.1.15",
