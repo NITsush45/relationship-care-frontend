@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Show,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-  useUser,
-} from "@clerk/react";
+import { Show, UserButton, useUser } from "@clerk/react";
 import { useTheme } from "../context/ThemeContext";
 import { getUserRole } from "../utils/roles";
 
@@ -21,38 +15,22 @@ function AuthNavDesktop() {
       : "/user-dashboard";
 
   return (
-    <>
-      <Show when="signed-out">
-        <SignInButton mode="modal">
-          <button className="px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-white/10">
-            Sign In
-          </button>
-        </SignInButton>
+    <Show when="signed-in">
+      <Link
+        to={dashboardPath}
+        className="px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-white/10"
+      >
+        Dashboard
+      </Link>
 
-        <SignUpButton mode="modal">
-          <button className="px-4 py-2 rounded-lg font-medium bg-white/10 hover:bg-white/20 transition-all duration-300">
-            Sign Up
-          </button>
-        </SignUpButton>
-      </Show>
-
-      <Show when="signed-in">
-        <Link
-          to={dashboardPath}
-          className="px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-white/10"
-        >
-          Dashboard
-        </Link>
-
-        <UserButton
-          appearance={{
-            elements: {
-              avatarBox: "w-9 h-9",
-            },
-          }}
-        />
-      </Show>
-    </>
+      <UserButton
+        appearance={{
+          elements: {
+            avatarBox: "w-9 h-9",
+          },
+        }}
+      />
+    </Show>
   );
 }
 
@@ -65,47 +43,25 @@ function AuthNavMobile({ onLinkClick }) {
       : "/user-dashboard";
 
   return (
-    <>
-      <Show when="signed-out">
-        <SignInButton mode="modal">
-          <button
-            onClick={onLinkClick}
-            className="block w-full text-left hover:bg-white/10 rounded-lg px-4 py-2 font-medium transition-all duration-300"
-          >
-            Sign In
-          </button>
-        </SignInButton>
+    <Show when="signed-in">
+      <Link
+        to={dashboardPath}
+        onClick={onLinkClick}
+        className="block hover:bg-white/10 rounded-lg px-4 py-2 font-medium transition-all duration-300"
+      >
+        Dashboard
+      </Link>
 
-        <SignUpButton mode="modal">
-          <button
-            onClick={onLinkClick}
-            className="block w-full text-left hover:bg-white/10 rounded-lg px-4 py-2 font-medium transition-all duration-300"
-          >
-            Sign Up
-          </button>
-        </SignUpButton>
-      </Show>
-
-      <Show when="signed-in">
-        <Link
-          to={dashboardPath}
-          onClick={onLinkClick}
-          className="block hover:bg-white/10 rounded-lg px-4 py-2 font-medium transition-all duration-300"
-        >
-          Dashboard
-        </Link>
-
-        <div className="px-4 py-2">
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox: "w-9 h-9",
-              },
-            }}
-          />
-        </div>
-      </Show>
-    </>
+      <div className="px-4 py-2">
+        <UserButton
+          appearance={{
+            elements: {
+              avatarBox: "w-9 h-9",
+            },
+          }}
+        />
+      </div>
+    </Show>
   );
 }
 
