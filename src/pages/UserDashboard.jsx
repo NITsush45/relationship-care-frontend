@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const UserDashboard = () => {
@@ -71,7 +71,8 @@ const UserDashboard = () => {
     },
     {
       id: "physicalActivity",
-      question: "How often do you exercise or participate in physical activities?",
+      question:
+        "How often do you exercise or participate in physical activities?",
       type: "options",
       options: [
         "Never",
@@ -95,7 +96,8 @@ const UserDashboard = () => {
     },
     {
       id: "socialLife",
-      question: "How often do you spend time with friends or family?",
+      question:
+        "How often do you spend time with friends or family?",
       type: "options",
       options: [
         "Rarely",
@@ -109,7 +111,8 @@ const UserDashboard = () => {
   const lgbtqQuestions = [
     {
       id: "identityComfort",
-      question: "How comfortable do you feel with your identity?",
+      question:
+        "How comfortable do you feel with your identity?",
       type: "options",
       options: [
         "Very uncomfortable",
@@ -121,7 +124,8 @@ const UserDashboard = () => {
     },
     {
       id: "selfAcceptance",
-      question: "How accepting do you currently feel toward yourself?",
+      question:
+        "How accepting do you currently feel toward yourself?",
       type: "options",
       options: [
         "I am struggling a lot",
@@ -133,7 +137,8 @@ const UserDashboard = () => {
     },
     {
       id: "supportSystem",
-      question: "Do you have people who support and accept you for who you are?",
+      question:
+        "Do you have people who support and accept you for who you are?",
       type: "options",
       options: [
         "No",
@@ -145,7 +150,8 @@ const UserDashboard = () => {
     },
     {
       id: "familyAcceptance",
-      question: "How comfortable do you feel discussing your identity with your family?",
+      question:
+        "How comfortable do you feel discussing your identity with your family?",
       type: "options",
       options: [
         "Not comfortable",
@@ -157,7 +163,8 @@ const UserDashboard = () => {
     },
     {
       id: "socialAcceptance",
-      question: "Do you ever feel judged or excluded because of your identity?",
+      question:
+        "Do you ever feel judged or excluded because of your identity?",
       type: "options",
       options: [
         "Never",
@@ -169,7 +176,8 @@ const UserDashboard = () => {
     },
     {
       id: "communityConnection",
-      question: "Do you feel connected to a supportive community?",
+      question:
+        "Do you feel connected to a supportive community?",
       type: "options",
       options: [
         "Not at all",
@@ -181,7 +189,8 @@ const UserDashboard = () => {
     },
     {
       id: "identityStress",
-      question: "Does thinking about your identity ever cause you stress or anxiety?",
+      question:
+        "Does thinking about your identity ever cause you stress or anxiety?",
       type: "options",
       options: [
         "Never",
@@ -193,7 +202,8 @@ const UserDashboard = () => {
     },
     {
       id: "comingOutComfort",
-      question: "How comfortable are you sharing your identity with people you trust?",
+      question:
+        "How comfortable are you sharing your identity with people you trust?",
       type: "options",
       options: [
         "Not comfortable",
@@ -205,7 +215,8 @@ const UserDashboard = () => {
     },
     {
       id: "belonging",
-      question: "How much do you feel that you can be yourself around the people in your life?",
+      question:
+        "How much do you feel that you can be yourself around the people in your life?",
       type: "options",
       options: [
         "Never",
@@ -217,7 +228,8 @@ const UserDashboard = () => {
     },
     {
       id: "identitySupport",
-      question: "Would you like support regarding identity, relationships, family, or social experiences?",
+      question:
+        "Would you like support regarding identity, relationships, family, or social experiences?",
       type: "options",
       options: [
         "No",
@@ -230,7 +242,8 @@ const UserDashboard = () => {
   const singleQuestions = [
     {
       id: "confidence",
-      question: "How confident do you currently feel about yourself?",
+      question:
+        "How confident do you currently feel about yourself?",
       type: "options",
       options: [
         "Very low",
@@ -242,7 +255,8 @@ const UserDashboard = () => {
     },
     {
       id: "personality",
-      question: "How would you describe your personality?",
+      question:
+        "How would you describe your personality?",
       type: "options",
       options: [
         "Introvert",
@@ -252,7 +266,8 @@ const UserDashboard = () => {
     },
     {
       id: "socializing",
-      question: "How much do you enjoy spending time with other people?",
+      question:
+        "How much do you enjoy spending time with other people?",
       type: "options",
       options: [
         "Not at all",
@@ -264,7 +279,8 @@ const UserDashboard = () => {
     },
     {
       id: "loneliness",
-      question: "How often do you feel lonely?",
+      question:
+        "How often do you feel lonely?",
       type: "options",
       options: [
         "Never",
@@ -276,7 +292,8 @@ const UserDashboard = () => {
     },
     {
       id: "selfWorth",
-      question: "How would you describe your current sense of self-worth?",
+      question:
+        "How would you describe your current sense of self-worth?",
       type: "options",
       options: [
         "Very low",
@@ -288,7 +305,8 @@ const UserDashboard = () => {
     },
     {
       id: "futureOptimism",
-      question: "How optimistic do you feel about your future?",
+      question:
+        "How optimistic do you feel about your future?",
       type: "options",
       options: [
         "Not optimistic",
@@ -299,7 +317,8 @@ const UserDashboard = () => {
     },
     {
       id: "trustedPerson",
-      question: "Do you have someone you can comfortably talk to about your problems?",
+      question:
+        "Do you have someone you can comfortably talk to about your problems?",
       type: "options",
       options: [
         "No",
@@ -309,7 +328,8 @@ const UserDashboard = () => {
     },
     {
       id: "socialAnxiety",
-      question: "How often do you feel nervous or uncomfortable in social situations?",
+      question:
+        "How often do you feel nervous or uncomfortable in social situations?",
       type: "options",
       options: [
         "Never",
@@ -321,7 +341,8 @@ const UserDashboard = () => {
     },
     {
       id: "romanticInterest",
-      question: "Are you currently interested in meeting someone romantically?",
+      question:
+        "Are you currently interested in meeting someone romantically?",
       type: "options",
       options: [
         "Not currently",
@@ -331,7 +352,8 @@ const UserDashboard = () => {
     },
     {
       id: "pastRelationship",
-      question: "Have past relationships affected how you approach relationships today?",
+      question:
+        "Have past relationships affected how you approach relationships today?",
       type: "options",
       options: [
         "Not at all",
@@ -342,7 +364,8 @@ const UserDashboard = () => {
     },
     {
       id: "recentBreakup",
-      question: "Have you recently experienced a breakup or emotional disappointment?",
+      question:
+        "Have you recently experienced a breakup or emotional disappointment?",
       type: "options",
       options: [
         "No",
@@ -352,7 +375,8 @@ const UserDashboard = () => {
     },
     {
       id: "motivation",
-      question: "How motivated do you feel in your daily life?",
+      question:
+        "How motivated do you feel in your daily life?",
       type: "options",
       options: [
         "Very low",
@@ -364,7 +388,8 @@ const UserDashboard = () => {
     },
     {
       id: "personalGrowth",
-      question: "How interested are you in personal growth and self-improvement?",
+      question:
+        "How interested are you in personal growth and self-improvement?",
       type: "options",
       options: [
         "Not interested",
@@ -374,7 +399,8 @@ const UserDashboard = () => {
     },
     {
       id: "emotionalWellbeing",
-      question: "How would you describe your overall emotional well-being?",
+      question:
+        "How would you describe your overall emotional well-being?",
       type: "options",
       options: [
         "Very difficult",
@@ -386,22 +412,27 @@ const UserDashboard = () => {
     },
     {
       id: "singleGoal",
-      question: "What is one area of your personal life you would most like to improve?",
+      question:
+        "What is one area of your personal life you would most like to improve?",
       type: "text",
-      placeholder: "Confidence, friendships, dating, motivation...",
+      placeholder:
+        "Confidence, friendships, dating, motivation...",
     },
   ];
 
   const relationshipQuestions = [
     {
       id: "relationshipDuration",
-      question: "How long have you been in your current relationship?",
+      question:
+        "How long have you been in your current relationship?",
       type: "text",
-      placeholder: "For example: 2 years, 6 months...",
+      placeholder:
+        "For example: 2 years, 6 months...",
     },
     {
       id: "partnerIssues",
-      question: "Are you currently experiencing any issues with your partner?",
+      question:
+        "Are you currently experiencing any issues with your partner?",
       type: "options",
       options: [
         "No",
@@ -412,7 +443,8 @@ const UserDashboard = () => {
     },
     {
       id: "partnerTime",
-      question: "How much time do you usually spend with your partner each day?",
+      question:
+        "How much time do you usually spend with your partner each day?",
       type: "options",
       options: [
         "Less than 1 hour",
@@ -423,7 +455,8 @@ const UserDashboard = () => {
     },
     {
       id: "communication",
-      question: "How would you describe communication with your partner?",
+      question:
+        "How would you describe communication with your partner?",
       type: "options",
       options: [
         "Very poor",
@@ -435,7 +468,8 @@ const UserDashboard = () => {
     },
     {
       id: "conflicts",
-      question: "How often do you and your partner have disagreements?",
+      question:
+        "How often do you and your partner have disagreements?",
       type: "options",
       options: [
         "Rarely",
@@ -446,7 +480,8 @@ const UserDashboard = () => {
     },
     {
       id: "conflictResolution",
-      question: "How well do you resolve disagreements together?",
+      question:
+        "How well do you resolve disagreements together?",
       type: "options",
       options: [
         "Poorly",
@@ -457,7 +492,8 @@ const UserDashboard = () => {
     },
     {
       id: "trust",
-      question: "How would you rate the level of trust in your relationship?",
+      question:
+        "How would you rate the level of trust in your relationship?",
       type: "options",
       options: [
         "Very low",
@@ -469,7 +505,8 @@ const UserDashboard = () => {
     },
     {
       id: "emotionalConnection",
-      question: "How emotionally connected do you feel to your partner?",
+      question:
+        "How emotionally connected do you feel to your partner?",
       type: "options",
       options: [
         "Not connected",
@@ -480,7 +517,8 @@ const UserDashboard = () => {
     },
     {
       id: "qualityTime",
-      question: "Do you feel that you spend enough quality time together?",
+      question:
+        "Do you feel that you spend enough quality time together?",
       type: "options",
       options: [
         "No",
@@ -491,7 +529,8 @@ const UserDashboard = () => {
     },
     {
       id: "livingTogether",
-      question: "Do you currently live together with your partner?",
+      question:
+        "Do you currently live together with your partner?",
       type: "options",
       options: [
         "Yes",
@@ -500,7 +539,8 @@ const UserDashboard = () => {
     },
     {
       id: "intimacy",
-      question: "How satisfied are you with the emotional intimacy in your relationship?",
+      question:
+        "How satisfied are you with the emotional intimacy in your relationship?",
       type: "options",
       options: [
         "Very dissatisfied",
@@ -512,7 +552,8 @@ const UserDashboard = () => {
     },
     {
       id: "partnerSupport",
-      question: "Do you feel emotionally supported by your partner?",
+      question:
+        "Do you feel emotionally supported by your partner?",
       type: "options",
       options: [
         "Never",
@@ -524,7 +565,8 @@ const UserDashboard = () => {
     },
     {
       id: "jealousy",
-      question: "How often do jealousy or insecurity affect your relationship?",
+      question:
+        "How often do jealousy or insecurity affect your relationship?",
       type: "options",
       options: [
         "Never",
@@ -536,7 +578,8 @@ const UserDashboard = () => {
     },
     {
       id: "futureTogether",
-      question: "How confident do you feel about your future together?",
+      question:
+        "How confident do you feel about your future together?",
       type: "options",
       options: [
         "Not confident",
@@ -547,22 +590,27 @@ const UserDashboard = () => {
     },
     {
       id: "relationshipGoal",
-      question: "What would you most like to improve in your relationship?",
+      question:
+        "What would you most like to improve in your relationship?",
       type: "text",
-      placeholder: "Communication, trust, quality time...",
+      placeholder:
+        "Communication, trust, quality time...",
     },
   ];
 
   const marriedQuestions = [
     {
       id: "marriageDuration",
-      question: "How long have you been married?",
+      question:
+        "How long have you been married?",
       type: "text",
-      placeholder: "For example: 5 years...",
+      placeholder:
+        "For example: 5 years...",
     },
     {
       id: "marriageSatisfaction",
-      question: "How satisfied are you with your marriage?",
+      question:
+        "How satisfied are you with your marriage?",
       type: "options",
       options: [
         "Very dissatisfied",
@@ -574,7 +622,8 @@ const UserDashboard = () => {
     },
     {
       id: "spouseCommunication",
-      question: "How would you describe communication with your spouse?",
+      question:
+        "How would you describe communication with your spouse?",
       type: "options",
       options: [
         "Very poor",
@@ -586,7 +635,8 @@ const UserDashboard = () => {
     },
     {
       id: "marriageConflict",
-      question: "How often do you and your spouse have conflicts?",
+      question:
+        "How often do you and your spouse have conflicts?",
       type: "options",
       options: [
         "Rarely",
@@ -597,7 +647,8 @@ const UserDashboard = () => {
     },
     {
       id: "emotionalSupport",
-      question: "Do you feel emotionally supported by your spouse?",
+      question:
+        "Do you feel emotionally supported by your spouse?",
       type: "options",
       options: [
         "Never",
@@ -609,7 +660,8 @@ const UserDashboard = () => {
     },
     {
       id: "qualityTimeMarriage",
-      question: "How often do you spend quality time together?",
+      question:
+        "How often do you spend quality time together?",
       type: "options",
       options: [
         "Rarely",
@@ -620,7 +672,8 @@ const UserDashboard = () => {
     },
     {
       id: "responsibilities",
-      question: "How satisfied are you with how household responsibilities are shared?",
+      question:
+        "How satisfied are you with how household responsibilities are shared?",
       type: "options",
       options: [
         "Very dissatisfied",
@@ -632,7 +685,8 @@ const UserDashboard = () => {
     },
     {
       id: "financialStress",
-      question: "Does financial pressure create stress in your marriage?",
+      question:
+        "Does financial pressure create stress in your marriage?",
       type: "options",
       options: [
         "Never",
@@ -644,7 +698,8 @@ const UserDashboard = () => {
     },
     {
       id: "familyPressure",
-      question: "Do family responsibilities or expectations create relationship stress?",
+      question:
+        "Do family responsibilities or expectations create relationship stress?",
       type: "options",
       options: [
         "Never",
@@ -656,7 +711,8 @@ const UserDashboard = () => {
     },
     {
       id: "marriageTrust",
-      question: "How would you rate the trust between you and your spouse?",
+      question:
+        "How would you rate the trust between you and your spouse?",
       type: "options",
       options: [
         "Very low",
@@ -668,7 +724,8 @@ const UserDashboard = () => {
     },
     {
       id: "romance",
-      question: "How satisfied are you with romance in your marriage?",
+      question:
+        "How satisfied are you with romance in your marriage?",
       type: "options",
       options: [
         "Very dissatisfied",
@@ -680,7 +737,8 @@ const UserDashboard = () => {
     },
     {
       id: "personalSpace",
-      question: "Do you feel you have enough personal space and independence?",
+      question:
+        "Do you feel you have enough personal space and independence?",
       type: "options",
       options: [
         "No",
@@ -691,7 +749,8 @@ const UserDashboard = () => {
     },
     {
       id: "healthRoutine",
-      question: "How often do you practice activities such as yoga, meditation, or exercise?",
+      question:
+        "How often do you practice activities such as yoga, meditation, or exercise?",
       type: "options",
       options: [
         "Never",
@@ -703,7 +762,8 @@ const UserDashboard = () => {
     },
     {
       id: "stressManagement",
-      question: "How well do you currently manage stress in your personal life?",
+      question:
+        "How well do you currently manage stress in your personal life?",
       type: "options",
       options: [
         "Very poorly",
@@ -715,54 +775,62 @@ const UserDashboard = () => {
     },
     {
       id: "marriageGoal",
-      question: "What would you most like to improve in your marriage?",
+      question:
+        "What would you most like to improve in your marriage?",
       type: "text",
-      placeholder: "Communication, trust, intimacy, quality time...",
+      placeholder:
+        "Communication, trust, intimacy, quality time...",
     },
   ];
 
-  const questions = useMemo(() => {
-    const identity = answers.identity;
-    const relationshipStatus = answers.relationshipStatus;
+  /*
+   * Build the questionnaire dynamically.
+   * No useMemo is required, so Vercel's ESLint
+   * react-hooks/exhaustive-deps warning is avoided.
+   */
+  const identity = answers.identity;
+  const relationshipStatus = answers.relationshipStatus;
 
-    const isLGBTQ = [
-      "Lesbian",
-      "Gay",
-      "Bisexual",
-      "Queer",
-    ].includes(identity);
+  const isLGBTQ = [
+    "Lesbian",
+    "Gay",
+    "Bisexual",
+    "Queer",
+  ].includes(identity);
 
-    let relationshipBranch = [];
+  let relationshipBranch = [];
 
-    if (relationshipStatus === "Single") {
-      relationshipBranch = singleQuestions;
+  if (relationshipStatus === "Single") {
+    relationshipBranch = singleQuestions;
+  } else if (relationshipStatus === "In a Relationship") {
+    relationshipBranch = relationshipQuestions;
+  } else if (relationshipStatus === "Married") {
+    relationshipBranch = marriedQuestions;
+  }
+
+  const questions = [
+    ...basicQuestions,
+    ...(isLGBTQ ? lgbtqQuestions : []),
+    ...relationshipBranch,
+  ];
+
+  /*
+   * If the questionnaire branch changes while editing,
+   * make sure the current step remains valid.
+   */
+  useEffect(() => {
+    if (step >= questions.length) {
+      setStep(Math.max(questions.length - 1, 0));
     }
-
-    if (relationshipStatus === "In a Relationship") {
-      relationshipBranch = relationshipQuestions;
-    }
-
-    if (relationshipStatus === "Married") {
-      relationshipBranch = marriedQuestions;
-    }
-
-    if (isLGBTQ) {
-      return [
-        ...basicQuestions,
-        ...lgbtqQuestions,
-        ...relationshipBranch,
-      ];
-    }
-
-    return [
-      ...basicQuestions,
-      ...relationshipBranch,
-    ];
-  }, [answers.identity, answers.relationshipStatus]);
+  }, [step, questions.length]);
 
   const currentQuestion = questions[step];
 
   const handleAnswer = (value) => {
+    if (!currentQuestion) {
+      return;
+    }
+
     setAnswers((previous) => ({
       ...previous,
       [currentQuestion.id]: value,
@@ -770,12 +838,16 @@ const UserDashboard = () => {
   };
 
   const handleNext = () => {
+    if (!currentQuestion) {
+      return;
+    }
+
     const currentAnswer = answers[currentQuestion.id];
 
     if (
       currentAnswer === undefined ||
       currentAnswer === null ||
-      currentAnswer === ""
+      String(currentAnswer).trim() === ""
     ) {
       return;
     }
@@ -811,11 +883,23 @@ const UserDashboard = () => {
     }
   };
 
-  const progress = ((step + 1) / questions.length) * 100;
-
   if (!currentQuestion) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <p className="text-gray-600">
+          Loading questionnaire...
+        </p>
+      </div>
+    );
   }
+
+  const progress =
+    ((step + 1) / questions.length) * 100;
+
+  const hasAnswer =
+    answers[currentQuestion.id] !== undefined &&
+    answers[currentQuestion.id] !== null &&
+    String(answers[currentQuestion.id]).trim() !== "";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center px-4 py-10">
@@ -833,8 +917,9 @@ const UserDashboard = () => {
           </h1>
 
           <p className="text-gray-500 mt-3 max-w-lg mx-auto">
-            Answer a few questions so we can better understand your
-            personality, lifestyle, relationships, and counselling needs.
+            Answer a few questions so we can better understand
+            your personality, lifestyle, relationships, and
+            counselling needs.
           </p>
 
         </div>
@@ -894,7 +979,9 @@ const UserDashboard = () => {
                     <button
                       key={option}
                       type="button"
-                      onClick={() => handleAnswer(option)}
+                      onClick={() =>
+                        handleAnswer(option)
+                      }
                       className={`w-full text-left px-5 py-4 rounded-2xl border-2 transition-all duration-200 ${
                         selected
                           ? "border-pink-500 bg-pink-50 text-pink-700 shadow-sm"
@@ -929,17 +1016,32 @@ const UserDashboard = () => {
 
                 <input
                   type={currentQuestion.type}
-                  value={answers[currentQuestion.id] || ""}
+                  min={
+                    currentQuestion.type === "number"
+                      ? 1
+                      : undefined
+                  }
+                  max={
+                    currentQuestion.type === "number"
+                      ? 120
+                      : undefined
+                  }
+                  value={
+                    answers[currentQuestion.id] || ""
+                  }
                   onChange={(event) =>
                     handleAnswer(event.target.value)
                   }
-                  placeholder={currentQuestion.placeholder}
+                  placeholder={
+                    currentQuestion.placeholder
+                  }
                   className="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 text-gray-800 focus:border-pink-400 focus:outline-none focus:ring-4 focus:ring-pink-100 transition-all"
                 />
 
                 {currentQuestion.type === "text" && (
                   <p className="text-sm text-gray-400 mt-3">
-                    Share as much or as little as you're comfortable with.
+                    Share as much or as little as you're
+                    comfortable with.
                   </p>
                 )}
 
@@ -966,11 +1068,9 @@ const UserDashboard = () => {
             <button
               type="button"
               onClick={handleNext}
-              disabled={
-                !answers[currentQuestion.id]
-              }
+              disabled={!hasAnswer}
               className={`px-8 py-3 rounded-xl font-semibold text-white transition-all ${
-                answers[currentQuestion.id]
+                hasAnswer
                   ? "bg-gradient-to-r from-pink-500 to-purple-500 hover:shadow-lg hover:scale-[1.02]"
                   : "bg-gray-300 cursor-not-allowed"
               }`}
@@ -985,7 +1085,8 @@ const UserDashboard = () => {
         </div>
 
         <p className="text-center text-gray-400 text-sm mt-5">
-          Your responses help personalize your counselling experience.
+          Your responses help personalize your counselling
+          experience.
         </p>
 
       </div>
