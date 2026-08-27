@@ -1,6 +1,11 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
-import { useAuth, useUser } from "@clerk/react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { API_BASE } from "../config";
+import { useAuth } from "./AuthContext";
 
 const SessionContext = createContext({
   sessionId: null,
@@ -8,83 +13,103 @@ const SessionContext = createContext({
 });
 
 export const SessionProvider = ({ children }) => {
-  const { isSignedIn, getToken, sessionId: clerkSessionId } = useAuth();
-  const { user, isLoaded } = useUser();
+  const {
+    user,
+    isAuthenticated,
+    loading: authLoading,
+  } = useAuth();
+
   const [sessionId, setSessionId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const syncedRef = useRef(false);
 
   useEffect(() => {
-    if (!isLoaded || !isSignedIn || !user || !clerkSessionId) {
-      if (!isSignedIn) {
-        syncedRef.current = false;
-        setSessionId(null);
-        setIsLoading(false);
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("clerk_session_id");
-        }
-      }
+    if (authLoading) {
+      setIsLoading(true);
       return;
     }
 
-    if (syncedRef.current) return;
+    if (!isAuthenticated || !user) {
+      setSessionId(null);
+      setIsLoading(false);
 
-    syncedRef.current = true;
-    setIsLoading(true);
+      localStorage.removeItem("session_id");
+      return;
+    }
 
-    (async () => {
+    const createSession = async () => {
+      setIsLoading(true);
+
       try {
-        const token = await getToken();
+        const storedSessionId =
+          localStorage.getItem("session_id");
 
-        // Sync session with backend
-        const res = await fetch(`${API_BASE}/api/user/session`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            sessionId: clerkSessionId,
-            userId: user.id,
-          }),
-        });
+        const token = localStorage.getItem("authToken");
 
-        if (res.ok) {
-          const data = await res.json();
-          setSessionId(data.sessionId || clerkSessionId);
-          // Persist session ID for subsequent visits
-          if (typeof window !== "undefined") {
-            localStorage.setItem("clerk_session_id", data.sessionId || clerkSessionId);
+        const response = await fetch(
+          `${API_BASE}/api/user/session`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...(token
+                ? {
+                    Authorization: `Bearer ${token}`,
+                  }
+                : {}),
+            },
+            body: JSON.stringify({
+              sessionId: storedSessionId,
+              userId: user.id,
+            }),
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+
+          const newSessionId =
+            data.sessionId || storedSessionId;
+
+          setSessionId(newSessionId);
+
+          if (newSessionId) {
+            localStorage.setItem(
+              "session_id",
+              newSessionId
+            );
           }
         } else {
-          setSessionId(clerkSessionId);
+          setSessionId(storedSessionId);
         }
-      } catch (_) {
-        setSessionId(clerkSessionId);
+      } catch (error) {
+        console.error(
+          "Failed to create session:",
+          error
+        );
+
+        const storedSessionId =
+          localStorage.getItem("session_id");
+
+        setSessionId(storedSessionId);
       } finally {
         setIsLoading(false);
       }
-    })();
-  }, [isLoaded, isSignedIn, user, clerkSessionId, getToken]);
+    };
 
-  // Restore session ID from localStorage on mount
-  useEffect(() => {
-    if (!isSignedIn) return;
-
-    const stored =
-      typeof window !== "undefined"
-        ? localStorage.getItem("clerk_session_id")
-        : null;
-    if (stored && !sessionId) {
-      setSessionId(stored);
-    }
-  }, [isSignedIn, sessionId]);
-
-  const value = { sessionId, isLoading };
+    createSession();
+  }, [authLoading, isAuthenticated, user]);
 
   return (
-    <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
+    <SessionContext.Provider
+      value={{
+        sessionId,
+        isLoading,
+      }}
+    >
+      {children}
+    </SessionContext.Provider>
   );
 };
 
-export const useSession = () => useContext(SessionContext);
+export const useSession = () =>
+  useContext(SessionContext);

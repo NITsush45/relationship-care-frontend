@@ -1,44 +1,49 @@
-import { useAuth, useUser, useSession } from "@clerk/react";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
-export function useClerkAuthSession() {
-  const { isSignedIn, isLoaded, getToken, userId, sessionId } = useAuth();
-  const { user } = useUser();
-  const { session } = useSession();
+export function useAuthSession() {
+  const {
+    user,
+    token,
+    sessionId,
+    isAuthenticated,
+    isLoading,
+    login,
+    logout,
+    signup,
+  } = useContext(AuthContext);
 
   const getAuthHeaders = async (customHeaders = {}) => {
-    const headers = { ...customHeaders };
-    try {
-      if (isSignedIn && getToken) {
-        const token = await getToken();
-        if (token) {
-          headers["Authorization"] = `Bearer ${token}`;
-        }
-      }
-    } catch (_) {
-      // Ignore token retrieval error
+    const headers = {
+      "Content-Type": "application/json",
+      ...customHeaders,
+    };
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
     }
 
-    const activeSessionId = sessionId || session?.id || null;
-    const activeUserId = userId || user?.id || null;
-
-    if (activeSessionId) {
-      headers["x-session-id"] = activeSessionId;
+    if (sessionId) {
+      headers["x-session-id"] = sessionId;
     }
-    if (activeUserId) {
-      headers["x-user-id"] = activeUserId;
+
+    if (user?.id) {
+      headers["x-user-id"] = user.id;
     }
 
     return headers;
   };
 
   return {
-    isLoaded,
-    isSignedIn,
-    userId: userId || user?.id || null,
-    sessionId: sessionId || session?.id || null,
+    isLoaded: !isLoading,
+    isSignedIn: isAuthenticated,
+    userId: user?.id || null,
+    sessionId,
     user,
-    session,
-    getToken,
+    token,
     getAuthHeaders,
+    login,
+    logout,
+    signup,
   };
 }

@@ -1,87 +1,150 @@
-import { useEffect, useRef } from "react";
-import { useAuth, useUser } from "@clerk/react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { API_BASE } from "../config";
-import { getUserRole } from "../utils/roles";
-import { useSession } from "../context/SessionContext";
 
-const PENDING_ROLE_KEY = "pendingClerkRole";
+const AuthContext = createContext(null);
 
-export function setPendingRole(role) {
-  sessionStorage.setItem(PENDING_ROLE_KEY, role);
-}
-
-export function getPendingRole() {
-  return sessionStorage.getItem(PENDING_ROLE_KEY);
-}
-
-export function clearPendingRole() {
-  sessionStorage.removeItem(PENDING_ROLE_KEY);
-}
-
-/**
- * After sign-up, syncs the selected role (User / Therapist)
- * to Clerk publicMetadata via backend.
- */
-export function useSyncUserRole() {
-  const { isSignedIn, getToken } = useAuth();
-  const { user, isLoaded } = useUser();
-  const { sessionId } = useSession();
-  const syncingRef = useRef(false);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isLoaded || !isSignedIn || !user || syncingRef.current) {
-      return;
-    }
+    const loadUser = async () => {
+      const storedToken = localStorage.getItem("auth_token");
 
-    const pendingRole = getPendingRole();
-    const currentRole = getUserRole(user);
+      if (!storedToken) {
+        setLoading(false);
+        return;
+      }
 
-    if (!pendingRole && user.publicMetadata?.role) {
-      return;
-    }
-
-    if (
-      pendingRole &&
-      currentRole === pendingRole &&
-      user.publicMetadata?.role
-    ) {
-      clearPendingRole();
-      return;
-    }
-
-    const roleToSet = pendingRole || currentRole;
-
-    if (!roleToSet) {
-      return;
-    }
-
-    syncingRef.current = true;
-
-    (async () => {
       try {
-        const token = await getToken();
-
-        const res = await fetch(`${API_BASE}/api/user/set-role`, {
-          method: "POST",
+        const res = await fetch(`${API_BASE}/api/auth/me`, {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            "X-Session-Id": sessionId || "",
+            Authorization: `Bearer ${storedToken}`,
           },
-          body: JSON.stringify({
-            role: roleToSet,
-          }),
         });
 
         if (res.ok) {
-          await user.reload();
-          clearPendingRole();
+          const data = await res.json();
+          setUser(data.user);
+        } else {
+          localStorage.removeItem("auth_token");
+          setUser(null);
         }
-      } catch (_) {
-        // Role sync is best-effort; user can retry on next visit
+      } catch (error) {
+        console.error("Failed to load user:", error);
+        localStorage.removeItem("auth_token");
+        setUser(null);
       } finally {
-        syncingRef.current = false;
+        setLoading(false);
       }
-    })();
-  }, [isLoaded, isSignedIn, user, getToken, sessionId]);
-}
+    };
+
+    loadUser();
+  }, []);
+
+  const login = async (email, password) => {
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Login failed");
+    }
+
+    localStorage.setItem("auth_token", data.token);
+    setUser(data.user);
+
+    return data;
+  };
+
+  const signup = async (
+    username,
+    email,
+    password,
+    role = "user"
+  ) => {
+    const res = await fetch(`${API_BASE}/api/auth/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+        role,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Signup failed");
+    }
+
+    localStorage.setItem("auth_token", data.token);
+    setUser(data.user);
+
+    return data;
+  };
+
+  const logout = () => {
+    localStorage.removeItem("auth_token");
+    setUser(null);
+  };
+
+  const authFetch = async (url, options = {}) => {
+    const token = localStorage.getItem("auth_token");
+
+    const headers = {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    };
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    return fetch(url, {
+      ...options,
+      headers,
+    });
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        isAuthenticated: !!user,
+        login,
+        signup,
+        logout,
+        authFetch,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error(
+      "useAuth must be used inside AuthProvider"
+    );
+  }
+
+  return context;
+};

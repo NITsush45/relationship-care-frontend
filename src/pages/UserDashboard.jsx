@@ -1,74 +1,995 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useUser } from "@clerk/react";
-import { ROLE_LABELS, getUserRole } from "../utils/roles";
+import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const UserDashboard = () => {
-  const { user } = useUser();
-  const role = getUserRole(user);
+  const navigate = useNavigate();
+
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState({});
+
+  const basicQuestions = [
+    {
+      id: "identity",
+      question: "How do you identify?",
+      type: "options",
+      options: [
+        "Male",
+        "Female",
+        "Non-binary",
+        "Lesbian",
+        "Gay",
+        "Bisexual",
+        "Queer",
+        "Prefer not to say",
+      ],
+    },
+    {
+      id: "age",
+      question: "What is your age?",
+      type: "number",
+      placeholder: "Enter your age",
+    },
+    {
+      id: "stress",
+      question: "How stressed have you been feeling lately?",
+      type: "options",
+      options: [
+        "Not at all",
+        "A little",
+        "Moderately",
+        "Quite stressed",
+        "Extremely stressed",
+      ],
+    },
+    {
+      id: "extracurricular",
+      question: "What extracurricular activities do you participate in?",
+      type: "text",
+      placeholder: "Sports, music, volunteering, clubs...",
+    },
+    {
+      id: "hobbies",
+      question: "What are your favorite hobbies?",
+      type: "text",
+      placeholder: "Tell us about your hobbies...",
+    },
+    {
+      id: "career",
+      question: "What career are you currently pursuing?",
+      type: "text",
+      placeholder: "Student, Software Engineer, Doctor...",
+    },
+    {
+      id: "relationshipStatus",
+      question: "What is your current relationship status?",
+      type: "options",
+      options: [
+        "Single",
+        "In a Relationship",
+        "Married",
+      ],
+    },
+    {
+      id: "physicalActivity",
+      question: "How often do you exercise or participate in physical activities?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "1–2 times a week",
+        "3–5 times a week",
+        "Daily",
+      ],
+    },
+    {
+      id: "sleep",
+      question: "How would you describe your sleep quality?",
+      type: "options",
+      options: [
+        "Very poor",
+        "Poor",
+        "Average",
+        "Good",
+        "Excellent",
+      ],
+    },
+    {
+      id: "socialLife",
+      question: "How often do you spend time with friends or family?",
+      type: "options",
+      options: [
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Very often",
+      ],
+    },
+  ];
+
+  const lgbtqQuestions = [
+    {
+      id: "identityComfort",
+      question: "How comfortable do you feel with your identity?",
+      type: "options",
+      options: [
+        "Very uncomfortable",
+        "Uncomfortable",
+        "Neutral",
+        "Comfortable",
+        "Very comfortable",
+      ],
+    },
+    {
+      id: "selfAcceptance",
+      question: "How accepting do you currently feel toward yourself?",
+      type: "options",
+      options: [
+        "I am struggling a lot",
+        "I am struggling somewhat",
+        "I feel neutral",
+        "I am mostly accepting",
+        "I completely accept myself",
+      ],
+    },
+    {
+      id: "supportSystem",
+      question: "Do you have people who support and accept you for who you are?",
+      type: "options",
+      options: [
+        "No",
+        "Very few",
+        "Some",
+        "Most people around me",
+        "Yes, strongly",
+      ],
+    },
+    {
+      id: "familyAcceptance",
+      question: "How comfortable do you feel discussing your identity with your family?",
+      type: "options",
+      options: [
+        "Not comfortable",
+        "Slightly comfortable",
+        "Somewhat comfortable",
+        "Very comfortable",
+        "I have already discussed it",
+      ],
+    },
+    {
+      id: "socialAcceptance",
+      question: "Do you ever feel judged or excluded because of your identity?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Very often",
+      ],
+    },
+    {
+      id: "communityConnection",
+      question: "Do you feel connected to a supportive community?",
+      type: "options",
+      options: [
+        "Not at all",
+        "A little",
+        "Somewhat",
+        "Quite connected",
+        "Very connected",
+      ],
+    },
+    {
+      id: "identityStress",
+      question: "Does thinking about your identity ever cause you stress or anxiety?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Very often",
+      ],
+    },
+    {
+      id: "comingOutComfort",
+      question: "How comfortable are you sharing your identity with people you trust?",
+      type: "options",
+      options: [
+        "Not comfortable",
+        "Slightly comfortable",
+        "Somewhat comfortable",
+        "Very comfortable",
+        "Completely comfortable",
+      ],
+    },
+    {
+      id: "belonging",
+      question: "How much do you feel that you can be yourself around the people in your life?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Always",
+      ],
+    },
+    {
+      id: "identitySupport",
+      question: "Would you like support regarding identity, relationships, family, or social experiences?",
+      type: "options",
+      options: [
+        "No",
+        "Maybe",
+        "Yes",
+      ],
+    },
+  ];
+
+  const singleQuestions = [
+    {
+      id: "confidence",
+      question: "How confident do you currently feel about yourself?",
+      type: "options",
+      options: [
+        "Very low",
+        "Low",
+        "Average",
+        "High",
+        "Very high",
+      ],
+    },
+    {
+      id: "personality",
+      question: "How would you describe your personality?",
+      type: "options",
+      options: [
+        "Introvert",
+        "Extrovert",
+        "Ambivert",
+      ],
+    },
+    {
+      id: "socializing",
+      question: "How much do you enjoy spending time with other people?",
+      type: "options",
+      options: [
+        "Not at all",
+        "A little",
+        "Sometimes",
+        "Usually",
+        "I love socializing",
+      ],
+    },
+    {
+      id: "loneliness",
+      question: "How often do you feel lonely?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Very often",
+      ],
+    },
+    {
+      id: "selfWorth",
+      question: "How would you describe your current sense of self-worth?",
+      type: "options",
+      options: [
+        "Very low",
+        "Low",
+        "Average",
+        "Good",
+        "Very good",
+      ],
+    },
+    {
+      id: "futureOptimism",
+      question: "How optimistic do you feel about your future?",
+      type: "options",
+      options: [
+        "Not optimistic",
+        "Slightly optimistic",
+        "Moderately optimistic",
+        "Very optimistic",
+      ],
+    },
+    {
+      id: "trustedPerson",
+      question: "Do you have someone you can comfortably talk to about your problems?",
+      type: "options",
+      options: [
+        "No",
+        "Sometimes",
+        "Yes",
+      ],
+    },
+    {
+      id: "socialAnxiety",
+      question: "How often do you feel nervous or uncomfortable in social situations?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Very often",
+      ],
+    },
+    {
+      id: "romanticInterest",
+      question: "Are you currently interested in meeting someone romantically?",
+      type: "options",
+      options: [
+        "Not currently",
+        "Maybe",
+        "Yes",
+      ],
+    },
+    {
+      id: "pastRelationship",
+      question: "Have past relationships affected how you approach relationships today?",
+      type: "options",
+      options: [
+        "Not at all",
+        "A little",
+        "Moderately",
+        "A lot",
+      ],
+    },
+    {
+      id: "recentBreakup",
+      question: "Have you recently experienced a breakup or emotional disappointment?",
+      type: "options",
+      options: [
+        "No",
+        "Yes, recently",
+        "Yes, some time ago",
+      ],
+    },
+    {
+      id: "motivation",
+      question: "How motivated do you feel in your daily life?",
+      type: "options",
+      options: [
+        "Very low",
+        "Low",
+        "Average",
+        "High",
+        "Very high",
+      ],
+    },
+    {
+      id: "personalGrowth",
+      question: "How interested are you in personal growth and self-improvement?",
+      type: "options",
+      options: [
+        "Not interested",
+        "Somewhat interested",
+        "Very interested",
+      ],
+    },
+    {
+      id: "emotionalWellbeing",
+      question: "How would you describe your overall emotional well-being?",
+      type: "options",
+      options: [
+        "Very difficult",
+        "Difficult",
+        "Okay",
+        "Good",
+        "Very good",
+      ],
+    },
+    {
+      id: "singleGoal",
+      question: "What is one area of your personal life you would most like to improve?",
+      type: "text",
+      placeholder: "Confidence, friendships, dating, motivation...",
+    },
+  ];
+
+  const relationshipQuestions = [
+    {
+      id: "relationshipDuration",
+      question: "How long have you been in your current relationship?",
+      type: "text",
+      placeholder: "For example: 2 years, 6 months...",
+    },
+    {
+      id: "partnerIssues",
+      question: "Are you currently experiencing any issues with your partner?",
+      type: "options",
+      options: [
+        "No",
+        "Minor issues",
+        "Some issues",
+        "Serious issues",
+      ],
+    },
+    {
+      id: "partnerTime",
+      question: "How much time do you usually spend with your partner each day?",
+      type: "options",
+      options: [
+        "Less than 1 hour",
+        "1–2 hours",
+        "2–4 hours",
+        "More than 4 hours",
+      ],
+    },
+    {
+      id: "communication",
+      question: "How would you describe communication with your partner?",
+      type: "options",
+      options: [
+        "Very poor",
+        "Poor",
+        "Average",
+        "Good",
+        "Excellent",
+      ],
+    },
+    {
+      id: "conflicts",
+      question: "How often do you and your partner have disagreements?",
+      type: "options",
+      options: [
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Very often",
+      ],
+    },
+    {
+      id: "conflictResolution",
+      question: "How well do you resolve disagreements together?",
+      type: "options",
+      options: [
+        "Poorly",
+        "Somewhat",
+        "Well",
+        "Very well",
+      ],
+    },
+    {
+      id: "trust",
+      question: "How would you rate the level of trust in your relationship?",
+      type: "options",
+      options: [
+        "Very low",
+        "Low",
+        "Average",
+        "High",
+        "Very high",
+      ],
+    },
+    {
+      id: "emotionalConnection",
+      question: "How emotionally connected do you feel to your partner?",
+      type: "options",
+      options: [
+        "Not connected",
+        "Slightly connected",
+        "Moderately connected",
+        "Very connected",
+      ],
+    },
+    {
+      id: "qualityTime",
+      question: "Do you feel that you spend enough quality time together?",
+      type: "options",
+      options: [
+        "No",
+        "Sometimes",
+        "Mostly",
+        "Yes",
+      ],
+    },
+    {
+      id: "livingTogether",
+      question: "Do you currently live together with your partner?",
+      type: "options",
+      options: [
+        "Yes",
+        "No",
+      ],
+    },
+    {
+      id: "intimacy",
+      question: "How satisfied are you with the emotional intimacy in your relationship?",
+      type: "options",
+      options: [
+        "Very dissatisfied",
+        "Dissatisfied",
+        "Neutral",
+        "Satisfied",
+        "Very satisfied",
+      ],
+    },
+    {
+      id: "partnerSupport",
+      question: "Do you feel emotionally supported by your partner?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Always",
+      ],
+    },
+    {
+      id: "jealousy",
+      question: "How often do jealousy or insecurity affect your relationship?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Very often",
+      ],
+    },
+    {
+      id: "futureTogether",
+      question: "How confident do you feel about your future together?",
+      type: "options",
+      options: [
+        "Not confident",
+        "Slightly confident",
+        "Moderately confident",
+        "Very confident",
+      ],
+    },
+    {
+      id: "relationshipGoal",
+      question: "What would you most like to improve in your relationship?",
+      type: "text",
+      placeholder: "Communication, trust, quality time...",
+    },
+  ];
+
+  const marriedQuestions = [
+    {
+      id: "marriageDuration",
+      question: "How long have you been married?",
+      type: "text",
+      placeholder: "For example: 5 years...",
+    },
+    {
+      id: "marriageSatisfaction",
+      question: "How satisfied are you with your marriage?",
+      type: "options",
+      options: [
+        "Very dissatisfied",
+        "Dissatisfied",
+        "Neutral",
+        "Satisfied",
+        "Very satisfied",
+      ],
+    },
+    {
+      id: "spouseCommunication",
+      question: "How would you describe communication with your spouse?",
+      type: "options",
+      options: [
+        "Very poor",
+        "Poor",
+        "Average",
+        "Good",
+        "Excellent",
+      ],
+    },
+    {
+      id: "marriageConflict",
+      question: "How often do you and your spouse have conflicts?",
+      type: "options",
+      options: [
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Very often",
+      ],
+    },
+    {
+      id: "emotionalSupport",
+      question: "Do you feel emotionally supported by your spouse?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Always",
+      ],
+    },
+    {
+      id: "qualityTimeMarriage",
+      question: "How often do you spend quality time together?",
+      type: "options",
+      options: [
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Daily",
+      ],
+    },
+    {
+      id: "responsibilities",
+      question: "How satisfied are you with how household responsibilities are shared?",
+      type: "options",
+      options: [
+        "Very dissatisfied",
+        "Dissatisfied",
+        "Neutral",
+        "Satisfied",
+        "Very satisfied",
+      ],
+    },
+    {
+      id: "financialStress",
+      question: "Does financial pressure create stress in your marriage?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Very often",
+      ],
+    },
+    {
+      id: "familyPressure",
+      question: "Do family responsibilities or expectations create relationship stress?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Very often",
+      ],
+    },
+    {
+      id: "marriageTrust",
+      question: "How would you rate the trust between you and your spouse?",
+      type: "options",
+      options: [
+        "Very low",
+        "Low",
+        "Average",
+        "High",
+        "Very high",
+      ],
+    },
+    {
+      id: "romance",
+      question: "How satisfied are you with romance in your marriage?",
+      type: "options",
+      options: [
+        "Very dissatisfied",
+        "Dissatisfied",
+        "Neutral",
+        "Satisfied",
+        "Very satisfied",
+      ],
+    },
+    {
+      id: "personalSpace",
+      question: "Do you feel you have enough personal space and independence?",
+      type: "options",
+      options: [
+        "No",
+        "Sometimes",
+        "Mostly",
+        "Yes",
+      ],
+    },
+    {
+      id: "healthRoutine",
+      question: "How often do you practice activities such as yoga, meditation, or exercise?",
+      type: "options",
+      options: [
+        "Never",
+        "Rarely",
+        "Sometimes",
+        "Often",
+        "Daily",
+      ],
+    },
+    {
+      id: "stressManagement",
+      question: "How well do you currently manage stress in your personal life?",
+      type: "options",
+      options: [
+        "Very poorly",
+        "Poorly",
+        "Average",
+        "Well",
+        "Very well",
+      ],
+    },
+    {
+      id: "marriageGoal",
+      question: "What would you most like to improve in your marriage?",
+      type: "text",
+      placeholder: "Communication, trust, intimacy, quality time...",
+    },
+  ];
+
+  const questions = useMemo(() => {
+    const identity = answers.identity;
+    const relationshipStatus = answers.relationshipStatus;
+
+    const isLGBTQ = [
+      "Lesbian",
+      "Gay",
+      "Bisexual",
+      "Queer",
+    ].includes(identity);
+
+    let relationshipBranch = [];
+
+    if (relationshipStatus === "Single") {
+      relationshipBranch = singleQuestions;
+    }
+
+    if (relationshipStatus === "In a Relationship") {
+      relationshipBranch = relationshipQuestions;
+    }
+
+    if (relationshipStatus === "Married") {
+      relationshipBranch = marriedQuestions;
+    }
+
+    if (isLGBTQ) {
+      return [
+        ...basicQuestions,
+        ...lgbtqQuestions,
+        ...relationshipBranch,
+      ];
+    }
+
+    return [
+      ...basicQuestions,
+      ...relationshipBranch,
+    ];
+  }, [answers.identity, answers.relationshipStatus]);
+
+  const currentQuestion = questions[step];
+
+  const handleAnswer = (value) => {
+    setAnswers((previous) => ({
+      ...previous,
+      [currentQuestion.id]: value,
+    }));
+  };
+
+  const handleNext = () => {
+    const currentAnswer = answers[currentQuestion.id];
+
+    if (
+      currentAnswer === undefined ||
+      currentAnswer === null ||
+      currentAnswer === ""
+    ) {
+      return;
+    }
+
+    if (step < questions.length - 1) {
+      setStep((previous) => previous + 1);
+      return;
+    }
+
+    const completedAt = new Date().toISOString();
+
+    const questionnaireData = {
+      ...answers,
+      completedAt,
+    };
+
+    localStorage.setItem(
+      "questionnaireAnswers",
+      JSON.stringify(questionnaireData)
+    );
+
+    localStorage.setItem(
+      "questionnaireCompleted",
+      "true"
+    );
+
+    navigate("/");
+  };
+
+  const handleBack = () => {
+    if (step > 0) {
+      setStep((previous) => previous - 1);
+    }
+  };
+
+  const progress = ((step + 1) / questions.length) * 100;
+
+  if (!currentQuestion) {
+    return null;
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-10">
-          <div className="flex items-center gap-4 mb-8">
-            {user?.imageUrl && (
-              <img
-                src={user.imageUrl}
-                alt=""
-                className="w-16 h-16 rounded-full border-2 border-pink-200"
-              />
-            )}
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Hello, {user?.firstName || user?.username || "there"}!
-              </h1>
-              <p className="text-pink-600 font-medium">
-                {ROLE_LABELS[role] || "User"} Dashboard
-              </p>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center px-4 py-10">
+
+      <div className="w-full max-w-2xl">
+
+        <div className="text-center mb-8">
+
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 text-white text-3xl shadow-lg mb-4">
+            💗
           </div>
 
-          <p className="text-gray-600 mb-8">
-            Welcome to your personal space. Book sessions, explore services, and track your journey.
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+            Let's Get to Know You
+          </h1>
+
+          <p className="text-gray-500 mt-3 max-w-lg mx-auto">
+            Answer a few questions so we can better understand your
+            personality, lifestyle, relationships, and counselling needs.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Link
-              to="/book"
-              className="p-6 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 text-white hover:shadow-lg transition-all"
-            >
-              <span className="text-2xl block mb-2">📅</span>
-              <h3 className="font-bold text-lg">Book Appointment</h3>
-              <p className="text-pink-100 text-sm mt-1">Schedule a session with a therapist</p>
-            </Link>
-            <Link
-              to="/services"
-              className="p-6 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-500 text-white hover:shadow-lg transition-all"
-            >
-              <span className="text-2xl block mb-2">💑</span>
-              <h3 className="font-bold text-lg">Browse Services</h3>
-              <p className="text-purple-100 text-sm mt-1">Explore counseling & coaching options</p>
-            </Link>
-            <Link
-              to="/personal"
-              className="p-6 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white hover:shadow-lg transition-all"
-            >
-              <span className="text-2xl block mb-2">💬</span>
-              <h3 className="font-bold text-lg">Confess / Chat</h3>
-              <p className="text-blue-100 text-sm mt-1">Join anonymous support rooms</p>
-            </Link>
-            <Link
-              to="/contact-us"
-              className="p-6 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white hover:shadow-lg transition-all"
-            >
-              <span className="text-2xl block mb-2">✉️</span>
-              <h3 className="font-bold text-lg">Contact Us</h3>
-              <p className="text-amber-100 text-sm mt-1">Get in touch with our team</p>
-            </Link>
-          </div>
         </div>
+
+        <div className="bg-white rounded-3xl shadow-xl p-6 md:p-10">
+
+          <div className="mb-8">
+
+            <div className="flex justify-between items-center text-sm text-gray-500 mb-3">
+
+              <span>
+                Question {step + 1} of {questions.length}
+              </span>
+
+              <span className="font-medium text-pink-500">
+                {Math.round(progress)}%
+              </span>
+
+            </div>
+
+            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+
+              <div
+                className="h-full bg-gradient-to-r from-pink-500 to-purple-500 transition-all duration-500"
+                style={{
+                  width: `${progress}%`,
+                }}
+              />
+
+            </div>
+
+          </div>
+
+          <div className="min-h-[330px] flex flex-col justify-center">
+
+            <div className="mb-8">
+
+              <p className="text-sm font-semibold text-pink-500 mb-3">
+                PERSONALIZED COUNSELLING QUESTIONNAIRE
+              </p>
+
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800 leading-tight">
+                {currentQuestion.question}
+              </h2>
+
+            </div>
+
+            {currentQuestion.type === "options" && (
+              <div className="grid grid-cols-1 gap-3">
+
+                {currentQuestion.options.map((option) => {
+
+                  const selected =
+                    answers[currentQuestion.id] === option;
+
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => handleAnswer(option)}
+                      className={`w-full text-left px-5 py-4 rounded-2xl border-2 transition-all duration-200 ${
+                        selected
+                          ? "border-pink-500 bg-pink-50 text-pink-700 shadow-sm"
+                          : "border-gray-100 bg-gray-50 text-gray-700 hover:border-pink-200 hover:bg-pink-50"
+                      }`}
+                    >
+
+                      <div className="flex items-center justify-between">
+
+                        <span className="font-medium">
+                          {option}
+                        </span>
+
+                        {selected && (
+                          <span className="w-6 h-6 rounded-full bg-pink-500 text-white flex items-center justify-center text-sm">
+                            ✓
+                          </span>
+                        )}
+
+                      </div>
+
+                    </button>
+                  );
+                })}
+
+              </div>
+            )}
+
+            {(currentQuestion.type === "text" ||
+              currentQuestion.type === "number") && (
+              <div>
+
+                <input
+                  type={currentQuestion.type}
+                  value={answers[currentQuestion.id] || ""}
+                  onChange={(event) =>
+                    handleAnswer(event.target.value)
+                  }
+                  placeholder={currentQuestion.placeholder}
+                  className="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 text-gray-800 focus:border-pink-400 focus:outline-none focus:ring-4 focus:ring-pink-100 transition-all"
+                />
+
+                {currentQuestion.type === "text" && (
+                  <p className="text-sm text-gray-400 mt-3">
+                    Share as much or as little as you're comfortable with.
+                  </p>
+                )}
+
+              </div>
+            )}
+
+          </div>
+
+          <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
+
+            <button
+              type="button"
+              onClick={handleBack}
+              disabled={step === 0}
+              className={`px-6 py-3 rounded-xl font-medium transition-all ${
+                step === 0
+                  ? "text-gray-300 cursor-not-allowed"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`}
+            >
+              ← Back
+            </button>
+
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={
+                !answers[currentQuestion.id]
+              }
+              className={`px-8 py-3 rounded-xl font-semibold text-white transition-all ${
+                answers[currentQuestion.id]
+                  ? "bg-gradient-to-r from-pink-500 to-purple-500 hover:shadow-lg hover:scale-[1.02]"
+                  : "bg-gray-300 cursor-not-allowed"
+              }`}
+            >
+              {step === questions.length - 1
+                ? "Finish ✓"
+                : "Continue →"}
+            </button>
+
+          </div>
+
+        </div>
+
+        <p className="text-center text-gray-400 text-sm mt-5">
+          Your responses help personalize your counselling experience.
+        </p>
+
       </div>
+
     </div>
   );
 };
