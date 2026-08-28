@@ -1,11 +1,15 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
 
 import HomePage from "./pages/HomePage.jsx";
 import ServicesPage from "./pages/ServicesPage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar.jsx";
 import BookAppointment from "./pages/BookAppointment.jsx";
 import BlogPage from "./pages/BlogPage.jsx";
 import FAQPage from "./pages/FAQPage.jsx";
@@ -21,6 +25,9 @@ import SignUpPage from "./pages/SignUpPage.jsx";
 import UserDashboard from "./pages/UserDashboard.jsx";
 import TherapistDashboard from "./pages/TherapistDashboard.jsx";
 
+import Progress from "./pages/Progress.jsx";
+import ChangePassword from "./pages/ChangePassword.jsx";
+
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import PublicOnlyRoute from "./components/PublicOnlyRoute.jsx";
 import RoleRedirect from "./components/RoleRedirect.jsx";
@@ -34,14 +41,18 @@ const App = () => {
   return (
     <Router>
       <div
-        className={`app-theme ${
-          theme === "dark" ? "theme-dark dark" : "theme-light"
+        className={`app-theme min-h-screen ${
+          theme === "dark"
+            ? "theme-dark dark"
+            : "theme-light"
         }`}
       >
         <Navbar />
 
         <Routes>
-          {/* Authentication */}
+
+          {/* ================= AUTHENTICATION ================= */}
+
           <Route
             path="/sign-in"
             element={
@@ -60,11 +71,20 @@ const App = () => {
             }
           />
 
-          {/* Public pages */}
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsOfService />} />
+          {/* ================= PUBLIC PAGES ================= */}
 
-          {/* Protected pages */}
+          <Route
+            path="/privacy-policy"
+            element={<PrivacyPolicy />}
+          />
+
+          <Route
+            path="/terms"
+            element={<TermsOfService />}
+          />
+
+          {/* ================= HOME ================= */}
+
           <Route
             path="/"
             element={
@@ -74,14 +94,7 @@ const App = () => {
             }
           />
 
-          <Route
-            path="/book"
-            element={
-              <ProtectedRoute>
-                <BookAppointment />
-              </ProtectedRoute>
-            }
-          />
+          {/* ================= SERVICES ================= */}
 
           <Route
             path="/services"
@@ -92,6 +105,8 @@ const App = () => {
             }
           />
 
+          {/* ================= DOCTORS ================= */}
+
           <Route
             path="/doctors/:serviceType"
             element={
@@ -100,6 +115,19 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+
+          {/* ================= BOOK APPOINTMENT ================= */}
+
+          <Route
+            path="/book"
+            element={
+              <ProtectedRoute>
+                <BookAppointment />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ================= ABOUT ================= */}
 
           <Route
             path="/about-us"
@@ -110,6 +138,8 @@ const App = () => {
             }
           />
 
+          {/* ================= CONTACT ================= */}
+
           <Route
             path="/contact-us"
             element={
@@ -118,6 +148,8 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+
+          {/* ================= BLOG ================= */}
 
           <Route
             path="/blog"
@@ -128,6 +160,8 @@ const App = () => {
             }
           />
 
+          {/* ================= FAQ ================= */}
+
           <Route
             path="/faqs"
             element={
@@ -136,6 +170,8 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+
+          {/* ================= CONFESS ================= */}
 
           <Route
             path="/personal"
@@ -146,39 +182,105 @@ const App = () => {
             }
           />
 
-          {/* Dashboard redirect */}
+          {/* ================= DASHBOARD REDIRECT ================= */}
+
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute allowedRoles={[ROLES.USER, ROLES.THERAPIST]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  ROLES.USER,
+                  ROLES.THERAPIST,
+                ]}
+              >
                 <RoleRedirect />
               </ProtectedRoute>
             }
           />
 
-          {/* User dashboard */}
+          {/* ================= USER DASHBOARD ================= */}
+
           <Route
             path="/user-dashboard"
             element={
-              <ProtectedRoute allowedRoles={[ROLES.USER]}>
+              <ProtectedRoute
+                allowedRoles={[ROLES.USER]}
+              >
                 <UserDashboard />
               </ProtectedRoute>
             }
           />
 
-          {/* Therapist dashboard */}
+          {/* ================= QUESTIONNAIRE ================= */}
+
+          <Route
+            path="/questionnaire"
+            element={
+              <ProtectedRoute
+                allowedRoles={[ROLES.USER]}
+              >
+                <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ================= PROGRESS ================= */}
+
+          <Route
+            path="/progress"
+            element={
+              <ProtectedRoute
+                allowedRoles={[ROLES.USER]}
+              >
+                <Progress />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ================= CHANGE PASSWORD ================= */}
+
+          <Route
+            path="/change-password"
+            element={
+              <ProtectedRoute
+                allowedRoles={[
+                  ROLES.USER,
+                  ROLES.THERAPIST,
+                ]}
+              >
+                <ChangePassword />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ================= THERAPIST DASHBOARD ================= */}
+
           <Route
             path="/therapist-dashboard"
             element={
-              <ProtectedRoute allowedRoles={[ROLES.THERAPIST]}>
+              <ProtectedRoute
+                allowedRoles={[ROLES.THERAPIST]}
+              >
                 <TherapistDashboard />
               </ProtectedRoute>
             }
           />
-        </Routes>
-      </div>
 
-      <Footer />
+          {/* ================= FALLBACK ================= */}
+
+          <Route
+            path="*"
+            element={
+              <ProtectedRoute>
+                <HomePage />
+              </ProtectedRoute>
+            }
+          />
+
+        </Routes>
+
+        <Footer />
+      </div>
     </Router>
   );
 };

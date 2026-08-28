@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  FaQuestionCircle, 
-  FaChevronDown, 
+import {
+  FaQuestionCircle,
+  FaChevronDown,
   FaChevronUp,
   FaSearch,
   FaLightbulb,
@@ -25,7 +25,7 @@ import {
   FaSeedling,
   FaLeaf,
   FaHandHoldingHeart,
-  FaShareAlt  // Added this import
+  FaShareAlt
 } from "react-icons/fa";
 
 const FAQPage = () => {
@@ -45,7 +45,8 @@ const FAQPage = () => {
     {
       id: 1,
       question: "How does the consultation process work?",
-      answer: "Our consultation process is simple and seamless. You can book an appointment online through our platform, and our relationship experts will guide you through each step. We begin with an initial assessment to understand your concerns, followed by personalized sessions tailored to your needs.",
+      answer:
+        "Our consultation process is simple and seamless. You can book an appointment online through our platform, and our relationship experts will guide you through each step. We begin with an initial assessment to understand your concerns, followed by personalized sessions tailored to your needs.",
       category: "consultation",
       icon: <FaRocket className="text-blue-500" />,
       tags: ["Process", "Booking", "Guidance"]
@@ -53,7 +54,8 @@ const FAQPage = () => {
     {
       id: 2,
       question: "What is the cost of a consultation?",
-      answer: "We offer flexible pricing plans to suit different needs. Initial 30-minute sessions start at $79, with package discounts available for multiple sessions. We also provide sliding scale options for those in need. Contact our team for a personalized quote.",
+      answer:
+        "We offer flexible pricing plans to suit different needs. Initial 30-minute sessions start at $79, with package discounts available for multiple sessions. We also provide sliding scale options for those in need. Contact our team for a personalized quote.",
       category: "consultation",
       icon: <FaStar className="text-yellow-500" />,
       tags: ["Pricing", "Plans", "Payment"]
@@ -61,7 +63,8 @@ const FAQPage = () => {
     {
       id: 3,
       question: "Are the consultations confidential?",
-      answer: "Absolutely. All consultations are 100% confidential and protected by HIPAA compliance. Your privacy is our utmost priority. We use end-to-end encryption for all communications and secure storage for session notes. Our professionals are bound by strict confidentiality agreements.",
+      answer:
+        "Absolutely. All consultations are 100% confidential and protected by HIPAA compliance. Your privacy is our utmost priority. We use end-to-end encryption for all communications and secure storage for session notes. Our professionals are bound by strict confidentiality agreements.",
       category: "confidentiality",
       icon: <FaShieldAlt className="text-green-500" />,
       tags: ["Privacy", "Security", "Trust"]
@@ -69,7 +72,8 @@ const FAQPage = () => {
     {
       id: 4,
       question: "How long does each consultation last?",
-      answer: "Sessions typically last between 50 to 60 minutes to ensure we have ample time to address your concerns. We also offer 30-minute follow-up sessions and 90-minute intensive sessions for specific needs. The duration can be customized based on your requirements.",
+      answer:
+        "Sessions typically last between 50 to 60 minutes to ensure we have ample time to address your concerns. We also offer 30-minute follow-up sessions and 90-minute intensive sessions for specific needs. The duration can be customized based on your requirements.",
       category: "appointment",
       icon: <FaClock className="text-purple-500" />,
       tags: ["Duration", "Timing", "Custom"]
@@ -77,7 +81,8 @@ const FAQPage = () => {
     {
       id: 5,
       question: "Can I reschedule or cancel my appointment?",
-      answer: "Yes, you can reschedule or cancel your appointment up to 24 hours before the scheduled time without any charges. You can do this through your account dashboard or by contacting our support team. Late cancellations may incur a small fee as per our policy.",
+      answer:
+        "Yes, you can reschedule or cancel your appointment up to 24 hours before the scheduled time without any charges. You can do this through your account dashboard or by contacting our support team. Late cancellations may incur a small fee as per our policy.",
       category: "appointment",
       icon: <FaCalendarAlt className="text-pink-500" />,
       tags: ["Reschedule", "Cancel", "Policy"]
@@ -85,7 +90,8 @@ const FAQPage = () => {
     {
       id: 6,
       question: "Do you offer virtual consultations?",
-      answer: "Yes, we offer both in-person and virtual consultations through our secure video platform. Virtual sessions provide the same quality of care and are accessible from anywhere. All you need is a stable internet connection and a private space for the session.",
+      answer:
+        "Yes, we offer both in-person and virtual consultations through our secure video platform. Virtual sessions provide the same quality of care and are accessible from anywhere. All you need is a stable internet connection and a private space for the session.",
       category: "technical",
       icon: <FaVideo className="text-teal-500" />,
       tags: ["Virtual", "Online", "Remote"]
@@ -93,7 +99,8 @@ const FAQPage = () => {
     {
       id: 7,
       question: "What qualifications do your experts have?",
-      answer: "Our team consists of licensed therapists, certified relationship coaches, and mental health professionals with extensive experience. All experts undergo rigorous vetting and continuous training to ensure the highest quality of service.",
+      answer:
+        "Our team consists of licensed therapists, certified relationship coaches, and mental health professionals with extensive experience. All experts undergo rigorous vetting and continuous training to ensure the highest quality of service.",
       category: "consultation",
       icon: <FaUserMd className="text-indigo-500" />,
       tags: ["Experts", "Qualifications", "Quality"]
@@ -101,7 +108,8 @@ const FAQPage = () => {
     {
       id: 8,
       question: "Is there any preparation needed before a session?",
-      answer: "No special preparation is needed. We recommend being in a quiet, comfortable space for virtual sessions and having a notebook handy if you wish to take notes. Some clients find it helpful to jot down key points they want to discuss.",
+      answer:
+        "No special preparation is needed. We recommend being in a quiet, comfortable space for virtual sessions and having a notebook handy if you wish to take notes. Some clients find it helpful to jot down key points they want to discuss.",
       category: "consultation",
       icon: <FaMagic className="text-amber-500" />,
       tags: ["Preparation", "Tips", "Guide"]
@@ -109,7 +117,8 @@ const FAQPage = () => {
     {
       id: 9,
       question: "Can I choose my preferred expert?",
-      answer: "Absolutely. You can browse expert profiles, read reviews, and select the professional who best aligns with your needs. If you're unsure, our matching algorithm can suggest experts based on your concerns and preferences.",
+      answer:
+        "Absolutely. You can browse expert profiles, read reviews, and select the professional who best aligns with your needs. If you're unsure, our matching algorithm can suggest experts based on your concerns and preferences.",
       category: "appointment",
       icon: <FaHandHoldingHeart className="text-rose-500" />,
       tags: ["Choice", "Matching", "Preferences"]
@@ -117,7 +126,8 @@ const FAQPage = () => {
     {
       id: 10,
       question: "What if I need urgent support?",
-      answer: "For urgent matters, we offer emergency sessions within 24 hours. Additionally, we provide 24/7 chat support and have partnerships with crisis helplines for immediate assistance when needed.",
+      answer:
+        "For urgent matters, we offer emergency sessions within 24 hours. Additionally, we provide 24/7 chat support and have partnerships with crisis helplines for immediate assistance when needed.",
       category: "confidentiality",
       icon: <FaHeadset className="text-red-500" />,
       tags: ["Emergency", "Support", "Urgent"]
@@ -125,7 +135,8 @@ const FAQPage = () => {
     {
       id: 11,
       question: "Are sessions covered by insurance?",
-      answer: "We work with several insurance providers and can help you verify coverage. Many of our services are eligible for reimbursement through HSA/FSA accounts. Our billing team can provide detailed information about your specific plan.",
+      answer:
+        "We work with several insurance providers and can help you verify coverage. Many of our services are eligible for reimbursement through HSA/FSA accounts. Our billing team can provide detailed information about your specific plan.",
       category: "consultation",
       icon: <FaHeartbeat className="text-emerald-500" />,
       tags: ["Insurance", "Payment", "Coverage"]
@@ -133,7 +144,8 @@ const FAQPage = () => {
     {
       id: 12,
       question: "How do I know if this is right for me?",
-      answer: "We offer a free 15-minute consultation to help you understand our approach and determine if it's a good fit. This allows you to meet an expert, discuss your concerns, and ask any questions before committing to a full session.",
+      answer:
+        "We offer a free 15-minute consultation to help you understand our approach and determine if it's a good fit. This allows you to meet an expert, discuss your concerns, and ask any questions before committing to a full session.",
       category: "all",
       icon: <FaSeedling className="text-lime-500" />,
       tags: ["Suitability", "Free Trial", "Assessment"]
@@ -141,7 +153,8 @@ const FAQPage = () => {
     {
       id: 13,
       question: "Can I switch experts if needed?",
-      answer: "Yes, you can switch experts at any time. We believe the right match is crucial for progress. Our team will help you find another expert who might be a better fit for your needs and preferences.",
+      answer:
+        "Yes, you can switch experts at any time. We believe the right match is crucial for progress. Our team will help you find another expert who might be a better fit for your needs and preferences.",
       category: "appointment",
       icon: <FaComments className="text-cyan-500" />,
       tags: ["Switch", "Flexibility", "Match"]
@@ -149,7 +162,8 @@ const FAQPage = () => {
     {
       id: 14,
       question: "What technology do I need for virtual sessions?",
-      answer: "You'll need a device with a camera and microphone (computer, tablet, or smartphone) and a stable internet connection. Our platform works on all modern browsers and has dedicated apps for iOS and Android.",
+      answer:
+        "You'll need a device with a camera and microphone (computer, tablet, or smartphone) and a stable internet connection. Our platform works on all modern browsers and has dedicated apps for iOS and Android.",
       category: "technical",
       icon: <FaLeaf className="text-green-500" />,
       tags: ["Technology", "Requirements", "Setup"]
@@ -160,14 +174,18 @@ const FAQPage = () => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-  const filteredFaqs = faqs.filter(faq => {
-    const matchesSearch = searchQuery === "" || 
+  const filteredFaqs = faqs.filter((faq) => {
+    const matchesSearch =
+      searchQuery === "" ||
       faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
       faq.answer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      faq.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    const matchesCategory = activeCategory === "all" || faq.category === activeCategory;
-    
+      faq.tags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+    const matchesCategory =
+      activeCategory === "all" || faq.category === activeCategory;
+
     return matchesSearch && matchesCategory;
   });
 
@@ -202,13 +220,14 @@ const FAQPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-10 px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-purple-950 py-10 px-4 relative overflow-hidden transition-colors duration-300">
+
       {/* Decorative background elements */}
       <motion.div
-        className="absolute top-0 left-0 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"
+        className="absolute top-0 left-0 w-64 h-64 bg-blue-200 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-20"
         animate={{
           x: [0, 100, 0],
-          y: [0, 50, 0],
+          y: [0, 50, 0]
         }}
         transition={{
           duration: 20,
@@ -216,11 +235,12 @@ const FAQPage = () => {
           ease: "linear"
         }}
       />
+
       <motion.div
-        className="absolute bottom-0 right-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"
+        className="absolute bottom-0 right-0 w-96 h-96 bg-purple-200 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-20"
         animate={{
           x: [0, -100, 0],
-          y: [0, -50, 0],
+          y: [0, -50, 0]
         }}
         transition={{
           duration: 25,
@@ -228,11 +248,12 @@ const FAQPage = () => {
           ease: "linear"
         }}
       />
+
       <motion.div
-        className="absolute top-1/2 left-1/3 w-48 h-48 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"
+        className="absolute top-1/2 left-1/3 w-48 h-48 bg-cyan-200 dark:bg-cyan-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-20"
         animate={{
           x: [0, 80, 0],
-          y: [0, -80, 0],
+          y: [0, -80, 0]
         }}
         transition={{
           duration: 30,
@@ -241,7 +262,7 @@ const FAQPage = () => {
         }}
       />
 
-      {/* Header Section */}
+      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -254,6 +275,7 @@ const FAQPage = () => {
         >
           <FaQuestionCircle className="text-6xl text-blue-500" />
         </motion.div>
+
         <motion.h1
           className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
           initial={{ scale: 0.5, opacity: 0 }}
@@ -262,8 +284,9 @@ const FAQPage = () => {
         >
           Questions & Answers
         </motion.h1>
+
         <motion.p
-          className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+          className="text-gray-600 dark:text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
@@ -271,7 +294,7 @@ const FAQPage = () => {
           Find clarity and guidance for your relationship journey
         </motion.p>
 
-        {/* Search Bar */}
+        {/* Search */}
         <motion.div
           className="max-w-2xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
@@ -279,20 +302,22 @@ const FAQPage = () => {
           transition={{ delay: 0.6 }}
         >
           <div className="relative">
-            <FaSearch className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+            <FaSearch className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xl" />
+
             <input
               type="text"
               placeholder="Search questions or topics..."
-              className="w-full pl-14 pr-6 py-4 rounded-2xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none shadow-lg bg-white/80 backdrop-blur-sm"
+              className="w-full pl-14 pr-12 py-4 rounded-2xl border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none shadow-lg bg-white/80 dark:bg-gray-800/80 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 backdrop-blur-sm transition-colors"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+
             {searchQuery && (
               <motion.button
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 onClick={() => setSearchQuery("")}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
               >
                 ✕
               </motion.button>
@@ -316,19 +341,25 @@ const FAQPage = () => {
               className={`px-5 py-3 rounded-xl flex items-center gap-3 transition-all ${
                 activeCategory === category.id
                   ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
-                  : "bg-white text-gray-700 hover:bg-blue-50 border border-gray-200"
+                  : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700"
               }`}
               onClick={() => setActiveCategory(category.id)}
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
               <span className="text-lg">{category.icon}</span>
-              <span className="font-medium">{category.label}</span>
-              <span className={`px-2 py-1 rounded-full text-sm ${
-                activeCategory === category.id
-                  ? "bg-white/20"
-                  : "bg-blue-100 text-blue-600"
-              }`}>
+
+              <span className="font-medium">
+                {category.label}
+              </span>
+
+              <span
+                className={`px-2 py-1 rounded-full text-sm ${
+                  activeCategory === category.id
+                    ? "bg-white/20"
+                    : "bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300"
+                }`}
+              >
                 {category.count}
               </span>
             </motion.button>
@@ -354,18 +385,24 @@ const FAQPage = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  className={`bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden ${
-                    activeIndex === index ? "ring-2 ring-blue-500" : ""
+                  className={`bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-black/30 border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors ${
+                    activeIndex === index
+                      ? "ring-2 ring-blue-500"
+                      : ""
                   }`}
-                  whileHover={{ 
+                  whileHover={{
                     y: -3,
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+                    boxShadow:
+                      "0 20px 40px rgba(0,0,0,0.15)"
                   }}
                 >
                   <motion.button
                     className="w-full p-6 text-left flex items-center justify-between"
                     onClick={() => toggleFAQ(index)}
-                    whileHover={{ backgroundColor: "rgba(59, 130, 246, 0.05)" }}
+                    whileHover={{
+                      backgroundColor:
+                        "rgba(59, 130, 246, 0.06)"
+                    }}
                     aria-expanded={activeIndex === index}
                     aria-controls={`faq-answer-${faq.id}`}
                   >
@@ -373,18 +410,24 @@ const FAQPage = () => {
                       <div className="mt-1">
                         {faq.icon}
                       </div>
+
                       <div className="flex-1">
                         <motion.h3
-                          className="text-xl font-semibold text-gray-800 mb-2"
-                          animate={activeIndex === index ? { color: "#3b82f6" } : {}}
+                          className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2"
+                          animate={
+                            activeIndex === index
+                              ? { color: "#3b82f6" }
+                              : {}
+                          }
                         >
                           {faq.question}
                         </motion.h3>
+
                         <div className="flex flex-wrap gap-2">
                           {faq.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"
+                              className="px-3 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium"
                             >
                               {tag}
                             </span>
@@ -392,8 +435,12 @@ const FAQPage = () => {
                         </div>
                       </div>
                     </div>
+
                     <motion.div
-                      animate={{ rotate: activeIndex === index ? 180 : 0 }}
+                      animate={{
+                        rotate:
+                          activeIndex === index ? 180 : 0
+                      }}
                       transition={{ duration: 0.3 }}
                       className="ml-4 text-blue-500"
                     >
@@ -409,8 +456,11 @@ const FAQPage = () => {
                     {activeIndex === index && (
                       <motion.div
                         id={`faq-answer-${faq.id}`}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ 
+                        initial={{
+                          height: 0,
+                          opacity: 0
+                        }}
+                        animate={{
                           height: "auto",
                           opacity: 1,
                           transition: {
@@ -423,7 +473,7 @@ const FAQPage = () => {
                             }
                           }
                         }}
-                        exit={{ 
+                        exit={{
                           height: 0,
                           opacity: 0,
                           transition: {
@@ -438,37 +488,66 @@ const FAQPage = () => {
                         className="overflow-hidden"
                       >
                         <div className="px-6 pb-6">
-                          <div className="pl-10 border-l-2 border-blue-200">
-                            <p className="text-gray-600 text-lg leading-relaxed mb-4">
+                          <div className="pl-10 border-l-2 border-blue-200 dark:border-blue-800">
+                            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-4">
                               {faq.answer}
                             </p>
+
                             {faq.id === 2 && (
-                              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl mb-4">
-                                <h4 className="font-semibold text-blue-700 mb-2 flex items-center gap-2">
+                              <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/50 dark:to-purple-950/50 p-4 rounded-xl mb-4">
+                                <h4 className="font-semibold text-blue-700 dark:text-blue-300 mb-2 flex items-center gap-2">
                                   <FaLightbulb className="text-yellow-500" />
                                   Pricing Plans
                                 </h4>
+
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                   {[
-                                    { plan: "Basic", price: "$79", sessions: "1 session" },
-                                    { plan: "Premium", price: "$199", sessions: "3 sessions" },
-                                    { plan: "Elite", price: "$349", sessions: "6 sessions" }
+                                    {
+                                      plan: "Basic",
+                                      price: "$79",
+                                      sessions: "1 session"
+                                    },
+                                    {
+                                      plan: "Premium",
+                                      price: "$199",
+                                      sessions: "3 sessions"
+                                    },
+                                    {
+                                      plan: "Elite",
+                                      price: "$349",
+                                      sessions: "6 sessions"
+                                    }
                                   ].map((plan) => (
-                                    <div key={plan.plan} className="bg-white p-3 rounded-lg text-center">
-                                      <div className="font-bold text-gray-800">{plan.plan}</div>
-                                      <div className="text-2xl font-bold text-blue-600">{plan.price}</div>
-                                      <div className="text-sm text-gray-500">{plan.sessions}</div>
+                                    <div
+                                      key={plan.plan}
+                                      className="bg-white dark:bg-gray-800 p-3 rounded-lg text-center border border-gray-100 dark:border-gray-700"
+                                    >
+                                      <div className="font-bold text-gray-800 dark:text-gray-100">
+                                        {plan.plan}
+                                      </div>
+
+                                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                                        {plan.price}
+                                      </div>
+
+                                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                                        {plan.sessions}
+                                      </div>
                                     </div>
                                   ))}
                                 </div>
                               </div>
                             )}
+
                             <div className="flex flex-wrap gap-4 mt-4">
-                              <button className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
-                                <FaCommentDots /> Was this helpful?
+                              <button className="flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors">
+                                <FaCommentDots />
+                                Was this helpful?
                               </button>
-                              <button className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors">
-                                <FaShareAlt /> Share answer
+
+                              <button className="flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 rounded-lg hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors">
+                                <FaShareAlt />
+                                Share answer
                               </button>
                             </div>
                           </div>
@@ -485,11 +564,13 @@ const FAQPage = () => {
               animate={{ opacity: 1, y: 0 }}
               className="text-center py-20"
             >
-              <FaQuestionCircle className="text-8xl text-gray-300 mx-auto mb-6" />
-              <h3 className="text-2xl font-bold text-gray-600 mb-2">
+              <FaQuestionCircle className="text-8xl text-gray-300 dark:text-gray-700 mx-auto mb-6" />
+
+              <h3 className="text-2xl font-bold text-gray-600 dark:text-gray-300 mb-2">
                 No questions found
               </h3>
-              <p className="text-gray-500">
+
+              <p className="text-gray-500 dark:text-gray-400">
                 Try adjusting your search or browse by category
               </p>
             </motion.div>
@@ -497,7 +578,7 @@ const FAQPage = () => {
         </AnimatePresence>
       </motion.div>
 
-      {/* Stats & CTA Section */}
+      {/* Stats & CTA */}
       <motion.div
         className="max-w-6xl mx-auto mt-16 relative z-10"
         initial={{ opacity: 0, y: 50 }}
@@ -510,10 +591,12 @@ const FAQPage = () => {
               <div className="text-4xl font-bold mb-2">24/7</div>
               <div className="text-lg">Support Available</div>
             </div>
+
             <div className="text-center">
               <div className="text-4xl font-bold mb-2">100%</div>
               <div className="text-lg">Confidential</div>
             </div>
+
             <div className="text-center">
               <div className="text-4xl font-bold mb-2">4.9★</div>
               <div className="text-lg">Satisfaction Rate</div>
@@ -524,24 +607,53 @@ const FAQPage = () => {
         {/* Contact Options */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           {[
-            { icon: <FaPhoneAlt />, title: "Call Us", desc: "+1 (555) 123-HELP", color: "bg-green-500" },
-            { icon: <FaEnvelope />, title: "Email", desc: "support@relationship.com", color: "bg-blue-500" },
-            { icon: <FaWhatsapp />, title: "WhatsApp", desc: "Chat instantly", color: "bg-green-400" }
+            {
+              icon: <FaPhoneAlt />,
+              title: "Call Us",
+              desc: "+1 (555) 123-HELP",
+              color: "bg-green-500"
+            },
+            {
+              icon: <FaEnvelope />,
+              title: "Email",
+              desc: "support@relationship.com",
+              color: "bg-blue-500"
+            },
+            {
+              icon: <FaWhatsapp />,
+              title: "WhatsApp",
+              desc: "Chat instantly",
+              color: "bg-green-400"
+            }
           ].map((contact, idx) => (
             <motion.div
               key={contact.title}
-              className="bg-white rounded-2xl p-6 shadow-lg text-center"
-              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg dark:shadow-black/30 border border-gray-100 dark:border-gray-700 text-center transition-colors"
+              whileHover={{
+                y: -5,
+                transition: { duration: 0.2 }
+              }}
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              whileInView={{
+                opacity: 1,
+                y: 0
+              }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
             >
-              <div className={`${contact.color} w-14 h-14 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4`}>
+              <div
+                className={`${contact.color} w-14 h-14 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4`}
+              >
                 {contact.icon}
               </div>
-              <h4 className="font-bold text-gray-800 mb-2">{contact.title}</h4>
-              <p className="text-gray-600">{contact.desc}</p>
+
+              <h4 className="font-bold text-gray-800 dark:text-gray-100 mb-2">
+                {contact.title}
+              </h4>
+
+              <p className="text-gray-600 dark:text-gray-400">
+                {contact.desc}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -554,14 +666,17 @@ const FAQPage = () => {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
       >
-        <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-3xl p-8 border-2 border-dashed border-pink-200">
+        <div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/40 dark:to-purple-950/40 rounded-3xl p-8 border-2 border-dashed border-pink-200 dark:border-pink-800">
           <FaLightbulb className="text-5xl text-yellow-500 mx-auto mb-4" />
-          <h3 className="text-3xl font-bold text-gray-800 mb-4">
+
+          <h3 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4">
             Still have questions?
           </h3>
-          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+
+          <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
             Can't find the answer you're looking for? Our support team is here to help.
           </p>
+
           <motion.button
             className="px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-shadow"
             whileHover={{ scale: 1.05 }}
@@ -581,6 +696,7 @@ const FAQPage = () => {
         whileTap={{ scale: 0.9 }}
       >
         <FaHeadset className="text-2xl" />
+
         <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full text-xs flex items-center justify-center animate-pulse">
           !
         </span>
@@ -588,19 +704,37 @@ const FAQPage = () => {
 
       <style jsx>{`
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+          0%, 100% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(-20px);
+          }
         }
+
         .animate-float {
           animation: float 6s ease-in-out infinite;
         }
-        
+
         @keyframes blob {
-          0% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-          100% { transform: translate(0px, 0px) scale(1); }
+          0% {
+            transform: translate(0px, 0px) scale(1);
+          }
+
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+
+          100% {
+            transform: translate(0px, 0px) scale(1);
+          }
         }
+
         .animate-blob {
           animation: blob 7s infinite;
         }

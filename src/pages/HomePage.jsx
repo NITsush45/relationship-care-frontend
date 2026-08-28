@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useInView,
+  AnimatePresence,
+} from "framer-motion";
 import servicesData from "../data/services.json";
 import testimonialsData from "../data/testimonials.json";
 import processStepsData from "../data/processSteps.json";
 import statsData from "../data/stats.json";
 import { API_BASE } from "../config";
-
-// Component definitions
-// Simple icon components
 
 // Reusable Section Wrapper Component
 const SectionWrapper = ({ children, className = "" }) => {
@@ -36,31 +39,46 @@ const ServiceCard = ({ service, index }) => {
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      animate={
+        isInView
+          ? { opacity: 1, y: 0 }
+          : { opacity: 0, y: 50 }
+      }
       transition={{ delay: index * 0.1, duration: 0.6 }}
       whileHover={{ y: -3 }}
       className="group relative"
     >
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-white via-pink-50/50 to-purple-50/50 rounded-3xl shadow-xl group-hover:shadow-2xl transition-all duration-500 border border-pink-100/50"
-      />
+      <motion.div className="absolute inset-0 bg-gradient-to-br from-white via-pink-50/50 to-purple-50/50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-950/40 rounded-3xl shadow-xl group-hover:shadow-2xl transition-all duration-500 border border-pink-100/50 dark:border-purple-900/50" />
+
       <div className="relative p-8 h-full">
-        <div className={`inline-flex p-5 rounded-2xl bg-gradient-to-r ${service.color} text-white mb-6 text-5xl shadow-lg`}>
+        <div
+          className={`inline-flex p-5 rounded-2xl bg-gradient-to-r ${service.color} text-white mb-6 text-5xl shadow-lg`}
+        >
           {service.icon}
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-pink-600 transition-colors">
+
+        <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">
           {service.title}
         </h3>
-        <p className="text-gray-600 mb-6 leading-relaxed">{service.description}</p>
-        
+
+        <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+          {service.description}
+        </p>
+
         <div className="space-y-3 mb-6">
           {service.features.map((feature, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, x: -20 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-              transition={{ delay: index * 0.1 + idx * 0.05 + 0.3 }}
-              className="flex items-center text-gray-700"
+              animate={
+                isInView
+                  ? { opacity: 1, x: 0 }
+                  : { opacity: 0, x: -20 }
+              }
+              transition={{
+                delay: index * 0.1 + idx * 0.05 + 0.3,
+              }}
+              className="flex items-center text-gray-700 dark:text-gray-300"
             >
               <span className="text-green-500 mr-3 text-xl flex-shrink-0">
                 ✓
@@ -69,20 +87,22 @@ const ServiceCard = ({ service, index }) => {
             </motion.div>
           ))}
         </div>
-        
-        <div className="flex items-center text-gray-500 mb-6">
+
+        <div className="flex items-center text-gray-500 dark:text-gray-400 mb-6">
           <span className="mr-2 text-lg">🕐</span>
-          <span className="text-sm font-medium">{service.duration}</span>
+          <span className="text-sm font-medium">
+            {service.duration}
+          </span>
         </div>
-        
-        <div className="pt-6 border-t border-gray-200">
-            <a
-              href="/book"
-              className="inline-flex items-center text-pink-600 font-bold group-hover:text-pink-700 transition-colors"
-            >
-              Learn More
-              <span className="ml-2 inline-block">→</span>
-            </a>
+
+        <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+          <a
+            href="/book"
+            className="inline-flex items-center text-pink-600 dark:text-pink-400 font-bold group-hover:text-pink-700 dark:group-hover:text-pink-300 transition-colors"
+          >
+            Learn More
+            <span className="ml-2 inline-block">→</span>
+          </a>
         </div>
       </div>
     </motion.div>
@@ -98,30 +118,39 @@ const ProcessStepCard = ({ step, index }) => {
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 50, scale: 0.9 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 50, scale: 0.9 }}
+      animate={
+        isInView
+          ? { opacity: 1, y: 0, scale: 1 }
+          : { opacity: 0, y: 50, scale: 0.9 }
+      }
       transition={{ delay: index * 0.15, duration: 0.6 }}
       className="relative group"
     >
-        <motion.div
-          className="relative bg-white rounded-3xl p-8 shadow-xl text-center border border-pink-100/50"
-          whileHover={{ y: -5, scale: 1.02 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
-            <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl">
-              {step.icon}
-            </div>
+      <motion.div
+        className="relative bg-white dark:bg-gray-900 rounded-3xl p-8 shadow-xl text-center border border-pink-100/50 dark:border-purple-900/50"
+        whileHover={{ y: -5, scale: 1.02 }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
+          <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-2xl">
+            {step.icon}
           </div>
-          <div className="mt-10">
-            <div className="text-7xl font-bold bg-gradient-to-b from-gray-200 to-gray-100 bg-clip-text text-transparent mb-3">
-              {step.step}
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-pink-600 transition-colors">
-              {step.title}
-            </h3>
-            <p className="text-gray-600 leading-relaxed">{step.description}</p>
+        </div>
+
+        <div className="mt-10">
+          <div className="text-7xl font-bold bg-gradient-to-b from-gray-200 to-gray-100 dark:from-gray-700 dark:to-gray-800 bg-clip-text text-transparent mb-3">
+            {step.step}
           </div>
-        </motion.div>
+
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">
+            {step.title}
+          </h3>
+
+          <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+            {step.description}
+          </p>
+        </div>
+      </motion.div>
     </motion.div>
   );
 };
@@ -132,12 +161,15 @@ const HomePage = () => {
   const [showStoryForm, setShowStoryForm] = useState(false);
   const [storyName, setStoryName] = useState("");
   const [storyText, setStoryText] = useState("");
-  const [storyStatus, setStoryStatus] = useState({ state: "idle", message: "" });
+  const [storyStatus, setStoryStatus] = useState({
+    state: "idle",
+    message: "",
+  });
 
   useEffect(() => {
-    // Generate floating hearts - reduced for better performance
     const generateHearts = () => {
       const heartArray = [];
+
       for (let i = 0; i < 6; i++) {
         heartArray.push({
           id: i,
@@ -149,47 +181,77 @@ const HomePage = () => {
           opacity: Math.random() * 0.3 + 0.1,
         });
       }
+
       setHearts(heartArray);
     };
+
     generateHearts();
   }, []);
 
-  // Auto-rotate testimonials
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % 3); // Fixed count for 3 testimonials
+      setActiveTestimonial(
+        (prev) => (prev + 1) % 3
+      );
     }, 5000);
+
     return () => clearInterval(interval);
   }, []);
+
   const handleStorySubmit = async (event) => {
     event.preventDefault();
+
     const trimmed = storyText.trim();
+
     if (!trimmed) {
-      setStoryStatus({ state: "error", message: "Please write your story before submitting." });
+      setStoryStatus({
+        state: "error",
+        message: "Please write your story before submitting.",
+      });
       return;
     }
 
-    setStoryStatus({ state: "loading", message: "" });
+    setStoryStatus({
+      state: "loading",
+      message: "",
+    });
+
     try {
-      const resp = await fetch(`${API_BASE}/api/testimonials/custom`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: storyName.trim() || "Anonymous",
-          quote: trimmed,
-        }),
-      });
+      const resp = await fetch(
+        `${API_BASE}/api/testimonials/custom`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: storyName.trim() || "Anonymous",
+            quote: trimmed,
+          }),
+        }
+      );
 
       if (!resp.ok) {
         const msg = await resp.json().catch(() => null);
-        throw new Error(msg?.error || "Failed to submit story");
+        throw new Error(
+          msg?.error || "Failed to submit story"
+        );
       }
 
       setStoryName("");
       setStoryText("");
-      setStoryStatus({ state: "success", message: "Thanks! Your story was added to our community." });
+
+      setStoryStatus({
+        state: "success",
+        message:
+          "Thanks! Your story was added to our community.",
+      });
     } catch (err) {
-      setStoryStatus({ state: "error", message: err.message || "Failed to submit story" });
+      setStoryStatus({
+        state: "error",
+        message:
+          err.message || "Failed to submit story",
+      });
     }
   };
 
@@ -198,22 +260,33 @@ const HomePage = () => {
   const processSteps = processStepsData;
 
   const heroRef = useRef(null);
+
   const { scrollYProgress } = useScroll({
     target: heroRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.5],
+    [1, 0]
+  );
+
+  const scale = useTransform(
+    scrollYProgress,
+    [0, 0.5],
+    [1, 0.95]
+  );
 
   return (
-    <div className="min-h-screen home-page bg-gradient-to-b from-pink-50 via-white to-blue-50 overflow-hidden">
-      {/* Enhanced Animated Background Elements */}
+    <div className="min-h-screen home-page bg-gradient-to-b from-pink-50 via-white to-blue-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 overflow-hidden">
+
+      {/* Animated Background Elements */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         {hearts.map((heart) => (
           <motion.div
             key={heart.id}
-            className="absolute text-pink-300"
+            className="absolute text-pink-300 dark:text-pink-700"
             initial={{ opacity: 0, y: 100 }}
             animate={{
               opacity: [0, heart.opacity, 0],
@@ -234,11 +307,12 @@ const HomePage = () => {
             ❤️
           </motion.div>
         ))}
-        
-        {/* Gradient orbs - simplified animations */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
-        <div className="absolute top-40 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
-        <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
+
+        <div className="absolute top-20 left-10 w-72 h-72 bg-pink-300 dark:bg-pink-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
+
+        <div className="absolute top-40 right-10 w-72 h-72 bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
+
+        <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-blue-300 dark:bg-blue-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
       </div>
 
       {/* Hero Section */}
@@ -247,68 +321,127 @@ const HomePage = () => {
         style={{ opacity, scale }}
         className="relative min-h-[95vh] flex items-center justify-center px-4 md:px-8 overflow-hidden pt-20"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-pink-200/30 via-purple-200/30 to-blue-200/30 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-br from-pink-200/30 via-purple-200/30 to-blue-200/30 dark:from-pink-950/30 dark:via-purple-950/30 dark:to-blue-950/30 blur-3xl" />
 
         <div className="relative z-10 max-w-6xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{
+              duration: 0.8,
+              ease: "easeOut",
+            }}
             className="mb-8"
           >
             <motion.span
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
+              initial={{
+                opacity: 0,
+                scale: 0.8,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+              }}
+              transition={{
+                delay: 0.2,
+                duration: 0.5,
+              }}
               whileHover={{ scale: 1.05 }}
-              className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-pink-100 to-purple-100 text-pink-700 font-semibold mb-8 shadow-lg backdrop-blur-sm border border-pink-200/50"
+              className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-pink-100 to-purple-100 dark:from-pink-950/60 dark:to-purple-950/60 text-pink-700 dark:text-pink-300 font-semibold mb-8 shadow-lg backdrop-blur-sm border border-pink-200/50 dark:border-pink-800/50"
             >
               <motion.span
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                animate={{
+                  rotate: [0, 10, -10, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatDelay: 1,
+                }}
                 className="mr-2 text-xl"
               >
                 ✨
               </motion.span>
-              Trusted by <strong className="mx-1 text-pink-800">5,000+</strong> Couples Worldwide
+
+              Trusted by{" "}
+              <strong className="mx-1 text-pink-800 dark:text-pink-300">
+                5,000+
+              </strong>{" "}
+              Couples Worldwide
             </motion.span>
 
             <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
+              initial={{
+                opacity: 0,
+                y: 30,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.3,
+                duration: 0.8,
+              }}
               className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight"
             >
               <span className="bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
                 Rekindle Love,
               </span>
+
               <br />
+
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="text-gray-800"
+                transition={{
+                  delay: 0.5,
+                  duration: 0.8,
+                }}
+                className="text-gray-800 dark:text-gray-100"
               >
                 Rediscover Connection
               </motion.span>
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed font-light"
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.6,
+                duration: 0.8,
+              }}
+              className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed font-light"
             >
               A safe space where hearts heal and relationships flourish.
               <br className="hidden md:block" />
-              <span className="text-gray-700">Our experienced counselors help you rebuild connection, clarity, and confidence—together.</span>
+
+              <span className="text-gray-700 dark:text-gray-200">
+                Our experienced counselors help you rebuild connection,
+                clarity, and confidence—together.
+              </span>
             </motion.p>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.8,
+              duration: 0.8,
+            }}
             className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-20"
           >
             <motion.a
@@ -319,10 +452,16 @@ const HomePage = () => {
             >
               <motion.button
                 className="group relative w-full px-10 py-5 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-full shadow-2xl text-lg"
-                whileHover={{ boxShadow: "0 20px 40px rgba(236, 72, 153, 0.4)", scale: 1.02 }}
+                whileHover={{
+                  boxShadow:
+                    "0 20px 40px rgba(236, 72, 153, 0.4)",
+                  scale: 1.02,
+                }}
               >
                 Begin Your Journey
-                <span className="ml-2 inline-block">→</span>
+                <span className="ml-2 inline-block">
+                  →
+                </span>
               </motion.button>
             </motion.a>
 
@@ -333,52 +472,96 @@ const HomePage = () => {
               whileTap={{ scale: 0.95 }}
             >
               <motion.button
-                className="w-full px-10 py-5 border-2 border-pink-400 text-pink-600 font-bold rounded-full bg-white/80 backdrop-blur-sm hover:bg-pink-50 transition-all duration-300 text-lg shadow-lg"
-                whileHover={{ borderColor: "#ec4899", boxShadow: "0 10px 30px rgba(236, 72, 153, 0.2)" }}
+                className="w-full px-10 py-5 border-2 border-pink-400 dark:border-pink-600 text-pink-600 dark:text-pink-400 font-bold rounded-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm hover:bg-pink-50 dark:hover:bg-gray-800 transition-all duration-300 text-lg shadow-lg"
+                whileHover={{
+                  borderColor: "#ec4899",
+                  boxShadow:
+                    "0 10px 30px rgba(236, 72, 153, 0.2)",
+                }}
               >
                 Explore Our Services
               </motion.button>
             </motion.a>
           </motion.div>
 
-          {/* Enhanced Stats */}
+          {/* Stats */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.8 }}
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 1,
+              duration: 0.8,
+            }}
             className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto"
           >
             {statsData.map((stat, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.2 + index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -10, scale: 1.05 }}
-                className="group relative text-center rounded-3xl p-8 bg-white/80 backdrop-blur-lg shadow-xl border border-pink-100/50 hover:border-pink-300 transition-all duration-300"
+                initial={{
+                  opacity: 0,
+                  scale: 0.8,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                transition={{
+                  delay: 1.2 + index * 0.1,
+                  duration: 0.5,
+                }}
+                whileHover={{
+                  y: -10,
+                  scale: 1.05,
+                }}
+                className="group relative text-center rounded-3xl p-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-xl border border-pink-100/50 dark:border-purple-900/50 hover:border-pink-300 dark:hover:border-pink-700 transition-all duration-300"
               >
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-pink-50/50 to-purple-50/50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  className="absolute inset-0 bg-gradient-to-br from-pink-50/50 to-purple-50/50 dark:from-pink-950/20 dark:to-purple-950/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 />
+
                 <div className="relative z-10">
                   <motion.div
                     className="text-5xl mb-3"
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+                    animate={{
+                      rotate: [0, 10, -10, 0],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: index * 0.2,
+                    }}
                   >
                     {stat.icon}
                   </motion.div>
+
                   <motion.div
                     className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2"
                     animate={{
-                      backgroundPosition: ["0%", "100%", "0%"],
+                      backgroundPosition: [
+                        "0%",
+                        "100%",
+                        "0%",
+                      ],
                     }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                    style={{ backgroundSize: "200% 200%" }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                    style={{
+                      backgroundSize: "200% 200%",
+                    }}
                   >
                     {stat.value}
                   </motion.div>
-                  <div className="mt-2 text-sm font-semibold text-gray-600 tracking-wide uppercase">
+
+                  <div className="mt-2 text-sm font-semibold text-gray-600 dark:text-gray-400 tracking-wide uppercase">
                     {stat.label}
                   </div>
                 </div>
@@ -388,75 +571,128 @@ const HomePage = () => {
         </div>
       </motion.section>
 
-      {/* Enhanced Services Section */}
+      {/* Services Section */}
       <SectionWrapper>
         <div className="max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+              margin: "-100px",
+            }}
+            transition={{
+              duration: 0.8,
+            }}
             className="text-center mb-20"
           >
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-4xl md:text-6xl font-bold text-gray-900 mb-6"
+              transition={{
+                delay: 0.2,
+                duration: 0.8,
+              }}
+              className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6"
             >
               Transform Your{" "}
               <span className="bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
                 Relationship Journey
               </span>
             </motion.h2>
+
             <motion.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-gray-600 text-xl max-w-3xl mx-auto leading-relaxed"
+              transition={{
+                delay: 0.4,
+                duration: 0.8,
+              }}
+              className="text-gray-600 dark:text-gray-300 text-xl max-w-3xl mx-auto leading-relaxed"
             >
-              Tailored solutions for every stage of your relationship, from first dates to golden anniversaries.
+              Tailored solutions for every stage of your relationship,
+              from first dates to golden anniversaries.
             </motion.p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {services.map((service, index) => (
-              <ServiceCard key={index} service={service} index={index} />
+              <ServiceCard
+                key={index}
+                service={service}
+                index={index}
+              />
             ))}
           </div>
         </div>
       </SectionWrapper>
 
-      {/* Enhanced How It Works */}
-      <SectionWrapper className="bg-gradient-to-b from-white via-pink-50/30 to-purple-50/30">
+      {/* How It Works */}
+      <SectionWrapper className="bg-gradient-to-b from-white via-pink-50/30 to-purple-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-purple-950/20">
         <div className="max-w-6xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+              margin: "-100px",
+            }}
+            transition={{
+              duration: 0.8,
+            }}
             className="text-center mb-20"
           >
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-4xl md:text-6xl font-bold text-gray-900 mb-6"
+              transition={{
+                delay: 0.2,
+                duration: 0.8,
+              }}
+              className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6"
             >
               Your Path to{" "}
               <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent">
                 Lasting Love
               </span>
             </motion.h2>
+
             <motion.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-gray-600 text-xl max-w-3xl mx-auto leading-relaxed"
+              transition={{
+                delay: 0.4,
+                duration: 0.8,
+              }}
+              className="text-gray-600 dark:text-gray-300 text-xl max-w-3xl mx-auto leading-relaxed"
             >
               A simple, compassionate process designed to guide you toward relationship fulfillment.
             </motion.p>
@@ -464,50 +700,81 @@ const HomePage = () => {
 
           <div className="relative">
             <motion.div
-              className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300 transform -translate-y-1/2 rounded-full"
+              className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300 dark:from-pink-800 dark:via-purple-800 dark:to-blue-800 transform -translate-y-1/2 rounded-full"
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
+              transition={{
+                duration: 1.5,
+                ease: "easeInOut",
+              }}
             />
-            
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {processSteps.map((step, index) => (
-                <ProcessStepCard key={index} step={step} index={index} />
+                <ProcessStepCard
+                  key={index}
+                  step={step}
+                  index={index}
+                />
               ))}
             </div>
           </div>
         </div>
       </SectionWrapper>
 
-      {/* Enhanced Testimonials */}
+      {/* Testimonials */}
       <SectionWrapper>
         <div className="max-w-6xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+              margin: "-100px",
+            }}
+            transition={{
+              duration: 0.8,
+            }}
             className="text-center mb-20"
           >
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-4xl md:text-6xl font-bold text-gray-900 mb-6"
+              transition={{
+                delay: 0.2,
+                duration: 0.8,
+              }}
+              className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6"
             >
               Stories of{" "}
               <span className="bg-gradient-to-r from-pink-600 via-rose-600 to-pink-500 bg-clip-text text-transparent">
                 Love Renewed
               </span>
             </motion.h2>
+
             <motion.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-gray-600 text-xl max-w-3xl mx-auto leading-relaxed"
+              transition={{
+                delay: 0.4,
+                duration: 0.8,
+              }}
+              className="text-gray-600 dark:text-gray-300 text-xl max-w-3xl mx-auto leading-relaxed"
             >
               Hear from couples and individuals who found their way back to love.
             </motion.p>
@@ -517,51 +784,93 @@ const HomePage = () => {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTestimonial}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
+                initial={{
+                  opacity: 0,
+                  x: 50,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  x: -50,
+                }}
                 transition={{ duration: 0.5 }}
-                className="bg-gradient-to-br from-white via-pink-50/50 to-purple-50/50 rounded-3xl shadow-2xl p-8 md:p-16 border border-pink-100/50 backdrop-blur-sm"
+                className="bg-gradient-to-br from-white via-pink-50/50 to-purple-50/50 dark:from-gray-900 dark:via-pink-950/20 dark:to-purple-950/30 rounded-3xl shadow-2xl p-8 md:p-16 border border-pink-100/50 dark:border-purple-900/50 backdrop-blur-sm"
               >
                 <div className="flex flex-col md:flex-row items-center h-full">
                   <motion.div
-                    initial={{ scale: 0, rotate: -180 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                    initial={{
+                      scale: 0,
+                      rotate: -180,
+                    }}
+                    animate={{
+                      scale: 1,
+                      rotate: 0,
+                    }}
+                    transition={{
+                      delay: 0.2,
+                      type: "spring",
+                      stiffness: 200,
+                    }}
                     className="md:w-1/3 text-center mb-8 md:mb-0"
                   >
                     <div className="text-9xl mb-6">
                       {testimonials[activeTestimonial].image}
                     </div>
+
                     <div className="flex justify-center gap-1">
                       {[...Array(5)].map((_, i) => (
-                        <span key={i} className="text-yellow-400 text-3xl">
+                        <span
+                          key={i}
+                          className="text-yellow-400 text-3xl"
+                        >
                           ⭐
                         </span>
                       ))}
                     </div>
                   </motion.div>
+
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{
+                      opacity: 0,
+                      y: 20,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
                     transition={{ delay: 0.4 }}
                     className="md:w-2/3 md:pl-12"
                   >
                     <motion.div
-                      className="text-2xl md:text-4xl text-gray-800 mb-8 leading-relaxed font-light italic"
+                      className="text-2xl md:text-4xl text-gray-800 dark:text-gray-100 mb-8 leading-relaxed font-light italic"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.5 }}
                     >
                       "{testimonials[activeTestimonial].content}"
                     </motion.div>
+
                     <motion.div
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
+                      initial={{
+                        opacity: 0,
+                        x: -20,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        x: 0,
+                      }}
                       transition={{ delay: 0.6 }}
                     >
-                      <div className="text-2xl font-bold text-gray-900 mb-2">{testimonials[activeTestimonial].name}</div>
-                      <div className="text-gray-600 text-lg">{testimonials[activeTestimonial].role}</div>
+                      <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                        {testimonials[activeTestimonial].name}
+                      </div>
+
+                      <div className="text-gray-600 dark:text-gray-400 text-lg">
+                        {testimonials[activeTestimonial].role}
+                      </div>
                     </motion.div>
                   </motion.div>
                 </div>
@@ -579,13 +888,15 @@ const HomePage = () => {
             {testimonials.map((_, index) => (
               <motion.button
                 key={index}
-                onClick={() => setActiveTestimonial(index)}
+                onClick={() =>
+                  setActiveTestimonial(index)
+                }
                 whileHover={{ scale: 1.2 }}
                 whileTap={{ scale: 0.9 }}
                 className={`h-3 rounded-full transition-all duration-300 ${
                   index === activeTestimonial
                     ? "bg-gradient-to-r from-pink-600 to-purple-600 w-12 shadow-lg"
-                    : "bg-pink-300 hover:bg-pink-400 w-3"
+                    : "bg-pink-300 dark:bg-pink-800 hover:bg-pink-400 dark:hover:bg-pink-700 w-3"
                 }`}
                 aria-label={`View testimonial ${index + 1}`}
               />
@@ -594,52 +905,88 @@ const HomePage = () => {
         </div>
       </SectionWrapper>
 
-      {/* Enhanced Final CTA */}
+      {/* Final CTA */}
       <section className="py-24 px-4 md:px-8 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-blue-500/20" />
-        
+        <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-blue-500/20 dark:from-pink-950/30 dark:via-purple-950/30 dark:to-blue-950/30" />
+
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          initial={{
+            opacity: 0,
+            y: 50,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            margin: "-100px",
+          }}
           transition={{ duration: 0.8 }}
           className="max-w-5xl mx-auto text-center relative z-10"
         >
           <motion.div
-            className="bg-white/95 backdrop-blur-md rounded-3xl p-12 md:p-16 shadow-2xl border border-pink-100/50"
-            whileHover={{ scale: 1.02, boxShadow: "0 30px 60px rgba(236, 72, 153, 0.3)" }}
+            className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-3xl p-12 md:p-16 shadow-2xl border border-pink-100/50 dark:border-purple-900/50"
+            whileHover={{
+              scale: 1.02,
+              boxShadow:
+                "0 30px 60px rgba(236, 72, 153, 0.3)",
+            }}
             transition={{ duration: 0.3 }}
           >
             <span className="text-7xl mx-auto mb-8 inline-block">
               ✨
             </span>
+
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-4xl md:text-6xl font-bold text-gray-900 mb-8 leading-tight"
+              transition={{
+                delay: 0.2,
+                duration: 0.8,
+              }}
+              className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-8 leading-tight"
             >
               Ready to Write Your{" "}
               <span className="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
                 Love Story?
               </span>
             </motion.h2>
+
             <motion.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed"
+              transition={{
+                delay: 0.4,
+                duration: 0.8,
+              }}
+              className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
             >
               Take the first step toward the relationship you deserve. Our expert counselors are here to guide you.
             </motion.p>
-            
+
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
               viewport={{ once: true }}
-              transition={{ delay: 0.6, duration: 0.8 }}
+              transition={{
+                delay: 0.6,
+                duration: 0.8,
+              }}
               className="flex flex-col sm:flex-row gap-6 justify-center"
             >
               <motion.a
@@ -650,14 +997,30 @@ const HomePage = () => {
               >
                 <motion.button
                   className="w-full px-12 py-6 bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 text-white font-bold rounded-full shadow-2xl text-lg relative overflow-hidden"
-                  whileHover={{ boxShadow: "0 20px 40px rgba(236, 72, 153, 0.4)" }}
-                  animate={{
-                    backgroundPosition: ["0%", "100%", "0%"],
+                  whileHover={{
+                    boxShadow:
+                      "0 20px 40px rgba(236, 72, 153, 0.4)",
                   }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                  style={{ backgroundSize: "200% 200%" }}
+                  animate={{
+                    backgroundPosition: [
+                      "0%",
+                      "100%",
+                      "0%",
+                    ],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  style={{
+                    backgroundSize: "200% 200%",
+                  }}
                 >
-                  <span className="relative z-10">Book Free Consultation</span>
+                  <span className="relative z-10">
+                    Book Free Consultation
+                  </span>
+
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600"
                     initial={{ x: "-100%" }}
@@ -666,7 +1029,7 @@ const HomePage = () => {
                   />
                 </motion.button>
               </motion.a>
-              
+
               <motion.a
                 href="/contact-us"
                 className="w-full sm:w-auto"
@@ -674,8 +1037,12 @@ const HomePage = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <motion.button
-                  className="w-full px-12 py-6 border-2 border-pink-400 text-pink-600 font-bold rounded-full bg-white hover:bg-pink-50 transition-all duration-300 text-lg shadow-lg"
-                  whileHover={{ borderColor: "#ec4899", boxShadow: "0 10px 30px rgba(236, 72, 153, 0.2)" }}
+                  className="w-full px-12 py-6 border-2 border-pink-400 dark:border-pink-600 text-pink-600 dark:text-pink-400 font-bold rounded-full bg-white dark:bg-gray-900 hover:bg-pink-50 dark:hover:bg-gray-800 transition-all duration-300 text-lg shadow-lg"
+                  whileHover={{
+                    borderColor: "#ec4899",
+                    boxShadow:
+                      "0 10px 30px rgba(236, 72, 153, 0.2)",
+                  }}
                 >
                   Talk to an Expert
                 </motion.button>
@@ -685,64 +1052,99 @@ const HomePage = () => {
                 type="button"
                 onClick={() => {
                   setShowStoryForm((prev) => !prev);
-                  setStoryStatus({ state: "idle", message: "" });
+                  setStoryStatus({
+                    state: "idle",
+                    message: "",
+                  });
                 }}
-                className="w-full sm:w-auto px-12 py-6 border-2 border-purple-400 text-purple-600 font-bold rounded-full bg-white hover:bg-purple-50 transition-all duration-300 text-lg shadow-lg"
-                whileHover={{ borderColor: "#a855f7", boxShadow: "0 10px 30px rgba(168, 85, 247, 0.2)" }}
+                className="w-full sm:w-auto px-12 py-6 border-2 border-purple-400 dark:border-purple-600 text-purple-600 dark:text-purple-400 font-bold rounded-full bg-white dark:bg-gray-900 hover:bg-purple-50 dark:hover:bg-gray-800 transition-all duration-300 text-lg shadow-lg"
+                whileHover={{
+                  borderColor: "#a855f7",
+                  boxShadow:
+                    "0 10px 30px rgba(168, 85, 247, 0.2)",
+                }}
               >
                 Write your own Story
               </motion.button>
             </motion.div>
-            
+
             <AnimatePresence>
               {showStoryForm && (
                 <motion.form
                   key="story-form"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
+                  initial={{
+                    opacity: 0,
+                    y: 10,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: 10,
+                  }}
                   transition={{ duration: 0.3 }}
                   onSubmit={handleStorySubmit}
-                  className="mt-8 bg-white/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-xl border border-pink-100/60"
+                  className="mt-8 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-xl border border-pink-100/60 dark:border-purple-900/60"
                 >
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Share your story</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                    Share your story
+                  </h3>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <input
                       type="text"
                       value={storyName}
-                      onChange={(event) => setStoryName(event.target.value)}
+                      onChange={(event) =>
+                        setStoryName(event.target.value)
+                      }
                       placeholder="Your name (optional)"
-                      className="w-full rounded-xl border border-gray-200 px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                      className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-300"
                     />
                   </div>
+
                   <textarea
                     value={storyText}
-                    onChange={(event) => setStoryText(event.target.value)}
+                    onChange={(event) =>
+                      setStoryText(event.target.value)
+                    }
                     placeholder="Write your experience..."
                     rows={4}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-300"
                   />
+
                   {storyStatus.message && (
                     <p
                       className={`mt-3 text-sm ${
-                        storyStatus.state === "error" ? "text-red-600" : "text-green-600"
+                        storyStatus.state === "error"
+                          ? "text-red-600 dark:text-red-400"
+                          : "text-green-600 dark:text-green-400"
                       }`}
                     >
                       {storyStatus.message}
                     </p>
                   )}
+
                   <div className="mt-5 flex flex-col sm:flex-row gap-4">
                     <button
                       type="submit"
-                      disabled={storyStatus.state === "loading"}
+                      disabled={
+                        storyStatus.state === "loading"
+                      }
                       className="px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-full shadow-lg disabled:opacity-70"
                     >
-                      {storyStatus.state === "loading" ? "Submitting..." : "Submit Story"}
+                      {storyStatus.state === "loading"
+                        ? "Submitting..."
+                        : "Submit Story"}
                     </button>
+
                     <button
                       type="button"
-                      onClick={() => setShowStoryForm(false)}
-                      className="px-6 py-3 border border-gray-300 text-gray-600 font-semibold rounded-full hover:bg-gray-50"
+                      onClick={() =>
+                        setShowStoryForm(false)
+                      }
+                      className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 font-semibold rounded-full hover:bg-gray-50 dark:hover:bg-gray-700"
                     >
                       Cancel
                     </button>
@@ -755,8 +1157,11 @@ const HomePage = () => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.8, duration: 0.8 }}
-              className="mt-10 text-gray-500 text-lg"
+              transition={{
+                delay: 0.8,
+                duration: 0.8,
+              }}
+              className="mt-10 text-gray-500 dark:text-gray-400 text-lg"
             >
               <span className="inline-block mr-2">
                 ❤️
@@ -766,16 +1171,8 @@ const HomePage = () => {
           </motion.div>
         </motion.div>
       </section>
-
     </div>
   );
 };
 
 export default HomePage;
-
-
-
-
-
-
-

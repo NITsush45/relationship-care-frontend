@@ -21,12 +21,14 @@ const staggerContainer = {
 const ServicesPage = () => {
   const navigate = useNavigate();
   const [services, setServices] = useState(servicesData);
-  const [testimonials, setTestimonials] = useState(testimonialsData.servicesPage || []);
+  const [testimonials, setTestimonials] = useState(
+    testimonialsData.servicesPage || []
+  );
 
   useEffect(() => {
     let active = true;
 
-        const loadData = async () => {
+    const loadData = async () => {
       try {
         const [servicesRes, testimonialsRes, customRes] = await Promise.all([
           fetch(`${API_BASE}/api/services`),
@@ -43,19 +45,24 @@ const ServicesPage = () => {
 
         if (testimonialsRes.ok) {
           const testimonialsJson = await testimonialsRes.json();
+
           if (Array.isArray(testimonialsJson)) {
             let merged = testimonialsJson;
+
             if (customRes && customRes.ok) {
               const customJson = await customRes.json();
+
               if (Array.isArray(customJson) && customJson.length) {
                 const customMapped = customJson.map((item) => ({
                   quote: item.quote,
                   name: item.name,
                   doctor: "Community Story",
                 }));
+
                 merged = [...customMapped, ...testimonialsJson];
               }
             }
+
             setTestimonials(merged);
           }
         }
@@ -65,6 +72,7 @@ const ServicesPage = () => {
     };
 
     loadData();
+
     return () => {
       active = false;
     };
@@ -75,7 +83,7 @@ const ServicesPage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-pink-100 to-white min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-pink-100 to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 transition-colors duration-300">
       <motion.div
         className="text-center py-10"
         initial="hidden"
@@ -83,11 +91,15 @@ const ServicesPage = () => {
         variants={fadeInUp}
         transition={{ duration: 0.8 }}
       >
-        <h1 className="text-4xl font-bold text-pink-600">Our Services</h1>
-        <p className="text-gray-700 mt-4">
+        <h1 className="text-4xl font-bold text-pink-600 dark:text-pink-400">
+          Our Services
+        </h1>
+
+        <p className="text-gray-700 dark:text-gray-300 mt-4">
           Explore our range of personalized services tailored to your needs.
         </p>
       </motion.div>
+
       <motion.div
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-10"
         variants={staggerContainer}
@@ -97,7 +109,7 @@ const ServicesPage = () => {
         {services.map((service, index) => (
           <motion.div
             key={index}
-            className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:rotate-2 hover:shadow-2xl cursor-pointer"
+            className="bg-white dark:bg-gray-800 shadow-lg dark:shadow-black/30 rounded-lg overflow-hidden transform transition duration-300 hover:rotate-2 hover:shadow-2xl dark:hover:shadow-black/50 cursor-pointer border border-transparent dark:border-gray-700"
             variants={fadeInUp}
             whileHover={{ scale: 1.1 }}
             onClick={() => handleServiceClick(service.route)}
@@ -107,32 +119,41 @@ const ServicesPage = () => {
               alt={service.title}
               className="w-full h-48 object-cover"
             />
+
             <div className="p-6">
-              <h2 className="text-2xl font-bold text-pink-600">
+              <h2 className="text-2xl font-bold text-pink-600 dark:text-pink-400">
                 {service.title}
               </h2>
-              <p className="text-gray-700 mt-4">{service.description}</p>
-              <div className="mt-4 text-pink-600 font-semibold">
+
+              <p className="text-gray-700 dark:text-gray-300 mt-4">
+                {service.description}
+              </p>
+
+              <div className="mt-4 text-pink-600 dark:text-pink-400 font-semibold">
                 View Doctors/Therapists ?
               </div>
             </div>
           </motion.div>
         ))}
       </motion.div>
+
       <motion.div
-        className="bg-pink-50 py-10 mt-10"
+        className="bg-pink-50 dark:bg-gray-900 py-10 mt-10 transition-colors duration-300"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={fadeInUp}
         transition={{ duration: 1 }}
       >
-        <h2 className="text-3xl font-bold text-center text-pink-600">
+        <h2 className="text-3xl font-bold text-center text-pink-600 dark:text-pink-400">
           What Our Clients Say
         </h2>
-        <p className="text-center text-gray-600 mt-4">
-          Hear from our happy clients about their experiences with our expert team of Doctors & Therapists.
+
+        <p className="text-center text-gray-600 dark:text-gray-400 mt-4">
+          Hear from our happy clients about their experiences with our expert
+          team of Doctors & Therapists.
         </p>
+
         <motion.div
           className="flex gap-4 overflow-x-scroll px-10 mt-8 hide-scrollbar"
           variants={staggerContainer}
@@ -140,16 +161,20 @@ const ServicesPage = () => {
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
-              className="bg-white shadow-lg rounded-lg p-6 min-w-[300px] transform transition duration-300 hover:-rotate-1 hover:shadow-xl"
+              className="bg-white dark:bg-gray-800 shadow-lg dark:shadow-black/30 rounded-lg p-6 min-w-[300px] transform transition duration-300 hover:-rotate-1 hover:shadow-xl dark:hover:shadow-black/50 border border-transparent dark:border-gray-700"
               variants={fadeInUp}
               whileHover={{ scale: 1.05 }}
             >
-              <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
-              <div className="border-t border-gray-200 pt-4">
-                <p className="text-pink-600 font-bold text-right">
+              <p className="text-gray-700 dark:text-gray-300 italic mb-4">
+                "{testimonial.quote}"
+              </p>
+
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <p className="text-pink-600 dark:text-pink-400 font-bold text-right">
                   - {testimonial.name}
                 </p>
-                <p className="text-gray-500 text-sm text-right mt-1">
+
+                <p className="text-gray-500 dark:text-gray-400 text-sm text-right mt-1">
                   About {testimonial.doctor}
                 </p>
               </div>
@@ -162,7 +187,3 @@ const ServicesPage = () => {
 };
 
 export default ServicesPage;
-
-
-
-

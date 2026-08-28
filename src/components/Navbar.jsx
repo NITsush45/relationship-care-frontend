@@ -1,5 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -7,36 +16,57 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState(null);
-  const [profileImage, setProfileImage] = useState(null);
 
-  const profileRef = useRef(null);
   const fileInputRef = useRef(null);
+  const profileRef = useRef(null);
 
   const { theme, toggleTheme } = useTheme();
-  const { user, logout } = useAuth();
+
+  const {
+    user,
+    loading,
+    updateUser,
+    logout,
+  } = useAuth();
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const isDark = theme === "dark";
 
+  const navLinks = [
+    {
+      to: "/",
+      label: "Home",
+    },
+    {
+      to: "/services",
+      label: "Services",
+    },
+    {
+      to: "/about-us",
+      label: "About Us",
+    },
+    {
+      to: "/contact-us",
+      label: "Contact Us",
+    },
+    {
+      to: "/blog",
+      label: "Blog",
+    },
+    {
+      to: "/faqs",
+      label: "FAQs",
+    },
+    {
+      to: "/personal",
+      label: "Confess",
+    },
+  ];
+
   useEffect(() => {
-    const storedUser = localStorage.getItem("authUser");
-
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-
-        if (parsedUser?.profileImage) {
-          setProfileImage(parsedUser.profileImage);
-        }
-      } catch {
-        setProfileImage(null);
-      }
-    }
-  }, [user]);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleOutsideClick = (event) => {
       if (
         profileRef.current &&
         !profileRef.current.contains(event.target)
@@ -45,16 +75,23 @@ const Navbar = () => {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener(
+      "mousedown",
+      handleOutsideClick
+    );
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener(
+        "mousedown",
+        handleOutsideClick
+      );
     };
   }, []);
 
-  const toggleMenu = () => {
-    setIsOpen((previous) => !previous);
-  };
+  useEffect(() => {
+    setIsOpen(false);
+    setProfileOpen(false);
+  }, [location.pathname]);
 
   const handleLinkClick = () => {
     setIsOpen(false);
@@ -63,9 +100,19 @@ const Navbar = () => {
 
   const handleProfileClick = () => {
     setProfileOpen((previous) => !previous);
+    setIsOpen(false);
   };
 
-  const handleProfileImageChange = (event) => {
+  const handleUpdateProfilePicture = () => {
+    if (!user) {
+      navigate("/sign-in");
+      return;
+    }
+
+    fileInputRef.current?.click();
+  };
+
+  const handleProfilePictureChange = (event) => {
     const file = event.target.files?.[0];
 
     if (!file) {
@@ -73,84 +120,279 @@ const Navbar = () => {
     }
 
     if (!file.type.startsWith("image/")) {
-      alert("Please select an image file.");
+      alert("Please select a valid image.");
+      event.target.value = "";
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      alert("Profile picture must be less than 5MB.");
+      alert(
+        "Profile picture must be smaller than 5 MB."
+      );
+      event.target.value = "";
       return;
     }
 
     const reader = new FileReader();
 
     reader.onload = () => {
-      const image = reader.result;
+      try {
+        updateUser({
+          profileImage: reader.result,
+        });
 
-      setProfileImage(image);
+        setProfileOpen(false);
 
-      const storedUser = localStorage.getItem("authUser");
+        alert(
+          "Profile picture updated successfully."
+        );
+      } catch (error) {
+        console.error(
+          "Profile picture update error:",
+          error
+        );
 
-      if (storedUser) {
-        try {
-          const parsedUser = JSON.parse(storedUser);
-
-          const updatedUser = {
-            ...parsedUser,
-            profileImage: image,
-          };
-
-          localStorage.setItem(
-            "authUser",
-            JSON.stringify(updatedUser)
-          );
-        } catch {
-          return;
-        }
+        alert(
+          "Unable to update profile picture."
+        );
       }
     };
 
+    reader.onerror = () => {
+      alert("Unable to read the selected image.");
+    };
+
     reader.readAsDataURL(file);
+
+    event.target.value = "";
   };
 
-  const handleUpdateProfilePicture = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleSignOut = () => {
+  const handleQuestionnaire = () => {
     setProfileOpen(false);
     setIsOpen(false);
 
+    navigate("/questionnaire");
+  };
+
+  const handleProgress = () => {
+    setProfileOpen(false);
+    setIsOpen(false);
+
+    navigate("/progress");
+  };
+
+  const handleChangePassword = () => {
+    setProfileOpen(false);
+    setIsOpen(false);
+
+    navigate("/change-password");
+  };
+
+  const handleSignOut = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to sign out?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
     logout();
 
-    navigate("/");
+    setProfileOpen(false);
+    setIsOpen(false);
+
+    navigate("/sign-in", {
+      replace: true,
+    });
   };
 
   const getInitial = () => {
-    if (user?.firstName) {
-      return user.firstName.charAt(0).toUpperCase();
-    }
-
-    if (user?.username) {
-      return user.username.charAt(0).toUpperCase();
-    }
-
-    if (user?.email) {
-      return user.email.charAt(0).toUpperCase();
-    }
-
-    return "U";
+    return (
+      user?.firstName?.charAt(0) ||
+      user?.username?.charAt(0) ||
+      user?.email?.charAt(0) ||
+      "U"
+    ).toUpperCase();
   };
 
-  const navLinks = [
-    { to: "/", label: "Home" },
-    { to: "/services", label: "Services" },
-    { to: "/about-us", label: "About Us" },
-    { to: "/contact-us", label: "Contact Us" },
-    { to: "/blog", label: "Blog" },
-    { to: "/faqs", label: "FAQs" },
-    { to: "/personal", label: "Confess" },
-  ];
+  const profileImage = user?.profileImage;
+
+  const ProfileAvatar = ({ mobile = false }) => {
+    return (
+      <div
+        className={`${
+          mobile ? "w-10 h-10" : "w-11 h-11"
+        } rounded-full overflow-hidden border-2 border-white/70 hover:border-blue-300 transition-all`}
+      >
+        {profileImage ? (
+          <img
+            src={profileImage}
+            alt="Profile"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center font-bold text-white">
+            {getInitial()}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const ProfileMenu = ({ mobile = false }) => {
+    return (
+      <div
+        className={`absolute ${
+          mobile ? "right-0 top-12" : "right-0 top-14"
+        } w-72 max-w-[calc(100vw-2rem)] rounded-2xl shadow-2xl overflow-hidden border z-[100] ${
+          isDark
+            ? "bg-[#241044] border-white/10 text-white"
+            : "bg-white border-gray-100 text-gray-800"
+        }`}
+      >
+        {/* USER INFORMATION */}
+        <div
+          className={`px-4 py-4 border-b ${
+            isDark
+              ? "border-white/10"
+              : "border-gray-100"
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                  {getInitial()}
+                </div>
+              )}
+            </div>
+
+            <div className="min-w-0">
+              <p className="font-semibold truncate">
+                {user?.firstName ||
+                  user?.username ||
+                  "User"}
+              </p>
+
+              <p className="text-sm opacity-60 truncate">
+                {user?.email || ""}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* UPDATE PROFILE PICTURE */}
+        <button
+          type="button"
+          onClick={handleUpdateProfilePicture}
+          className={`w-full flex items-center gap-3 text-left px-4 py-4 transition-all ${
+            isDark
+              ? "hover:bg-white/10"
+              : "hover:bg-pink-50"
+          }`}
+        >
+          <span className="text-xl">
+            🖼️
+          </span>
+
+          <span className="font-medium">
+            Update Profile Picture
+          </span>
+        </button>
+
+        {/* EDIT QUESTIONNAIRE */}
+        <button
+          type="button"
+          onClick={handleQuestionnaire}
+          className={`w-full flex items-center gap-3 text-left px-4 py-4 transition-all ${
+            isDark
+              ? "hover:bg-white/10"
+              : "hover:bg-pink-50"
+          }`}
+        >
+          <span className="text-xl">
+            📝
+          </span>
+
+          <span className="font-medium">
+            Edit Questionnaire
+          </span>
+        </button>
+
+        {/* TRACK IMPROVEMENTS */}
+        <button
+          type="button"
+          onClick={handleProgress}
+          className={`w-full flex items-center gap-3 text-left px-4 py-4 transition-all ${
+            isDark
+              ? "hover:bg-white/10"
+              : "hover:bg-purple-50"
+          }`}
+        >
+          <span className="text-xl">
+            📈
+          </span>
+
+          <span className="font-medium">
+            Track My Improvements
+          </span>
+        </button>
+
+        {/* CHANGE PASSWORD */}
+        <button
+          type="button"
+          onClick={handleChangePassword}
+          className={`w-full flex items-center gap-3 text-left px-4 py-4 transition-all ${
+            isDark
+              ? "hover:bg-white/10"
+              : "hover:bg-blue-50"
+          }`}
+        >
+          <span className="text-xl">
+            🔑
+          </span>
+
+          <span className="font-medium">
+            Change Password
+          </span>
+        </button>
+
+        {/* SIGN OUT */}
+        <div
+          className={`border-t ${
+            isDark
+              ? "border-white/10"
+              : "border-gray-100"
+          }`}
+        >
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className={`w-full flex items-center gap-3 text-left px-4 py-4 transition-all ${
+              isDark
+                ? "hover:bg-red-500/20 text-red-200"
+                : "hover:bg-red-50 text-red-600"
+            }`}
+          >
+            <span className="text-xl">
+              🚪
+            </span>
+
+            <span className="font-medium">
+              Sign Out
+            </span>
+          </button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <nav
@@ -162,6 +404,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-6 py-4 flex justify-between items-center relative z-10">
 
+        {/* LOGO */}
         <Link
           to="/"
           onClick={handleLinkClick}
@@ -172,28 +415,34 @@ const Navbar = () => {
           </span>
 
           <span className="text-blue-400 mx-1 inline-block animate-heartbeat">
-            {"\u2665"}
+            ♥
           </span>
 
           <span className="inline-block transition-transform duration-300 group-hover:scale-105">
             Care
           </span>
 
-          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-500 ease-out" />
+          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-500" />
         </Link>
 
+        {/* DESKTOP NAVIGATION */}
         <div className="hidden md:flex items-center space-x-2 ml-8">
 
           {navLinks.map((link, index) => (
             <Link
               key={link.to}
               to={link.to}
-              onMouseEnter={() => setHoveredLink(index)}
-              onMouseLeave={() => setHoveredLink(null)}
+              onMouseEnter={() =>
+                setHoveredLink(index)
+              }
+              onMouseLeave={() =>
+                setHoveredLink(null)
+              }
+              onClick={handleLinkClick}
               className="relative px-4 py-2 font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
             >
               <span
-                className={`relative z-10 transition-all duration-300 ${
+                className={`transition-all duration-300 ${
                   hoveredLink === index
                     ? "text-blue-300"
                     : isDark
@@ -211,325 +460,173 @@ const Navbar = () => {
                     : "w-0 opacity-0"
                 }`}
               />
-
-              <span
-                className={`absolute inset-0 rounded-lg bg-white/5 transition-opacity duration-300 ${
-                  hoveredLink === index
-                    ? "opacity-100"
-                    : "opacity-0"
-                }`}
-              />
             </Link>
           ))}
 
+          {/* THEME */}
           <button
+            type="button"
             onClick={toggleTheme}
-            className="ml-2 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="ml-2 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-all"
             aria-label={
               isDark
                 ? "Switch to light mode"
                 : "Switch to dark mode"
             }
-            title={isDark ? "Light mode" : "Dark mode"}
           >
-            <span
-              className="text-lg"
-              role="img"
-              aria-hidden="true"
-            >
-              {isDark ? "\u2600" : "\ud83c\udf19"}
+            <span className="text-lg">
+              {isDark ? "☀" : "🌙"}
             </span>
           </button>
 
-          {!user ? (
-            <div className="flex items-center gap-2 ml-3">
-              <Link
-                to="/login"
-                className="px-4 py-2 rounded-xl font-medium hover:bg-white/10 transition-all"
-              >
-                Sign In
-              </Link>
-
-              <Link
-                to="/signup"
-                className="px-5 py-2 rounded-xl bg-white text-pink-600 font-semibold hover:shadow-lg hover:scale-105 transition-all"
-              >
-                Sign Up
-              </Link>
-            </div>
-          ) : (
+          {/* AUTH / PROFILE */}
+          {!loading && user ? (
             <div
               ref={profileRef}
-              className="relative ml-3"
+              className="relative ml-6"
             >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={
+                  handleProfilePictureChange
+                }
+                className="hidden"
+              />
+
               <button
+                type="button"
                 onClick={handleProfileClick}
-                className={`w-11 h-11 rounded-full overflow-hidden border-2 border-white/70 shadow-md hover:scale-105 transition-all duration-300 ${
-                  profileOpen
-                    ? "ring-4 ring-blue-300/40"
-                    : ""
-                }`}
                 aria-label="Open profile menu"
+                aria-expanded={profileOpen}
               >
-                {profileImage || user?.profileImage ? (
-                  <img
-                    src={profileImage || user.profileImage}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
-                    {getInitial()}
-                  </div>
-                )}
+                <ProfileAvatar />
               </button>
 
               {profileOpen && (
-                <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl overflow-hidden text-gray-800 border border-gray-100">
-
-                  <div className="p-5 bg-gradient-to-r from-pink-50 to-purple-50 border-b border-gray-100">
-
-                    <div className="flex items-center gap-4">
-
-                      <div className="relative">
-
-                        <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white shadow-md">
-
-                          {profileImage || user?.profileImage ? (
-                            <img
-                              src={
-                                profileImage ||
-                                user.profileImage
-                              }
-                              alt="Profile"
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white text-xl font-bold">
-                              {getInitial()}
-                            </div>
-                          )}
-
-                        </div>
-
-                        <button
-                          onClick={handleUpdateProfilePicture}
-                          className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-pink-500 text-white flex items-center justify-center text-xs shadow-md hover:bg-pink-600 transition"
-                          title="Change profile picture"
-                        >
-                          ✎
-                        </button>
-
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept="image/*"
-                          onChange={handleProfileImageChange}
-                          className="hidden"
-                        />
-
-                      </div>
-
-                      <div className="min-w-0">
-
-                        <h3 className="font-bold text-lg truncate">
-                          {user?.firstName ||
-                            user?.username ||
-                            "Welcome"}
-                        </h3>
-
-                        <p className="text-sm text-gray-500 truncate">
-                          {user?.email || ""}
-                        </p>
-
-                        <button
-                          onClick={handleUpdateProfilePicture}
-                          className="text-xs text-pink-600 font-medium mt-1 hover:underline"
-                        >
-                          Update profile picture
-                        </button>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                  <div className="p-3">
-
-                    <Link
-                      to="/questionnaire"
-                      onClick={handleLinkClick}
-                      className="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-pink-50 transition-all group"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center text-lg group-hover:scale-110 transition">
-                        📝
-                      </div>
-
-                      <div>
-                        <p className="font-semibold">
-                          Edit Questionnaire
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Update your personal answers
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      to="/progress"
-                      onClick={handleLinkClick}
-                      className="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-purple-50 transition-all group"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-lg group-hover:scale-110 transition">
-                        📈
-                      </div>
-
-                      <div>
-                        <p className="font-semibold">
-                          Track My Improvements
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          View progress with your therapist
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      to="/change-password"
-                      onClick={handleLinkClick}
-                      className="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-blue-50 transition-all group"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-lg group-hover:scale-110 transition">
-                        🔑
-                      </div>
-
-                      <div>
-                        <p className="font-semibold">
-                          Change Password
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Update your account password
-                        </p>
-                      </div>
-                    </Link>
-
-                  </div>
-
-                  <div className="border-t border-gray-100 p-3">
-
-                    <button
-                      onClick={handleSignOut}
-                      className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-all"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center text-lg">
-                        🚪
-                      </div>
-
-                      <div className="text-left">
-                        <p className="font-semibold">
-                          Sign Out
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Sign out of your account
-                        </p>
-                      </div>
-                    </button>
-
-                  </div>
-
-                </div>
+                <ProfileMenu />
               )}
             </div>
-          )}
+          ) : (
+            <div className="flex items-center gap-2 ml-2">
 
+              <Link
+                to="/sign-in"
+                onClick={handleLinkClick}
+                className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all"
+              >
+                Login
+              </Link>
+
+              <Link
+                to="/sign-up"
+                onClick={handleLinkClick}
+                className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 transition-all"
+              >
+                Sign Up
+              </Link>
+
+            </div>
+          )}
         </div>
 
+        {/* MOBILE CONTROLS */}
         <div className="md:hidden flex items-center gap-2">
 
+          {/* THEME */}
           <button
+            type="button"
             onClick={toggleTheme}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
-            aria-label={
-              isDark
-                ? "Switch to light mode"
-                : "Switch to dark mode"
-            }
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-all"
+            aria-label="Toggle theme"
           >
-            <span
-              className="text-lg"
-              role="img"
-              aria-hidden="true"
-            >
-              {isDark ? "\u2600" : "\ud83c\udf19"}
-            </span>
+            {isDark ? "☀" : "🌙"}
           </button>
 
-          {user && (
-            <button
-              onClick={handleProfileClick}
-              className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/70 shadow-md"
+          {/* MOBILE PROFILE */}
+          {!loading && user && (
+            <div
+              ref={profileRef}
+              className="relative"
             >
-              {profileImage || user?.profileImage ? (
-                <img
-                  src={profileImage || user.profileImage}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold">
-                  {getInitial()}
-                </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={
+                  handleProfilePictureChange
+                }
+                className="hidden"
+              />
+
+              <button
+                type="button"
+                onClick={handleProfileClick}
+                aria-label="Open profile menu"
+                aria-expanded={profileOpen}
+              >
+                <ProfileAvatar mobile />
+              </button>
+
+              {profileOpen && (
+                <ProfileMenu mobile />
               )}
-            </button>
+            </div>
           )}
 
+          {/* MOBILE HAMBURGER */}
           <button
-            onClick={toggleMenu}
-            className="text-white focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg p-2 transition-all duration-300 hover:bg-white/10 active:scale-95"
+            type="button"
+            onClick={() => {
+              setIsOpen(
+                (previous) => !previous
+              );
+              setProfileOpen(false);
+            }}
+            className="text-white p-2 rounded-lg hover:bg-white/10"
             aria-label="Toggle menu"
+            aria-expanded={isOpen}
           >
-            <div className="w-6 h-6 flex flex-col justify-center items-center">
+            <div className="w-6 h-6 flex flex-col justify-center items-center gap-1">
 
               <span
-                className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+                className={`block h-0.5 w-6 bg-white transition-all ${
                   isOpen
-                    ? "rotate-45 translate-y-0.5"
-                    : "-translate-y-1"
+                    ? "rotate-45 translate-y-1.5"
+                    : ""
                 }`}
               />
 
               <span
-                className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+                className={`block h-0.5 w-6 bg-white transition-all ${
                   isOpen
                     ? "opacity-0"
-                    : "opacity-100"
+                    : ""
                 }`}
               />
 
               <span
-                className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+                className={`block h-0.5 w-6 bg-white transition-all ${
                   isOpen
-                    ? "-rotate-45 -translate-y-0.5"
-                    : "translate-y-1"
+                    ? "-rotate-45 -translate-y-1.5"
+                    : ""
                 }`}
               />
 
             </div>
           </button>
-
         </div>
-
       </div>
 
+      {/* MOBILE NAV */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${
+        className={`md:hidden overflow-hidden transition-all duration-500 ${
           isOpen
-            ? "max-h-[700px] opacity-100"
+            ? "max-h-[600px] opacity-100"
             : "max-h-0 opacity-0"
         }`}
       >
-
         <div
           className={`${
             isDark
@@ -538,134 +635,37 @@ const Navbar = () => {
           } text-white space-y-2 px-6 py-4`}
         >
 
-          {navLinks.map((link, index) => (
+          {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className="block hover:bg-white/10 rounded-lg px-4 py-3 font-medium transition-all duration-300 transform hover:translate-x-2 active:scale-95"
               onClick={handleLinkClick}
-              style={{
-                animation: isOpen
-                  ? `slideInLeft 0.3s ease-out ${
-                      index * 0.05
-                    }s both`
-                  : "none",
-              }}
+              className="block hover:bg-white/10 rounded-lg px-4 py-3 font-medium transition-all"
             >
-              <span className="flex items-center justify-between">
-                {link.label}
-                <span className="text-blue-300">
-                  {"\u2192"}
-                </span>
-              </span>
+              {link.label}
             </Link>
           ))}
 
-          {!user ? (
-            <div className="pt-3 mt-3 border-t border-white/20 grid grid-cols-2 gap-3">
-
+          {!loading && !user && (
+            <>
               <Link
-                to="/login"
+                to="/sign-in"
                 onClick={handleLinkClick}
-                className="text-center px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 font-medium"
+                className="block px-4 py-3 rounded-lg hover:bg-white/10"
               >
-                Sign In
+                Login
               </Link>
 
               <Link
-                to="/signup"
+                to="/sign-up"
                 onClick={handleLinkClick}
-                className="text-center px-4 py-3 rounded-xl bg-white text-pink-600 font-semibold"
+                className="block px-4 py-3 rounded-lg hover:bg-white/10"
               >
                 Sign Up
               </Link>
-
-            </div>
-          ) : (
-            <div className="pt-3 mt-3 border-t border-white/20">
-
-              <div className="flex items-center gap-3 px-4 py-3 mb-2">
-
-                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/70">
-
-                  {profileImage || user?.profileImage ? (
-                    <img
-                      src={
-                        profileImage ||
-                        user.profileImage
-                      }
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center font-bold">
-                      {getInitial()}
-                    </div>
-                  )}
-
-                </div>
-
-                <div className="min-w-0">
-
-                  <p className="font-semibold truncate">
-                    {user?.firstName ||
-                      user?.username ||
-                      "Welcome"}
-                  </p>
-
-                  <p className="text-xs text-white/70 truncate">
-                    {user?.email || ""}
-                  </p>
-
-                </div>
-
-              </div>
-
-              <button
-                onClick={() => {
-                  fileInputRef.current?.click();
-                }}
-                className="w-full text-left px-4 py-3 rounded-lg hover:bg-white/10"
-              >
-                🖼️ Update Profile Picture
-              </button>
-
-              <Link
-                to="/questionnaire"
-                onClick={handleLinkClick}
-                className="block px-4 py-3 rounded-lg hover:bg-white/10"
-              >
-                📝 Edit Questionnaire
-              </Link>
-
-              <Link
-                to="/progress"
-                onClick={handleLinkClick}
-                className="block px-4 py-3 rounded-lg hover:bg-white/10"
-              >
-                📈 Track My Improvements
-              </Link>
-
-              <Link
-                to="/change-password"
-                onClick={handleLinkClick}
-                className="block px-4 py-3 rounded-lg hover:bg-white/10"
-              >
-                🔑 Change Password
-              </Link>
-
-              <button
-                onClick={handleSignOut}
-                className="w-full text-left px-4 py-3 rounded-lg hover:bg-red-500/20 text-red-200"
-              >
-                🚪 Sign Out
-              </button>
-
-            </div>
+            </>
           )}
-
         </div>
-
       </div>
 
       <style>{`
@@ -682,25 +682,12 @@ const Navbar = () => {
         }
 
         @keyframes heartbeat {
-          0%,
-          100% {
+          0%, 100% {
             transform: scale(1);
           }
 
           50% {
             transform: scale(1.2);
-          }
-        }
-
-        @keyframes slideInLeft {
-          from {
-            transform: translateX(-20px);
-            opacity: 0;
-          }
-
-          to {
-            transform: translateX(0);
-            opacity: 1;
           }
         }
 
