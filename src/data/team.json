@@ -1,25 +1,135 @@
 {
-  "expert": {
-    "name": "Dr. Alex Morgan",
-    "title": "Certified Relationship Expert",
-    "description": "With over 15 years of experience in relationship counseling, Dr. Alex Morgan is dedicated to helping individuals and couples build meaningful and lasting connections. Alex's mission is to provide personalized support and guidance to help clients overcome challenges and achieve happiness in their relationships.",
-    "image": "/images/mdoc.png"
-  },
-  "members": [
-    {
-      "name": "Dr. Emily Carter",
-      "specialty": "Conflict Resolution Specialist",
-      "image": "/images/femdoc.jpg"
-    },
-    {
-      "name": "John Smith",
-      "specialty": "Breakup Recovery Coach",
-      "image": "/images/doc.jpg"
-    },
-    {
-      "name": "Sarah Williams",
-      "specialty": "Patch-Up and Rekindling Expert",
-      "image": "/images/gdoc.jpg"
-    }
-  ]
+"expert": {
+"name": "Dr. Alex Morgan",
+"title": "Certified Relationship Expert",
+"description": "With over 15 years of experience in relationship counseling, Dr. Alex Morgan is dedicated to helping individuals and couples build meaningful and lasting connections. Alex's mission is to provide personalized support and guidance to help clients overcome challenges and achieve happiness in their relationships.",
+"image": "/images/mdoc.png"
+},
+
+"members": [
+{
+"name": "Dr. Emily Carter",
+"specialty": "Conflict Resolution Specialist",
+"image": "/images/femdoc.jpg"
+},
+{
+"name": "Dr. Sarah Williams",
+"specialty": "Patch-Up and Rekindling Expert",
+"image": "/images/gdoc.jpg"
+},
+{
+"name": "John Smith",
+"specialty": "Breakup Recovery Coach",
+"image": "/images/doc.jpg"
+},
+{
+"name": "Dr. Lisa Anderson",
+"specialty": "Emotional Healing Specialist",
+"image": "/images/femdoc.jpg"
+},
+{
+"name": "Dr. Michael Chen",
+"specialty": "Post-Breakup Recovery Expert",
+"image": "/images/mdoc.png"
+},
+{
+"name": "Dr. Robert Taylor",
+"specialty": "Marriage & Intimacy Counselor",
+"image": "/images/mdoc.png"
+},
+{
+"name": "Dr. Jennifer Martinez",
+"specialty": "Marriage Reconnection Specialist",
+"image": "/images/femdoc.jpg"
+},
+{
+"name": "Dr. David Kim",
+"specialty": "Marriage Guidance Expert",
+"image": "/images/doc.jpg"
+},
+{
+"name": "Dr. Amanda Foster",
+"specialty": "Pre-Marital Coaching Expert",
+"image": "/images/femdoc.jpg"
+},
+{
+"name": "Dr. James Wilson",
+"specialty": "Pre-Marital Preparation Specialist",
+"image": "/images/mdoc.png"
+},
+{
+"name": "Dr. Maria Rodriguez",
+"specialty": "Relationship Foundation Coach",
+"image": "/images/gdoc.jpg"
+},
+
+{
+  "name": "Dr. Rachel Thompson",
+  "specialty": "Stress & Anxiety Therapist",
+  "image": "/images/femdoc.jpg"
+},
+{
+  "name": "Dr. Daniel Brooks",
+  "specialty": "Emotional Wellness & Mental Health Counselor",
+  "image": "/images/mdoc.png"
+},
+{
+  "name": "Dr. Sophia Patel",
+  "specialty": "Depression & Emotional Wellness Specialist",
+  "image": "/images/gdoc.jpg"
+},
+
+{
+  "name": "Ananya Sharma",
+  "specialty": "Certified Yoga & Breathing Instructor",
+  "image": "/images/yoga-instructor.jpg"
+},
+{
+  "name": "Riya Mehta",
+  "specialty": "Yoga, Pranayama & Stress Relief Instructor",
+  "image": "/images/yoga-instructor-2.jpg"
+},
+{
+  "name": "Arjun Kapoor",
+  "specialty": "Mindful Yoga & Breathing Coach",
+  "image": "/images/yoga-instructor-3.jpg"
+},
+
+{
+  "name": "Dr. Neha Verma",
+  "specialty": "Clinical Dietician & Wellness Consultant",
+  "image": "/images/dietician.jpg"
+},
+{
+  "name": "Dr. Priya Nair",
+  "specialty": "Nutrition & Lifestyle Wellness Specialist",
+  "image": "/images/dietician-2.jpg"
+},
+{
+  "name": "Dr. Kavya Iyer",
+  "specialty": "Mental Wellness Nutrition Consultant",
+  "image": "/images/dietician-3.jpg"
+},
+
+{
+  "name": "Meera Kapoor",
+  "specialty": "Meditation & Mindfulness Specialist",
+  "image": "/images/meditation-specialist.jpg"
+},
+{
+  "name": "Aarav Singh",
+  "specialty": "Guided Meditation & Relaxation Coach",
+  "image": "/images/meditation-specialist-2.jpg"
+},
+{
+  "name": "Nisha Rao",
+  "specialty": "Sleep & Mindfulness Instructor",
+  "image": "/images/meditation-specialist-3.jpg"
+},
+{
+  "name": "Vikram Malhotra",
+  "specialty": "Breathing, Meditation & Stress Management Coach",
+  "image": "/images/meditation-specialist-4.jpg"
+}
+]
 }

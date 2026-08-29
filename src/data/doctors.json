@@ -30,8 +30,19 @@
         "image": "/images/gdoc.jpg",
         "bio": "Expert in conflict resolution and helping couples navigate difficult conversations with empathy and understanding.",
         "sessions": "60-90 min"
+      },
+      {
+        "id": 13,
+        "name": "Dr. Rachel Thompson",
+        "specialty": "Emotional Connection Specialist",
+        "experience": "11 years",
+        "rating": 4.8,
+        "image": "/images/femdoc.jpg",
+        "bio": "Helps couples strengthen emotional connection, trust, communication, and mutual understanding.",
+        "sessions": "60-90 min"
       }
     ],
+
     "breakup-recovery": [
       {
         "id": 4,
@@ -62,8 +73,19 @@
         "image": "/images/mdoc.png",
         "bio": "Specialized in helping people navigate the emotional challenges of breakups and build resilience for future relationships.",
         "sessions": "Personalized program"
+      },
+      {
+        "id": 14,
+        "name": "Dr. Olivia Parker",
+        "specialty": "Heartbreak & Self-Growth Coach",
+        "experience": "10 years",
+        "rating": 4.8,
+        "image": "/images/gdoc.jpg",
+        "bio": "Supports individuals through emotional recovery, self-confidence building, and developing healthy patterns after difficult relationships.",
+        "sessions": "Personalized program"
       }
     ],
+
     "marriage-guidance": [
       {
         "id": 7,
@@ -94,8 +116,19 @@
         "image": "/images/doc.jpg",
         "bio": "Specialized in marriage counseling with a focus on communication, conflict resolution, and long-term relationship planning.",
         "sessions": "Ongoing support"
+      },
+      {
+        "id": 15,
+        "name": "Dr. Sophia Bennett",
+        "specialty": "Marriage & Family Counselor",
+        "experience": "13 years",
+        "rating": 4.8,
+        "image": "/images/femdoc.jpg",
+        "bio": "Helps married couples manage communication challenges, family conflicts, emotional distance, and relationship expectations.",
+        "sessions": "Ongoing support"
       }
     ],
+
     "pre-marital-coaching": [
       {
         "id": 10,
@@ -126,13 +159,228 @@
         "image": "/images/gdoc.jpg",
         "bio": "Specialized in pre-marital coaching with expertise in helping couples set realistic expectations and plan for a successful marriage.",
         "sessions": "8-week program"
+      },
+      {
+        "id": 16,
+        "name": "Dr. Daniel Brooks",
+        "specialty": "Pre-Marital Communication Coach",
+        "experience": "9 years",
+        "rating": 4.8,
+        "image": "/images/mdoc.png",
+        "bio": "Helps couples prepare for marriage by developing communication skills, emotional awareness, financial understanding, and shared goals.",
+        "sessions": "8-week program"
+      }
+    ],
+
+    "yoga": [
+      {
+        "id": 17,
+        "name": "Ananya Sharma",
+        "specialty": "Yoga & Breathing Instructor",
+        "experience": "10 years",
+        "rating": 4.9,
+        "image": "/images/femdoc.jpg",
+        "bio": "Certified yoga instructor specializing in gentle yoga, breathing exercises, flexibility, relaxation, and mindfulness practices.",
+        "sessions": "30-60 min"
+      },
+      {
+        "id": 18,
+        "name": "Arjun Mehta",
+        "specialty": "Yoga & Pranayama Specialist",
+        "experience": "8 years",
+        "rating": 4.8,
+        "image": "/images/mdoc.png",
+        "bio": "Specializes in pranayama, mindful movement, breathing techniques, and yoga routines designed to support relaxation and mental balance.",
+        "sessions": "30-60 min"
+      },
+      {
+        "id": 19,
+        "name": "Priya Kapoor",
+        "specialty": "Mindful Yoga Instructor",
+        "experience": "7 years",
+        "rating": 4.9,
+        "image": "/images/gdoc.jpg",
+        "bio": "Guides beginners and experienced practitioners through calming yoga routines focused on mindfulness, breathing, balance, and relaxation.",
+        "sessions": "30-60 min"
+      }
+    ],
+
+    "mind-relaxation": [
+      {
+        "id": 20,
+        "name": "Dr. Neha Verma",
+        "specialty": "Mind Relaxation Specialist",
+        "experience": "12 years",
+        "rating": 4.9,
+        "image": "/images/femdoc.jpg",
+        "bio": "Specializes in mindfulness, guided relaxation, visualization, breathing exercises, and techniques for creating a calmer daily routine.",
+        "sessions": "30-60 min"
+      },
+      {
+        "id": 21,
+        "name": "Rohan Malhotra",
+        "specialty": "Mindfulness & Relaxation Instructor",
+        "experience": "9 years",
+        "rating": 4.8,
+        "image": "/images/mdoc.png",
+        "bio": "Helps individuals develop practical mindfulness and relaxation habits to reduce mental fatigue, overthinking, and everyday emotional pressure.",
+        "sessions": "30-60 min"
+      },
+      {
+        "id": 22,
+        "name": "Dr. Meera Singh",
+        "specialty": "Meditation & Mindfulness Expert",
+        "experience": "11 years",
+        "rating": 4.9,
+        "image": "/images/gdoc.jpg",
+        "bio": "Experienced in guided meditation, mindfulness practices, visualization, and calming techniques for emotional and mental well-being.",
+        "sessions": "30-60 min"
+      }
+    ],
+
+    "diet-wellness": [
+      {
+        "id": 23,
+        "name": "Dr. Aisha Patel",
+        "specialty": "Clinical Dietician & Wellness Consultant",
+        "experience": "12 years",
+        "rating": 4.9,
+        "image": "/images/femdoc.jpg",
+        "bio": "Provides personalized nutrition and wellness plans supporting energy, healthy routines, sleep, emotional balance, and overall well-being.",
+        "sessions": "30-45 min"
+      },
+      {
+        "id": 24,
+        "name": "Dr. Vikram Rao",
+        "specialty": "Nutrition & Lifestyle Specialist",
+        "experience": "10 years",
+        "rating": 4.8,
+        "image": "/images/mdoc.png",
+        "bio": "Specializes in practical nutrition planning, healthy lifestyle changes, balanced diets, and sustainable wellness routines.",
+        "sessions": "30-45 min"
+      },
+      {
+        "id": 25,
+        "name": "Dr. Kavya Iyer",
+        "specialty": "Diet & Wellness Consultant",
+        "experience": "9 years",
+        "rating": 4.9,
+        "image": "/images/gdoc.jpg",
+        "bio": "Helps clients create personalized diet and wellness routines designed around their lifestyle, energy levels, sleep, and long-term health goals.",
+        "sessions": "30-45 min"
+      }
+    ],
+
+    "stress-anxiety": [
+      {
+        "id": 26,
+        "name": "Dr. Nisha Kapoor",
+        "specialty": "Stress Management Therapist",
+        "experience": "14 years",
+        "rating": 4.9,
+        "image": "/images/femdoc.jpg",
+        "bio": "Specialized in stress management, emotional regulation, relaxation techniques, and helping individuals manage everyday anxiety.",
+        "sessions": "45-60 min"
+      },
+      {
+        "id": 27,
+        "name": "Dr. Rahul Mehta",
+        "specialty": "Anxiety & Emotional Wellness Therapist",
+        "experience": "11 years",
+        "rating": 4.8,
+        "image": "/images/mdoc.png",
+        "bio": "Provides supportive sessions focused on managing anxiety, overthinking, emotional pressure, and stressful life situations.",
+        "sessions": "45-60 min"
+      },
+      {
+        "id": 28,
+        "name": "Dr. Laura Mitchell",
+        "specialty": "Stress & Anxiety Counselor",
+        "experience": "13 years",
+        "rating": 4.9,
+        "image": "/images/gdoc.jpg",
+        "bio": "Uses structured counseling and relaxation approaches to help individuals develop healthier ways of coping with stress and anxiety.",
+        "sessions": "45-60 min"
+      }
+    ],
+
+    "sleep-mindfulness": [
+      {
+        "id": 29,
+        "name": "Dr. Riya Sharma",
+        "specialty": "Sleep & Mindfulness Specialist",
+        "experience": "10 years",
+        "rating": 4.9,
+        "image": "/images/femdoc.jpg",
+        "bio": "Specializes in mindfulness, guided meditation, relaxation routines, and healthy sleep habits designed to support better rest.",
+        "sessions": "30-60 min"
+      },
+      {
+        "id": 30,
+        "name": "Aman Verma",
+        "specialty": "Meditation & Sleep Instructor",
+        "experience": "8 years",
+        "rating": 4.8,
+        "image": "/images/mdoc.png",
+        "bio": "Guides clients through meditation, breathing exercises, body relaxation, and calming bedtime routines for improved rest and mindfulness.",
+        "sessions": "30-60 min"
+      },
+      {
+        "id": 31,
+        "name": "Dr. Sophia Williams",
+        "specialty": "Mindfulness & Guided Meditation Expert",
+        "experience": "12 years",
+        "rating": 4.9,
+        "image": "/images/gdoc.jpg",
+        "bio": "Experienced in guided meditation and mindfulness practices that encourage mental calmness, relaxation, and healthier sleep routines.",
+        "sessions": "30-60 min"
+      }
+    ],
+
+    "depression-emotional-wellness": [
+      {
+        "id": 32,
+        "name": "Dr. Anjali Mehra",
+        "specialty": "Emotional Wellness Therapist",
+        "experience": "15 years",
+        "rating": 4.9,
+        "image": "/images/femdoc.jpg",
+        "bio": "Provides compassionate emotional wellness support for individuals experiencing sadness, emotional distress, low motivation, or difficult life transitions.",
+        "sessions": "45-60 min"
+      },
+      {
+        "id": 33,
+        "name": "Dr. Arvind Sharma",
+        "specialty": "Mental Wellness Counselor",
+        "experience": "13 years",
+        "rating": 4.8,
+        "image": "/images/mdoc.png",
+        "bio": "Supports individuals through challenging emotional periods with structured counseling, coping strategies, and personalized wellness guidance.",
+        "sessions": "45-60 min"
+      },
+      {
+        "id": 34,
+        "name": "Dr. Maya Wilson",
+        "specialty": "Depression Support Specialist",
+        "experience": "16 years",
+        "rating": 4.9,
+        "image": "/images/gdoc.jpg",
+        "bio": "Specialized in supportive counseling for emotional distress and helping individuals develop healthy coping strategies and stronger emotional resilience.",
+        "sessions": "45-60 min"
       }
     ]
   },
+
   "serviceTitles": {
     "relationship-counseling": "Relationship Counseling",
     "breakup-recovery": "Breakup Recovery",
     "marriage-guidance": "Marriage Guidance",
-    "pre-marital-coaching": "Pre-Marital Coaching"
+    "pre-marital-coaching": "Pre-Marital Coaching",
+    "yoga": "Yoga & Breathing Sessions",
+    "mind-relaxation": "Mind Relaxation Techniques",
+    "diet-wellness": "Diet & Wellness Consultation",
+    "stress-anxiety": "Stress & Anxiety Relaxation",
+    "sleep-mindfulness": "Sleep & Mindfulness Sessions",
+    "depression-emotional-wellness": "Depression Support / Emotional Wellness"
   }
 }

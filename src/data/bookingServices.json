@@ -22,5 +22,41 @@
     "name": "Pre-Marital Coaching",
     "icon": "👫",
     "color": "from-cyan-500 to-blue-500"
+  },
+  {
+    "id": "yoga",
+    "name": "Yoga & Breathing Sessions",
+    "icon": "🧘",
+    "color": "from-green-500 to-emerald-500"
+  },
+  {
+    "id": "mind-relaxation",
+    "name": "Mind Relaxation Techniques",
+    "icon": "🧠",
+    "color": "from-violet-500 to-purple-500"
+  },
+  {
+    "id": "diet-wellness",
+    "name": "Diet & Wellness Consultation",
+    "icon": "🥗",
+    "color": "from-lime-500 to-green-500"
+  },
+  {
+    "id": "stress-anxiety",
+    "name": "Stress & Anxiety Relaxation",
+    "icon": "🌿",
+    "color": "from-teal-500 to-cyan-500"
+  },
+  {
+    "id": "sleep-mindfulness",
+    "name": "Sleep & Mindfulness Sessions",
+    "icon": "😴",
+    "color": "from-indigo-500 to-blue-500"
+  },
+  {
+    "id": "depression-emotional-wellness",
+    "name": "Depression Support / Emotional Wellness",
+    "icon": "❤️",
+    "color": "from-rose-500 to-red-500"
   }
 ]
