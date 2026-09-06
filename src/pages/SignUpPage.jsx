@@ -5,7 +5,6 @@ import {
   FaUser,
   FaStethoscope,
   FaExclamationTriangle,
-  FaCheck,
 } from "react-icons/fa";
 import { ROLES, ROLE_LABELS } from "../utils/roles";
 import { useAuth } from "../context/AuthContext";

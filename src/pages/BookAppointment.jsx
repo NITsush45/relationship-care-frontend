@@ -58,7 +58,6 @@ const BookAppointment = () => {
     message: "",
   });
   const [hearts, setHearts] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [consultationType, setConsultationType] = useState(null);
   const [isPaying, setIsPaying] = useState(false);
@@ -698,10 +697,9 @@ const BookAppointment = () => {
                 <div className="pt-6 space-y-4">
                   <button
                     type="submit"
-                    disabled={isSubmitting}
                     className="w-full px-8 py-5 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? "Please wait..." : "Confirm & Continue to Payment →"}
+                    Confirm &amp; Continue to Payment →
                   </button>
                   
                   <button
