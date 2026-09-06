@@ -57,7 +57,7 @@ const SignUpPage = () => {
       );
 
       if (data.user?.role === ROLES.THERAPIST) {
-        navigate("/therapist-dashboard", { replace: true });
+        navigate("/therapist-onboarding", { replace: true });
       } else {
         navigate("/user-dashboard", { replace: true });
       }

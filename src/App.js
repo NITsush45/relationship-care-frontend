@@ -25,6 +25,7 @@ import OAuthCallbackPage from "./pages/OAuthCallbackPage.jsx";
 
 import UserDashboard from "./pages/UserDashboard.jsx";
 import TherapistDashboard from "./pages/TherapistDashboard.jsx";
+import TherapistOnboarding from "./pages/TherapistOnboarding.jsx";
 
 import Progress from "./pages/Progress.jsx";
 import ChangePassword from "./pages/ChangePassword.jsx";
@@ -255,6 +256,19 @@ const App = () => {
                 ]}
               >
                 <ChangePassword />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ================= THERAPIST ONBOARDING ================= */}
+
+          <Route
+            path="/therapist-onboarding"
+            element={
+              <ProtectedRoute
+                allowedRoles={[ROLES.THERAPIST]}
+              >
+                <TherapistOnboarding />
               </ProtectedRoute>
             }
           />

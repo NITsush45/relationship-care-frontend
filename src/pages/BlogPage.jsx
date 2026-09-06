@@ -844,7 +844,7 @@ const BlogPage = () => {
       >
         <AnimatePresence>
           {filteredPosts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch" style={{ gridAutoRows: "1fr" }}>
 
               {filteredPosts.map((post) => (
                 <motion.article
@@ -866,7 +866,7 @@ const BlogPage = () => {
                   transition={{
                     duration: 0.3
                   }}
-                  className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl dark:shadow-black/30 border border-gray-100 dark:border-gray-800 hover:shadow-2xl dark:hover:shadow-black/50 transition-all duration-300 h-full flex flex-col"
+                  className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl dark:shadow-black/30 border border-gray-100 dark:border-gray-800 hover:shadow-2xl dark:hover:shadow-black/50 transition-all duration-300 h-full flex flex-col min-h-[500px]"
                   onMouseEnter={() =>
                     setHoveredPost(post.id)
                   }
