@@ -2,21 +2,21 @@
   {
     "value": "95%",
     "label": "Success Rate",
-    "icon": "🎯"
+    "icon": ""
   },
   {
     "value": "10K+",
     "label": "Lives Changed",
-    "icon": "💝"
+    "icon": ""
   },
   {
     "value": "50+",
     "label": "Expert Counselors",
-    "icon": "👨‍⚕️"
+    "icon": ""
   },
   {
     "value": "24/7",
     "label": "Always-On Support",
-    "icon": "🕐"
+    "icon": ""
   }
 ]

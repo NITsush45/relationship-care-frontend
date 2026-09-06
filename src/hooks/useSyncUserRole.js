@@ -1,150 +1,57 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 import { API_BASE } from "../config";
 
-const AuthContext = createContext(null);
-
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+/**
+ * Syncs the user's role from the backend after authentication.
+ * This ensures role changes (e.g. therapist signup via Google) are reflected.
+ */
+export function useSyncUserRole() {
+  const { user, token } = useAuth();
 
   useEffect(() => {
-    const loadUser = async () => {
-      const storedToken = localStorage.getItem("auth_token");
+    if (!user || !token) {
+      return;
+    }
 
-      if (!storedToken) {
-        setLoading(false);
-        return;
-      }
+    let active = true;
 
+    const syncRole = async () => {
       try {
         const res = await fetch(`${API_BASE}/api/auth/me`, {
           headers: {
-            Authorization: `Bearer ${storedToken}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data.user);
-        } else {
-          localStorage.removeItem("auth_token");
-          setUser(null);
+        if (!res.ok || !active) {
+          return;
+        }
+
+        const data = await res.json();
+
+        if (data.user && active) {
+          const currentUser = JSON.parse(localStorage.getItem("authUser") || "null");
+
+          if (currentUser && currentUser.role !== data.user.role) {
+            const updatedUser = {
+              ...currentUser,
+              ...data.user,
+            };
+
+            localStorage.setItem("authUser", JSON.stringify(updatedUser));
+            window.dispatchEvent(new Event("authUserUpdated"));
+          }
         }
       } catch (error) {
-        console.error("Failed to load user:", error);
-        localStorage.removeItem("auth_token");
-        setUser(null);
-      } finally {
-        setLoading(false);
+        // Silent fail - role sync is best-effort
       }
     };
 
-    loadUser();
-  }, []);
+    syncRole();
 
-  const login = async (email, password) => {
-    const res = await fetch(`${API_BASE}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || "Login failed");
-    }
-
-    localStorage.setItem("auth_token", data.token);
-    setUser(data.user);
-
-    return data;
-  };
-
-  const signup = async (
-    username,
-    email,
-    password,
-    role = "user"
-  ) => {
-    const res = await fetch(`${API_BASE}/api/auth/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        email,
-        password,
-        role,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || "Signup failed");
-    }
-
-    localStorage.setItem("auth_token", data.token);
-    setUser(data.user);
-
-    return data;
-  };
-
-  const logout = () => {
-    localStorage.removeItem("auth_token");
-    setUser(null);
-  };
-
-  const authFetch = async (url, options = {}) => {
-    const token = localStorage.getItem("auth_token");
-
-    const headers = {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
+    return () => {
+      active = false;
     };
-
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-
-    return fetch(url, {
-      ...options,
-      headers,
-    });
-  };
-
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        isAuthenticated: !!user,
-        login,
-        signup,
-        logout,
-        authFetch,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error(
-      "useAuth must be used inside AuthProvider"
-    );
-  }
-
-  return context;
-};
+  }, [user?.id, token]);
+}

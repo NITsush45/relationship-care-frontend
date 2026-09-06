@@ -1,62 +1,62 @@
 [
   {
-    "id": "counseling",
+    "id": "relationship-counseling",
     "name": "Relationship Counseling",
-    "icon": "💑",
+    "icon": "",
     "color": "from-pink-500 to-rose-500"
   },
   {
-    "id": "breakup",
+    "id": "breakup-recovery",
     "name": "Breakup Recovery",
-    "icon": "💔",
+    "icon": "",
     "color": "from-purple-500 to-indigo-500"
   },
   {
-    "id": "marriage",
+    "id": "marriage-guidance",
     "name": "Marriage Guidance",
-    "icon": "💍",
+    "icon": "",
     "color": "from-amber-500 to-orange-500"
   },
   {
-    "id": "premarital",
+    "id": "pre-marital-coaching",
     "name": "Pre-Marital Coaching",
-    "icon": "👫",
+    "icon": "",
     "color": "from-cyan-500 to-blue-500"
   },
   {
     "id": "yoga",
     "name": "Yoga & Breathing Sessions",
-    "icon": "🧘",
+    "icon": "",
     "color": "from-green-500 to-emerald-500"
   },
   {
     "id": "mind-relaxation",
     "name": "Mind Relaxation Techniques",
-    "icon": "🧠",
+    "icon": "",
     "color": "from-violet-500 to-purple-500"
   },
   {
     "id": "diet-wellness",
     "name": "Diet & Wellness Consultation",
-    "icon": "🥗",
+    "icon": "",
     "color": "from-lime-500 to-green-500"
   },
   {
     "id": "stress-anxiety",
     "name": "Stress & Anxiety Relaxation",
-    "icon": "🌿",
+    "icon": "",
     "color": "from-teal-500 to-cyan-500"
   },
   {
     "id": "sleep-mindfulness",
     "name": "Sleep & Mindfulness Sessions",
-    "icon": "😴",
+    "icon": "",
     "color": "from-indigo-500 to-blue-500"
   },
   {
     "id": "depression-emotional-wellness",
     "name": "Depression Support / Emotional Wellness",
-    "icon": "❤️",
+    "icon": "",
     "color": "from-rose-500 to-red-500"
   }
 ]

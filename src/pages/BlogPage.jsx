@@ -348,7 +348,9 @@ const BlogPage = () => {
               (loadLocalInteractions() || {}).viewedPosts || {}
           });
         }
-      } catch (_) {}
+      } catch (err) {
+        console.warn("Blog view sync failed:", err);
+      }
     }
 
     if (post.link) {
@@ -419,7 +421,9 @@ const BlogPage = () => {
           viewedPosts: local.viewedPosts || {}
         });
       }
-    } catch (_) {}
+    } catch (err) {
+      console.warn("Blog star sync failed:", err);
+    }
   };
 
   const loadDiscussion = async (postId) => {
@@ -504,7 +508,9 @@ const BlogPage = () => {
           [postId]: ""
         }));
       }
-    } catch (_) {}
+    } catch (err) {
+      console.warn("Blog discussion sync failed:", err);
+    }
   };
 
   const handleNewsletterSubmit = async (e) => {
@@ -838,7 +844,7 @@ const BlogPage = () => {
       >
         <AnimatePresence>
           {filteredPosts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
 
               {filteredPosts.map((post) => (
                 <motion.article
@@ -860,11 +866,7 @@ const BlogPage = () => {
                   transition={{
                     duration: 0.3
                   }}
-                  className={`bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl dark:shadow-black/30 border border-gray-100 dark:border-gray-800 hover:shadow-2xl dark:hover:shadow-black/50 transition-all duration-300 ${
-                    post.featured
-                      ? "md:col-span-2 lg:col-span-2"
-                      : ""
-                  }`}
+                  className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl dark:shadow-black/30 border border-gray-100 dark:border-gray-800 hover:shadow-2xl dark:hover:shadow-black/50 transition-all duration-300 h-full flex flex-col"
                   onMouseEnter={() =>
                     setHoveredPost(post.id)
                   }
@@ -896,7 +898,7 @@ const BlogPage = () => {
                           delay: 0.2
                         }}
                       >
-                        ✨ Featured
+                        Featured
                       </motion.div>
                     )}
 
@@ -931,7 +933,7 @@ const BlogPage = () => {
                           : { x: 0 }
                       }
                     >
-                      <h3 className="text-2xl font-bold text-white mb-2">
+                      <h3 className="text-2xl font-bold text-white mb-2 line-clamp-2">
                         {post.title}
                       </h3>
 
@@ -951,7 +953,7 @@ const BlogPage = () => {
 
                   {/* Post Content */}
 
-                  <div className="p-6">
+                  <div className="p-6 flex flex-col flex-1">
 
                     <div className="flex items-center justify-between mb-4 gap-3">
                       <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-50 dark:bg-pink-950/40 text-pink-700 dark:text-pink-300 text-sm font-medium">
@@ -965,7 +967,7 @@ const BlogPage = () => {
                       </span>
                     </div>
 
-                    <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed line-clamp-3">
                       {post.excerpt}
                     </p>
 
@@ -987,7 +989,7 @@ const BlogPage = () => {
 
                     {/* Action Buttons */}
 
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
+                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
 
                       <div className="flex items-center gap-4">
 
@@ -1252,7 +1254,7 @@ const BlogPage = () => {
               scale: 1.02
             }}
           >
-            Bloom with Us 🌸
+            Bloom with Us
           </motion.h2>
 
           <p className="text-lg mb-8 opacity-90">

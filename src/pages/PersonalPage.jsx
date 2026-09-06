@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
+import { FaCommentDots } from "react-icons/fa";
 import { API_BASE } from "../config";
 
 const socketBase =
@@ -9,6 +10,8 @@ const socketBase =
 
 const PersonalPage = () => {
   const socketRef = useRef(null);
+  const joinedRoomRef = useRef(null);
+  const profileRef = useRef({ name: "", role: "customer" });
 
   const [connected, setConnected] = useState(false);
   const [name, setName] = useState("");
@@ -16,6 +19,9 @@ const PersonalPage = () => {
   const [roomId, setRoomId] = useState("confess-room");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+
+  // Keep the latest name/role reachable from long-lived socket handlers.
+  profileRef.current = { name, role };
 
   useEffect(() => {
     return () => {
@@ -33,6 +39,15 @@ const PersonalPage = () => {
       return;
     }
 
+    // Already connected and sitting in this room? Nothing to do.
+    if (
+      socketRef.current &&
+      socketRef.current.connected &&
+      joinedRoomRef.current === safeRoom
+    ) {
+      return;
+    }
+
     if (!socketRef.current) {
       socketRef.current = io(socketBase, {
         transports: ["websocket"],
@@ -40,6 +55,15 @@ const PersonalPage = () => {
 
       socketRef.current.on("connect", () => {
         setConnected(true);
+
+        // Server-side rooms are per-connection: re-join after any reconnect.
+        if (joinedRoomRef.current) {
+          socketRef.current.emit("join-room", {
+            roomId: joinedRoomRef.current,
+            name: profileRef.current.name.trim() || "Anonymous",
+            role: profileRef.current.role,
+          });
+        }
       });
 
       socketRef.current.on("disconnect", () => {
@@ -73,6 +97,18 @@ const PersonalPage = () => {
         ]);
       });
     }
+
+    // Switching rooms? Leave the previous one and clear its history.
+    if (
+      socketRef.current.connected &&
+      joinedRoomRef.current &&
+      joinedRoomRef.current !== safeRoom
+    ) {
+      socketRef.current.emit("leave-room");
+      setMessages([]);
+    }
+
+    joinedRoomRef.current = safeRoom;
 
     socketRef.current.emit("join-room", {
       roomId: safeRoom,
@@ -273,7 +309,7 @@ const PersonalPage = () => {
                     {messages.length === 0 && (
                       <div className="flex flex-col items-center justify-center h-full text-center">
                         <div className="text-4xl mb-3 opacity-50">
-                          💬
+                          <FaCommentDots className="text-3xl text-white" />
                         </div>
 
                         <p className="text-gray-400 dark:text-gray-500">

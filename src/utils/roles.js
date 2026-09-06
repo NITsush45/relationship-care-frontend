@@ -10,7 +10,12 @@ export const ROLE_LABELS = {
 
 export function getUserRole(user) {
   if (!user) return null;
-  return user.publicMetadata?.role || user.unsafeMetadata?.role || ROLES.USER;
+  return (
+    user.role ||
+    user.publicMetadata?.role ||
+    user.unsafeMetadata?.role ||
+    ROLES.USER
+  );
 }
 
 export function isTherapist(user) {

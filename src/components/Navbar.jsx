@@ -1,5 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  FaImage,
+  FaClipboardList,
+  FaChartLine,
+  FaKey,
+  FaSignOutAlt,
+  FaSun,
+  FaMoon,
+} from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -262,7 +271,7 @@ const Navbar = () => {
               : "hover:bg-pink-50 text-gray-700"
           }`}
         >
-          <span className="text-xl">🖼️</span>
+          <FaImage className="text-xl" />
           <span className="font-medium">
             Update Profile Picture
           </span>
@@ -277,7 +286,7 @@ const Navbar = () => {
               : "hover:bg-purple-50 text-gray-700"
           }`}
         >
-          <span className="text-xl">📝</span>
+          <FaClipboardList className="text-xl" />
           <span className="font-medium">
             Edit Questionnaire
           </span>
@@ -292,7 +301,7 @@ const Navbar = () => {
               : "hover:bg-indigo-50 text-gray-700"
           }`}
         >
-          <span className="text-xl">📈</span>
+          <FaChartLine className="text-xl" />
           <span className="font-medium">
             Track My Improvements
           </span>
@@ -307,7 +316,7 @@ const Navbar = () => {
               : "hover:bg-blue-50 text-gray-700"
           }`}
         >
-          <span className="text-xl">🔑</span>
+          <FaKey className="text-xl" />
           <span className="font-medium">
             Change Password
           </span>
@@ -329,7 +338,7 @@ const Navbar = () => {
                 : "hover:bg-red-50 text-red-600"
             }`}
           >
-            <span className="text-xl">🚪</span>
+            <FaSignOutAlt className="text-xl" />
             <span className="font-medium">
               Sign Out
             </span>
@@ -434,9 +443,7 @@ const Navbar = () => {
                 : "Switch to dark mode"
             }
           >
-            <span className="text-lg">
-              {isDark ? "☀️" : "🌙"}
-            </span>
+            {isDark ? <FaSun className="text-lg" /> : <FaMoon className="text-lg" />}
           </button>
 
           {!loading && user ? (
@@ -492,9 +499,7 @@ const Navbar = () => {
             aria-label="Toggle theme"
             title="Toggle theme"
           >
-            <span className="text-lg">
-              {isDark ? "☀️" : "🌙"}
-            </span>
+            {isDark ? <FaSun className="text-lg" /> : <FaMoon className="text-lg" />}
           </button>
 
           {!loading && user && (

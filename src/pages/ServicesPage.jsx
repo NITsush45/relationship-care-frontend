@@ -103,7 +103,19 @@ const ServicesPage = () => {
           const servicesJson = await servicesRes.json();
 
           if (Array.isArray(servicesJson)) {
-            setServices(servicesJson);
+            // Only replace the bundled cards with server data that
+            // is actually usable (title + route are required).
+            const validServices = servicesJson.filter(
+              (item) =>
+                item &&
+                typeof item.title === "string" &&
+                typeof item.route === "string" &&
+                item.route
+            );
+
+            if (validServices.length > 0) {
+              setServices(validServices);
+            }
           }
         }
 
@@ -143,7 +155,22 @@ const ServicesPage = () => {
   }, []);
 
   const handleServiceClick = (route) => {
-    navigate(`/doctors/${route}`);
+    if (!route) {
+      return;
+    }
+
+    navigate(`/doctors/${encodeURIComponent(route)}`);
+  };
+
+  // If an image fails to load (e.g. offline / broken URL),
+  // fall back to a bundled image so cards never look broken.
+  const handleImageError = (event) => {
+    if (event.currentTarget.dataset.fallbackApplied) {
+      return;
+    }
+
+    event.currentTarget.dataset.fallbackApplied = "true";
+    event.currentTarget.src = "/images/rel.jpg";
   };
 
   return (
@@ -190,6 +217,7 @@ const ServicesPage = () => {
             <img
               src={service.image}
               alt={service.title}
+              onError={handleImageError}
               className="w-full h-48 object-cover"
             />
 
@@ -242,18 +270,29 @@ const ServicesPage = () => {
           {wellnessServices.map((service, index) => (
             <motion.div
               key={service.route}
+              role="button"
+              tabIndex={0}
+              aria-label={service.title}
+              onClick={() => handleServiceClick(service.route)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  handleServiceClick(service.route);
+                }
+              }}
               variants={fadeInUp}
               whileHover={{
                 scale: 1.04,
                 y: -5,
               }}
               transition={{ duration: 0.3 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg dark:shadow-black/30 border border-pink-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-300"
+              className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg dark:shadow-black/30 border border-pink-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 cursor-pointer focus:outline-none focus:ring-4 focus:ring-pink-500/40"
             >
               {/* Image */}
               <img
                 src={service.image}
                 alt={service.title}
+                onError={handleImageError}
                 className="w-full h-52 object-cover"
               />
 
@@ -270,7 +309,10 @@ const ServicesPage = () => {
                 {/* CTA */}
                 <button
                   type="button"
-                  onClick={() => handleServiceClick(service.route)}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleServiceClick(service.route);
+                  }}
                   className={`mt-6 w-full px-5 py-3 rounded-xl font-semibold text-white transition-all duration-300 shadow-md hover:shadow-lg ${
                     service.route === "depression-emotional-wellness"
                       ? "bg-red-500 hover:bg-red-600"

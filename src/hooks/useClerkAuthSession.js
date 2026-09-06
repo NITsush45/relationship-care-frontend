@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 export function useAuthSession() {
   const {
@@ -11,7 +10,7 @@ export function useAuthSession() {
     login,
     logout,
     signup,
-  } = useContext(AuthContext);
+  } = useAuth();
 
   const getAuthHeaders = async (customHeaders = {}) => {
     const headers = {

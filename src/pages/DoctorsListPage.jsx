@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { FaBriefcase, FaUsers } from "react-icons/fa";
 import doctorsData from "../data/doctors.json";
 import { API_BASE } from "../config";
 
@@ -57,7 +58,11 @@ const DoctorsListPage = () => {
   }, [serviceType]);
 
   const handleBookAppointment = (doctorId) => {
-    navigate(`/book?doctor=${doctorId}&service=${serviceType}`);
+    navigate(
+      `/book?doctor=${encodeURIComponent(
+        doctorId
+      )}&service=${encodeURIComponent(serviceType || "")}`
+    );
   };
 
   return (
@@ -101,6 +106,14 @@ const DoctorsListPage = () => {
                   <img
                     src={doctor.image}
                     alt={doctor.name}
+                    onError={(event) => {
+                      if (event.currentTarget.dataset.fallbackApplied) {
+                        return;
+                      }
+
+                      event.currentTarget.dataset.fallbackApplied = "true";
+                      event.currentTarget.src = "/images/femdoc.jpg";
+                    }}
                     className="w-full h-64 object-cover"
                   />
 
@@ -126,14 +139,14 @@ const DoctorsListPage = () => {
                   {/* Experience & Sessions */}
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-gray-600 dark:text-gray-300">
-                      <span className="mr-2 text-pink-500">💼</span>
+                      <FaBriefcase className="mr-2 text-pink-500" />
                       <span className="text-sm">
                         {doctor.experience} experience
                       </span>
                     </div>
 
                     <div className="flex items-center text-gray-600 dark:text-gray-300">
-                      <span className="mr-2 text-pink-500">👥</span>
+                      <FaUsers className="mr-2 text-pink-500" />
                       <span className="text-sm">{doctor.sessions}</span>
                     </div>
                   </div>

@@ -16,7 +16,7 @@ const TherapistDashboard = () => {
 
     const loadAppointments = async () => {
       try {
-        const token = localStorage.getItem("auth_token");
+        const token = localStorage.getItem("authToken");
 
         const res = await fetch(`${API_BASE}/api/appointments`, {
           headers: token

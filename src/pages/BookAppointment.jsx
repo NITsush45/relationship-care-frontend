@@ -1,9 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
+import {
+  FaHeart,
+  FaBriefcase,
+  FaCalendarAlt,
+  FaClipboardList,
+  FaClock,
+  FaEnvelope,
+  FaCheckCircle,
+  FaWallet,
+  FaCommentDots,
+  FaPhoneAlt,
+  FaVideo,
+} from "react-icons/fa";
 import bookingServicesData from "../data/bookingServices.json";
 import timeSlotsData from "../data/timeSlots.json";
 import { API_BASE } from "../config";
+import { useAuth } from "../context/AuthContext";
+
+const CONSULTATION_TYPES = [
+  {
+    id: "chat",
+    label: "Chat Session",
+    desc: "Talk over secure text chat",
+    icon: <FaCommentDots />,
+    fee: 30,
+  },
+  {
+    id: "call",
+    label: "Call Session",
+    desc: "One-on-one voice counseling",
+    icon: <FaPhoneAlt />,
+    fee: 50,
+  },
+  {
+    id: "video",
+    label: "Video Call Session",
+    desc: "Face-to-face video therapy",
+    icon: <FaVideo />,
+    fee: 80,
+  },
+];
 
 const BookAppointment = () => {
+  const [searchParams] = useSearchParams();
+  const { user: authUser } = useAuth();
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(null);
@@ -19,6 +60,14 @@ const BookAppointment = () => {
   const [hearts, setHearts] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [consultationType, setConsultationType] = useState(null);
+  const [isPaying, setIsPaying] = useState(false);
+  const [payment, setPayment] = useState({
+    status: "idle", // idle | opening | waiting | paid
+    orderId: null,
+    checkoutUrl: null,
+    error: "",
+  });
   const [services, setServices] = useState(bookingServicesData);
   const [timeSlots, setTimeSlots] = useState(timeSlotsData);
   useEffect(() => {
@@ -70,6 +119,51 @@ const BookAppointment = () => {
       active = false;
     };
   }, []);
+
+  // Coming from a service/doctor card (e.g. /book?doctor=3&service=yoga):
+  // prefill the service, the signed-in user's details and skip
+  // straight to the date & time step.
+  const bookingParamsApplied = useRef(false);
+
+  useEffect(() => {
+    if (bookingParamsApplied.current) {
+      return;
+    }
+
+    const doctorParam = searchParams.get("doctor");
+    const serviceParam = searchParams.get("service");
+
+    if (!doctorParam && !serviceParam) {
+      return;
+    }
+
+    bookingParamsApplied.current = true;
+
+    const serviceSlug = serviceParam
+      ? decodeURIComponent(serviceParam)
+      : null;
+
+    const matchedService = serviceSlug
+      ? services.find((service) => service.id === serviceSlug) ||
+        services.find(
+          (service) =>
+            service.name.toLowerCase() ===
+            serviceSlug.replace(/-/g, " ").toLowerCase()
+        )
+      : null;
+
+    setFormData((prev) => ({
+      ...prev,
+      name: prev.name || authUser?.name || authUser?.username || "",
+      email: prev.email || authUser?.email || "",
+      service: matchedService ? matchedService.name : prev.service,
+    }));
+
+    if (matchedService) {
+      setStep(2);
+    }
+  }, [searchParams, services, authUser]);
+
   const getDaysInMonth = (date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -99,32 +193,128 @@ const BookAppointment = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setSubmitError("");
+    // Move on to the payment step — the appointment record is created on the
+    // server when the NovaPay payment is started.
+    setStep(4);
+  };
+
+  const paymentPollRef = useRef(null);
+
+  const stopPaymentPolling = () => {
+    if (paymentPollRef.current) {
+      clearInterval(paymentPollRef.current);
+      paymentPollRef.current = null;
+    }
+  };
+
+  const checkPaymentStatus = async (orderId) => {
     try {
-      const res = await fetch(`${API_BASE}/api/appointments`, {
+      const res = await fetch(
+        `${API_BASE}/api/payments/novapay/status/${encodeURIComponent(orderId)}`
+      );
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.paymentStatus === "paid") {
+        stopPaymentPolling();
+        setPayment((prev) => ({ ...prev, status: "paid", error: "" }));
+        setStep(5);
+        return true;
+      }
+      if (res.ok && data.paymentStatus === "failed") {
+        stopPaymentPolling();
+        setPayment((prev) => ({
+          ...prev,
+          status: "idle",
+          error: "The payment failed or was cancelled. Please try again.",
+        }));
+        return true;
+      }
+      return false;
+    } catch (_) {
+      return false;
+    }
+  };
+
+  const startPaymentPolling = (orderId) => {
+    stopPaymentPolling();
+    let attempts = 0;
+    paymentPollRef.current = setInterval(async () => {
+      attempts += 1;
+      const done = await checkPaymentStatus(orderId);
+      if (done) {
+        stopPaymentPolling();
+      } else if (attempts >= 100) {
+        stopPaymentPolling();
+        setPayment((prev) => ({
+          ...prev,
+          status: "waiting",
+          error:
+            "Automatic confirmation timed out. Use \"I've paid — Check status\" below in a moment.",
+        }));
+      }
+    }, 3000);
+  };
+
+  const handlePayWithNovaPay = async () => {
+    if (isPaying) return;
+    setIsPaying(true);
+    setPayment({ status: "opening", orderId: null, checkoutUrl: null, error: "" });
+    try {
+      const res = await fetch(`${API_BASE}/api/payments/novapay/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          consultationType,
           date: selectedDate?.toDateString() || null,
           time: selectedTime || null,
-          doctorId: new URLSearchParams(window.location.search).get("doctor") || null,
+          doctorId: searchParams.get("doctor") || null,
         }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Failed to book appointment");
-      setStep(4);
+      if (!res.ok || !data.checkoutUrl) {
+        throw new Error(
+          data.details || data.hint || data.error || "Could not start the NovaPay payment"
+        );
+      }
+      setPayment({
+        status: "waiting",
+        orderId: data.orderId,
+        checkoutUrl: data.checkoutUrl,
+        error: "",
+      });
+      window.open(data.checkoutUrl, "_blank", "noopener,noreferrer");
+      startPaymentPolling(data.orderId);
     } catch (err) {
-      setSubmitError(
-        err.message || "Unable to connect. Please check that the server is running and try again."
-      );
-       } finally {
-      setIsSubmitting(false);
+      setPayment((prev) => ({
+        ...prev,
+        status: "idle",
+        error: err.message || "Payment could not be started",
+      }));
+    } finally {
+      setIsPaying(false);
     }
   };
+
+  // If NovaPay redirects back to /book?novapay_order_id=..., resume polling.
+  useEffect(() => {
+    const orderId = searchParams.get("novapay_order_id");
+    if (!orderId) {
+      return undefined;
+    }
+    setStep(4);
+    setPayment((prev) => ({ ...prev, status: "waiting", orderId }));
+    startPaymentPolling(orderId);
+    return () => stopPaymentPolling();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Stop polling when the component unmounts.
+  useEffect(() => {
+    return () => stopPaymentPolling();
+  }, []);
 
   const { daysInMonth, startingDayOfWeek } = getDaysInMonth(currentMonth);
   const today = new Date();
@@ -151,7 +341,7 @@ const BookAppointment = () => {
               animationDuration: `${heart.duration}s`,
             }}
           >
-            ❤️
+            <FaHeart />
           </div>
         ))}
       </div>
@@ -160,7 +350,7 @@ const BookAppointment = () => {
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in-up">
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-pink-100 rounded-full mb-6">
-            <span className="text-3xl animate-pulse">💝</span>
+            <FaHeart className="text-3xl animate-pulse text-pink-500" />
             <span className="text-pink-600">Book Your Session</span>
           </div>
           
@@ -179,9 +369,11 @@ const BookAppointment = () => {
         <div className="max-w-4xl mx-auto mb-12">
           <div className="flex items-center justify-between">
             {[
-              { num: 1, label: "Service", icon: "💼" },
-              { num: 2, label: "Date & Time", icon: "📅" },
-              { num: 3, label: "Details", icon: "📝" },
+              { num: 1, label: "Service", icon: <FaBriefcase /> },
+              { num: 2, label: "Date & Time", icon: <FaCalendarAlt /> },
+              { num: 3, label: "Details", icon: <FaClipboardList /> },
+              { num: 4, label: "Payment", icon: <FaWallet /> },
+              { num: 5, label: "Done", icon: <FaCheckCircle /> },
             ].map((s, idx) => (
               <React.Fragment key={s.num}>
                 <div className="flex flex-col items-center">
@@ -198,7 +390,7 @@ const BookAppointment = () => {
                     {s.label}
                   </span>
                 </div>
-                {idx < 2 && (
+                {idx < 4 && (
                   <div className={`flex-1 h-1 mx-4 rounded-full transition-all duration-500 ${
                     step > s.num ? 'bg-gradient-to-r from-pink-500 to-purple-500' : 'bg-gray-200 dark:bg-gray-700'
                   }`} />
@@ -341,12 +533,12 @@ const BookAppointment = () => {
                           : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105'
                       }`}
                     >
-                      🕐 {time}
+                      <FaClock className="mr-2" /> {time}
                     </button>
                   ))}
                 </div>
 
-                {selectedDate && selectedTime && (
+                {selectedDate && selectedTime && consultationType && (
                   <button
                     onClick={() => setStep(3)}
                     className="w-full mt-8 px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
@@ -354,6 +546,48 @@ const BookAppointment = () => {
                     Continue to Details →
                   </button>
                 )}
+              </div>
+            </div>
+
+            {/* Consultation Type & Session Fee */}
+            <div className="mt-8 bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 text-center">
+                Choose Session Type
+              </h3>
+
+              <p className="text-center text-gray-500 dark:text-gray-400 mb-6">
+                Per-session charges — Chat ₹30 · Call ₹50 · Video Call ₹80
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {CONSULTATION_TYPES.map((type) => (
+                  <button
+                    key={type.id}
+                    type="button"
+                    onClick={() => setConsultationType(type.id)}
+                    className={`p-6 rounded-2xl border-2 text-left transition-all duration-300 ${
+                      consultationType === type.id
+                        ? "border-pink-500 bg-pink-50 dark:bg-pink-900/20 scale-105 shadow-lg"
+                        : "border-gray-200 dark:border-gray-600 hover:border-pink-300 hover:scale-105"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-3xl text-pink-500">{type.icon}</span>
+
+                      <span className="text-xl font-black text-pink-600 dark:text-pink-400">
+                        ₹{type.fee}
+                      </span>
+                    </div>
+
+                    <p className="font-bold text-gray-900 dark:text-white">
+                      {type.label}
+                    </p>
+
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {type.desc}
+                    </p>
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -467,7 +701,7 @@ const BookAppointment = () => {
                     disabled={isSubmitting}
                     className="w-full px-8 py-5 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? "Booking..." : "Confirm Booking ✨"}
+                    {isSubmitting ? "Please wait..." : "Confirm & Continue to Payment →"}
                   </button>
                   
                   <button
@@ -483,11 +717,135 @@ const BookAppointment = () => {
           </div>
         )}
 
-        {/* Step 4: Success Message */}
+        {/* Step 4: Payment (NovaPay UPI) */}
         {step === 4 && (
+          <div className="max-w-2xl mx-auto animate-fade-in-up">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 md:p-12">
+              <div className="text-center mb-8">
+                <div className="inline-flex p-4 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-white text-4xl mb-4">
+                  <FaWallet />
+                </div>
+
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  Make Payment
+                </h2>
+
+                <p className="text-gray-500 dark:text-gray-400 mt-2">
+                  Secure UPI payment via NovaPay
+                </p>
+              </div>
+
+              {/* Order Summary */}
+              <div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/20 dark:to-purple-900/20 rounded-2xl p-6 mb-8">
+                <div className="space-y-3">
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500 dark:text-gray-400">Service</span>
+
+                    <span className="font-bold text-gray-900 dark:text-white text-right">
+                      {formData.service || "Your session"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500 dark:text-gray-400">Date & Time</span>
+
+                    <span className="font-bold text-gray-900 dark:text-white text-right">
+                      {selectedDate ? selectedDate.toDateString() : "As scheduled"}
+                      {selectedTime ? ` at ${selectedTime}` : ""}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500 dark:text-gray-400">Session Type</span>
+
+                    <span className="font-bold text-gray-900 dark:text-white text-right">
+                      {consultationType
+                        ? `${CONSULTATION_TYPES.find((t) => t.id === consultationType)?.label} (₹${
+                            CONSULTATION_TYPES.find((t) => t.id === consultationType)?.fee
+                          })`
+                        : "As selected"}
+                    </span>
+                  </div>
+
+                  <div className="border-t border-pink-200 dark:border-pink-800 pt-3 flex justify-between gap-4">
+                    <span className="font-bold text-gray-900 dark:text-white">Total</span>
+
+                    <span className="font-black text-2xl text-pink-600 dark:text-pink-400">
+                      ₹{consultationType
+                        ? CONSULTATION_TYPES.find((t) => t.id === consultationType)?.fee
+                        : "--"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {payment.error && (
+                <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl mb-6 text-sm">
+                  {payment.error}
+                </div>
+              )}
+
+              {payment.status === "waiting" ? (
+                <div className="text-center space-y-4">
+                  <div className="inline-block w-10 h-10 border-4 border-pink-200 border-t-pink-500 rounded-full animate-spin" />
+
+                  <p className="text-gray-600 dark:text-gray-300 font-semibold">
+                    Waiting for payment confirmation…
+                  </p>
+
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Complete the payment in the NovaPay/UPI window. This page updates
+                    automatically.
+                  </p>
+
+                  {payment.orderId && (
+                    <button
+                      type="button"
+                      onClick={() => checkPaymentStatus(payment.orderId)}
+                      className="block mx-auto px-6 py-3 border-2 border-pink-300 dark:border-pink-500 text-pink-600 dark:text-pink-400 font-semibold rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-300"
+                    >
+                      I've paid — Check status
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handlePayWithNovaPay}
+                  disabled={isPaying || !consultationType}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                >
+                  {isPaying
+                    ? "Starting payment…"
+                    : `Pay ₹${
+                        consultationType
+                          ? CONSULTATION_TYPES.find((t) => t.id === consultationType)?.fee
+                          : ""
+                      } with NovaPay (UPI)`}
+                </button>
+              )}
+
+              <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-6">
+                🔒 Payments are processed securely by NovaPay directly to the counselor's
+                UPI account.
+              </p>
+
+              <button
+                type="button"
+                onClick={() => setStep(3)}
+                className="w-full mt-6 px-6 py-3 border-2 border-pink-300 dark:border-pink-500 text-pink-600 dark:text-pink-400 font-semibold rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-300"
+              >
+                ← Back to Details
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 5: Success Message */}
+        {step === 5 && (
           <div className="max-w-2xl mx-auto text-center animate-fade-in-up">
             <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-12">
-              <div className="text-7xl mb-6 animate-bounce">🎉</div>
+              <FaCheckCircle className="text-7xl mb-6 animate-bounce text-green-500 mx-auto" />
               
               <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600 dark:from-pink-400 dark:to-purple-400 mb-4">
                 Booking Confirmed!
@@ -500,7 +858,7 @@ const BookAppointment = () => {
               <div className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/20 dark:to-purple-900/20 rounded-2xl p-6 mb-8 text-left">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">💼</span>
+                    <FaBriefcase className="text-2xl text-pink-500" />
                     <div>
                       <p className="text-sm text-gray-500 dark:text-gray-400">Service</p>
                       <p className="font-bold text-gray-900 dark:text-white">{formData.service}</p>
@@ -508,7 +866,7 @@ const BookAppointment = () => {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">📅</span>
+                    <FaCalendarAlt className="text-2xl text-pink-500" />
                     <div>
                       <p className="text-sm text-gray-500 dark:text-gray-400">Date & Time</p>
                       <p className="font-bold text-gray-900 dark:text-white">
@@ -517,7 +875,21 @@ const BookAppointment = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">📧</span>
+                    <FaWallet className="text-2xl text-pink-500" />
+                    <div>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Session Type</p>
+                      <p className="font-bold text-gray-900 dark:text-white">
+                        {consultationType
+                          ? `${CONSULTATION_TYPES.find((t) => t.id === consultationType)?.label} — ₹${
+                              CONSULTATION_TYPES.find((t) => t.id === consultationType)?.fee
+                            } paid`
+                          : "Payment received"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <FaEnvelope className="text-2xl text-pink-500" />
                     <div>
                       <p className="text-sm text-gray-500 dark:text-gray-400">Confirmation sent to</p>
                       <p className="font-bold text-gray-900 dark:text-white">{formData.email}</p>

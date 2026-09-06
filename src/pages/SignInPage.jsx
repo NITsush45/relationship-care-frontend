@@ -1,5 +1,10 @@
-import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import {
   FaEye,
   FaEyeSlash,
@@ -8,10 +13,16 @@ import {
   FaLock,
 } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
+import { API_BASE } from "../config";
+import {
+  getOAuthErrorMessage,
+  isSafeInternalPath,
+} from "../utils/oauthErrors";
 
 const SignInPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login } = useAuth();
 
   const [email, setEmail] = useState("");
@@ -29,7 +40,19 @@ const SignInPage = () => {
       ? from
       : "/dashboard";
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    const oauthError = searchParams.get("error");
+
+    if (oauthError) {
+      setError(getOAuthErrorMessage(oauthError));
+
+      // Clean the error out of the address bar so it does not
+      // reappear on refresh or navigation.
+      window.history.replaceState({}, "", "/sign-in");
+    }
+  }, [searchParams]);
+
+      const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -54,11 +77,23 @@ const SignInPage = () => {
   };
 
   const handleGoogleLogin = () => {
-    const apiUrl =
-      process.env.REACT_APP_API_URL?.trim() ||
-      "http://localhost:5000";
+    try {
+      // The browser leaves the app during the Google redirect,
+      // so remember the context in localStorage for the callback.
+      localStorage.setItem("pending_google_role", "user");
+      localStorage.setItem("google_auth_action", "login");
 
-    window.location.href = `${apiUrl}/api/auth/google`;
+      if (isSafeInternalPath(redirectUrl)) {
+        localStorage.setItem("pending_google_redirect", redirectUrl);
+      } else {
+        localStorage.removeItem("pending_google_redirect");
+      }
+    } catch (_) {
+      // localStorage unavailable – the callback falls back
+      // to the role-aware dashboard redirect.
+    }
+
+    window.location.href = `${API_BASE}/api/auth/google?role=user`;
   };
 
   return (

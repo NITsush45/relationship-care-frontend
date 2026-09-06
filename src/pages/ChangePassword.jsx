@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaKey } from "react-icons/fa";
 
 const ChangePassword = () => {
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ const ChangePassword = () => {
 
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-3xl">
-            🔑
+            <FaKey className="text-3xl text-white" />
           </div>
 
           <h1 className="text-3xl font-bold text-gray-800 mt-4">

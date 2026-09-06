@@ -21,6 +21,7 @@ import DoctorsListPage from "./pages/DoctorsListPage.jsx";
 
 import SignInPage from "./pages/SignInPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
+import OAuthCallbackPage from "./pages/OAuthCallbackPage.jsx";
 
 import UserDashboard from "./pages/UserDashboard.jsx";
 import TherapistDashboard from "./pages/TherapistDashboard.jsx";
@@ -69,6 +70,11 @@ const App = () => {
                 <SignUpPage />
               </PublicOnlyRoute>
             }
+          />
+
+          <Route
+            path="/auth/callback"
+            element={<OAuthCallbackPage />}
           />
 
           {/* ================= PUBLIC PAGES ================= */}

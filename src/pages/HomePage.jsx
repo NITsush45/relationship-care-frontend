@@ -10,6 +10,12 @@ import servicesData from "../data/services.json";
 import testimonialsData from "../data/testimonials.json";
 import processStepsData from "../data/processSteps.json";
 import statsData from "../data/stats.json";
+import {
+  FaHeart,
+  FaClock,
+  FaStar,
+} from "react-icons/fa";
+import { FaWandMagicSparkles as FaSparkles } from "react-icons/fa6";
 import { API_BASE } from "../config";
 
 // Reusable Section Wrapper Component
@@ -89,7 +95,7 @@ const ServiceCard = ({ service, index }) => {
         </div>
 
         <div className="flex items-center text-gray-500 dark:text-gray-400 mb-6">
-          <span className="mr-2 text-lg">🕐</span>
+          <FaClock className="mr-2 text-lg" />
           <span className="text-sm font-medium">
             {service.duration}
           </span>
@@ -304,7 +310,7 @@ const HomePage = () => {
               fontSize: `${heart.size}px`,
             }}
           >
-            ❤️
+            <FaHeart />
           </motion.div>
         ))}
 
@@ -360,7 +366,7 @@ const HomePage = () => {
                 }}
                 className="mr-2 text-xl"
               >
-                ✨
+                <FaSparkles />
               </motion.span>
 
               Trusted by{" "}
@@ -826,7 +832,7 @@ const HomePage = () => {
                           key={i}
                           className="text-yellow-400 text-3xl"
                         >
-                          ⭐
+                          <FaStar />
                         </span>
                       ))}
                     </div>
@@ -935,7 +941,7 @@ const HomePage = () => {
             transition={{ duration: 0.3 }}
           >
             <span className="text-7xl mx-auto mb-8 inline-block">
-              ✨
+              <FaSparkles />
             </span>
 
             <motion.h2
@@ -1164,7 +1170,7 @@ const HomePage = () => {
               className="mt-10 text-gray-500 dark:text-gray-400 text-lg"
             >
               <span className="inline-block mr-2">
-                ❤️
+                <FaHeart />
               </span>
               Your journey to better relationships starts here
             </motion.p>

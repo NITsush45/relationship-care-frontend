@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from "react";
+import {
+  FaChartLine,
+  FaClipboardList,
+  FaStethoscope,
+} from "react-icons/fa";
 
 const Progress = () => {
   const [answers, setAnswers] = useState({});
@@ -32,7 +37,7 @@ const Progress = () => {
 
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 text-white text-3xl shadow-lg mb-4">
-            📈
+            <FaChartLine />
           </div>
 
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
@@ -47,7 +52,7 @@ const Progress = () => {
         {!hasQuestionnaire ? (
           <div className="bg-white rounded-3xl shadow-xl p-10 text-center">
             <div className="text-5xl mb-4">
-              📝
+              <FaClipboardList />
             </div>
 
             <h2 className="text-2xl font-bold text-gray-800">
@@ -160,9 +165,7 @@ const Progress = () => {
 
               <div className="mt-6 bg-purple-50 rounded-2xl p-6">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">
-                    🩺
-                  </span>
+                  <FaStethoscope className="text-2xl text-purple-600" />
 
                   <div>
                     <p className="font-semibold text-purple-800">

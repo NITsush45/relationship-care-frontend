@@ -3,24 +3,24 @@
     "step": "1",
     "title": "Connect",
     "description": "Share your story with our compassionate experts",
-    "icon": "💬"
+    "icon": ""
   },
   {
     "step": "2",
     "title": "Understand",
     "description": "Gain insights into your relationship dynamics",
-    "icon": "🧠"
+    "icon": ""
   },
   {
     "step": "3",
     "title": "Transform",
     "description": "Implement personalized strategies for growth",
-    "icon": "🦋"
+    "icon": ""
   },
   {
     "step": "4",
     "title": "Thrive",
     "description": "Build lasting happiness and connection",
-    "icon": "🌟"
+    "icon": ""
   }
 ]

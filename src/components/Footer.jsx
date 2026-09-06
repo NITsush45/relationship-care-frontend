@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import {
+  FaLock,
+  FaScroll,
+  FaCommentDots,
+  FaQuestionCircle,
+  FaHeart,
+  FaEnvelope,
+} from "react-icons/fa";
+import { FaWandMagicSparkles as FaSparkles } from "react-icons/fa6";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -14,10 +23,10 @@ const Footer = () => {
   const [hoveredLink, setHoveredLink] = useState(null);
 
   const navigationLinks = [
-    { to: "/privacy-policy", label: "Privacy Policy", icon: "🔒" },
-    { to: "/terms", label: "Terms of Service", icon: "📜" },
-    { to: "/contact-us", label: "Contact Us", icon: "💬" },
-    { to: "/faqs", label: "FAQ", icon: "❓" },
+    { to: "/privacy-policy", label: "Privacy Policy", icon: <FaLock /> },
+    { to: "/terms", label: "Terms of Service", icon: <FaScroll /> },
+    { to: "/contact-us", label: "Contact Us", icon: <FaCommentDots /> },
+    { to: "/faqs", label: "FAQ", icon: <FaQuestionCircle /> },
   ];
 
   const socialLinks = [
@@ -143,7 +152,7 @@ const Footer = () => {
                   className="text-red-500 text-2xl"
                   animate={floatingAnimation}
                 >
-                  ♥
+                  <FaHeart />
                 </motion.span>
               </motion.div>
               <motion.p 
@@ -152,6 +161,7 @@ const Footer = () => {
                 whileHover={{ opacity: 1 }}
               >
                 Nurturing meaningful connections for a better tomorrow.
+
               </motion.p>
             </Link>
             
@@ -163,7 +173,9 @@ const Footer = () => {
               }}
               transition={{ duration: 0.3 }}
             >
-              <p className="text-xs text-gray-400 mb-2">✨ New Feature</p>
+              <p className="text-xs text-gray-400 mb-2 flex items-center gap-1">
+                <FaSparkles className="text-pink-400" /> New Feature
+              </p>
               <p className="text-sm text-pink-300 font-semibold">AI-Powered Relationship Insights</p>
             </motion.div>
           </motion.div>
@@ -279,7 +291,9 @@ const Footer = () => {
                 boxShadow: "0 0 20px rgba(236, 72, 153, 0.3)"
               }}
             >
-              <span className="text-xs text-pink-300">💌 Join 10K+ subscribers</span>
+              <span className="text-xs text-pink-300 flex items-center gap-1">
+                <FaEnvelope className="text-pink-400" /> Join 10K+ subscribers
+              </span>
             </motion.div>
           </motion.div>
         </motion.div>
@@ -332,6 +346,7 @@ const Footer = () => {
               Relationship Care
             </motion.span>
             . All rights reserved.
+
           </motion.p>
           
           <motion.p
@@ -349,8 +364,9 @@ const Footer = () => {
                 ease: "easeInOut",
               }}
             >
-              ♥
+              <FaHeart />
             </motion.span> for better relationships.
+
             <br className="block sm:hidden" />
             <span className="hidden sm:inline"> · </span>
             <motion.span
@@ -359,6 +375,7 @@ const Footer = () => {
               whileHover={{ opacity: 1, scale: 1.05 }}
             >
               Making connections meaningful since 2025.
+
             </motion.span>
           </motion.p>
         </motion.div>
@@ -368,5 +385,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
-
