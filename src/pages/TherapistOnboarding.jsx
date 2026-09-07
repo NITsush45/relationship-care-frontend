@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaUserMd, FaSmile, FaSpinner, FaCheckCircle, FaHeart, FaBrain, FaHandsHelping } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { FaUserMd, FaSpinner, FaCheckCircle, FaHeart, FaBrain, FaHandsHelping } from "react-icons/fa";
 import { API_BASE } from "../config";
 import { useAuth } from "../context/AuthContext";
 
@@ -35,7 +35,6 @@ const TherapistOnboarding = () => {
   const [mood, setMood] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [showSplash, setShowSplash] = useState(false);
 
   const therapistName = user?.firstName || user?.name || user?.username || "Doctor";
 
