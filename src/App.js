@@ -33,15 +33,23 @@ import ChangePassword from "./pages/ChangePassword.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import PublicOnlyRoute from "./components/PublicOnlyRoute.jsx";
 import RoleRedirect from "./components/RoleRedirect.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
+import SessionWarningModal from "./components/SessionWarningModal.jsx";
 
 import { useTheme } from "./context/ThemeContext";
 import { ROLES } from "./utils/roles";
+import { useSessionTimeout } from "./hooks/useSessionTimeout";
 
 const App = () => {
   const { theme } = useTheme();
 
+  // Initialize session timeout (20 minutes of inactivity)
+  useSessionTimeout();
+
   return (
     <Router>
+      <ScrollToTop />
+      <SessionWarningModal />
       <div
         className={`app-theme min-h-screen ${
           theme === "dark"
