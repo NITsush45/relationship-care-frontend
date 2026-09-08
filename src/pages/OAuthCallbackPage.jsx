@@ -77,6 +77,30 @@ const OAuthCallbackPage = () => {
         if (pendingRedirect && isSafeInternalPath(pendingRedirect)) {
           navigate(pendingRedirect, { replace: true });
         } else if (actualRole === "therapist") {
+          // Therapists must complete onboarding (expertise segment +
+          // age + mood) before seeing their patient list. Check profile
+          // and route accordingly. Canonical route is /therapist-onboarding.
+          try {
+            const profileRes = await fetch(`${API_BASE}/api/therapist/profile`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (profileRes.ok) {
+              const profileData = await profileRes.json();
+              const profile = profileData?.profile || null;
+              if (!profile?.specialization) {
+                navigate("/therapist-onboarding", { replace: true });
+                return;
+              }
+            } else {
+              // If profile check fails, safest is onboarding (it redirects
+              // to dashboard on failure paths anyway).
+              navigate("/therapist-onboarding", { replace: true });
+              return;
+            }
+          } catch (_) {
+            navigate("/therapist-onboarding", { replace: true });
+            return;
+          }
           navigate("/therapist-dashboard", { replace: true });
         } else {
           navigate("/user-dashboard", { replace: true });

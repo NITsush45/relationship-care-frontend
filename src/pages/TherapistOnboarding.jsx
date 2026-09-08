@@ -38,6 +38,34 @@ const TherapistOnboarding = () => {
 
   const therapistName = user?.firstName || user?.name || user?.username || "Doctor";
 
+  // Prefill if therapist already onboarded (supports Edit Profile + returning logins)
+  useEffect(() => {
+    let active = true;
+    const loadExisting = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) return;
+        const res = await fetch(`${API_BASE}/api/therapist/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok || !active) return;
+        const data = await res.json().catch(() => ({}));
+        const p = data?.profile;
+        if (p) {
+          if (p.specialization) setSpecialization(p.specialization);
+          if (p.age) setAge(String(p.age));
+          if (p.mood) setMood(p.mood);
+        }
+      } catch (_) {
+        // ignore - fresh onboarding
+      }
+    };
+    loadExisting();
+    return () => {
+      active = false;
+    };
+  }, []);
+
   useEffect(() => {
     if (step === "splash") {
       const timer = setTimeout(() => {

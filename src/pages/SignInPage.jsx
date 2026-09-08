@@ -66,7 +66,32 @@ const SignInPage = () => {
     try {
       setLoading(true);
 
-      await login(trimmedEmail, password);
+      const data = await login(trimmedEmail, password);
+
+      // Therapists must finish onboarding (expertise segment + age +
+      // mood + Welcome Doctor splash) before seeing patients.
+      // Route via /dashboard role-redirect OR check profile directly
+      // so the requested flow always holds after login.
+      try {
+        const role = data?.user?.role;
+        if (role === "therapist") {
+          const token = localStorage.getItem("authToken");
+          const profileRes = await fetch(`${API_BASE}/api/therapist/profile`, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+          });
+          if (profileRes.ok) {
+            const profileData = await profileRes.json().catch(() => ({}));
+            if (!profileData?.profile?.specialization) {
+              navigate("/therapist-onboarding", { replace: true });
+              return;
+            }
+          }
+          navigate("/therapist-dashboard", { replace: true });
+          return;
+        }
+      } catch (_) {
+        // Fall through to default redirect on profile-check failure.
+      }
 
       navigate(redirectUrl, { replace: true });
     } catch (err) {
