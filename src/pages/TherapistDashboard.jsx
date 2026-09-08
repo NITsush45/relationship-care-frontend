@@ -83,32 +83,17 @@ const TherapistDashboard = () => {
     return () => clearTimeout(timer);
   }, [loading]);
 
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500 animate-pulse">Loading...</p>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null;
-  }
-
-  const appointmentsByService = appointments.reduce((groups, apt) => {
-    const service = apt.service || "Other";
-    if (!groups[service]) {
-      groups[service] = [];
-    }
-    groups[service].push(apt);
-    return groups;
-  }, {});
-
-  const therapistName = user.username || user.name || "Therapist";
-  const specializationRaw = profile?.specialization || "";
-  const specialization = specializationRaw
-    ? prettyService(specializationRaw)
-    : "General";
+  // All hooks must run before any early return (rules-of-hooks).
+  const appointmentsByService = useMemo(() => {
+    return appointments.reduce((groups, apt) => {
+      const service = apt.service || "Other";
+      if (!groups[service]) {
+        groups[service] = [];
+      }
+      groups[service].push(apt);
+      return groups;
+    }, {});
+  }, [appointments]);
 
   const serviceOptions = useMemo(() => {
     const keys = Object.keys(appointmentsByService);
@@ -121,7 +106,25 @@ const TherapistDashboard = () => {
     return entries.filter(([service]) => service === serviceFilter);
   }, [appointmentsByService, serviceFilter]);
 
+  const therapistName = user?.username || user?.name || "Therapist";
+  const specializationRaw = profile?.specialization || "";
+  const specialization = specializationRaw
+    ? prettyService(specializationRaw)
+    : "General";
+
   const totalPatients = appointments.length;
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500 animate-pulse">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-12 px-4">
