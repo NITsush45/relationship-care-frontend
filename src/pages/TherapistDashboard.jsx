@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaArrowRight } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { API_BASE } from "../config";
 
@@ -127,7 +128,7 @@ const TherapistDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 dark:from-gray-950 dark:via-gray-900 dark:to-pink-950/40 py-12 px-4 transition-colors duration-300">
       <AnimatePresence>
         {showSplash && !loading && (
           <motion.div
@@ -312,7 +313,7 @@ const TherapistDashboard = () => {
             to="/about-us"
             className="text-purple-600 font-semibold hover:underline"
           >
-            View team profile →
+            View team profile <FaArrowRight className="ml-1 inline" />
           </Link>
         </div>
 

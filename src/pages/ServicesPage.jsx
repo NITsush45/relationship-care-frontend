@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa";
 import servicesData from "../data/services.json";
 import testimonialsData from "../data/testimonials.json";
 import { API_BASE } from "../config";
@@ -230,8 +231,8 @@ const ServicesPage = () => {
                 {service.description}
               </p>
 
-              <div className="mt-4 text-pink-600 dark:text-pink-400 font-semibold">
-                View Doctors/Therapists →
+              <div className="mt-4 text-pink-600 dark:text-pink-400 font-semibold flex items-center gap-2">
+                View Doctors/Therapists <FaArrowRight />
               </div>
             </div>
           </motion.div>
@@ -319,7 +320,7 @@ const ServicesPage = () => {
                       : "bg-pink-500 hover:bg-pink-600"
                   }`}
                 >
-                  {service.button} →
+                  {service.button} <FaArrowRight className="ml-1 inline" />
                 </button>
               </div>
             </motion.div>

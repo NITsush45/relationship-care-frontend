@@ -8,6 +8,7 @@ import {
   FaQuestionCircle,
   FaHeart,
   FaEnvelope,
+  FaArrowRight,
 } from "react-icons/fa";
 import { FaWandMagicSparkles as FaSparkles } from "react-icons/fa6";
 
@@ -224,7 +225,7 @@ const Footer = () => {
                         animate={{ x: hoveredLink === index ? 0 : -10 }}
                         transition={{ duration: 0.3 }}
                       >
-                        →
+                        <FaArrowRight />
                       </motion.span>
                     </Link>
                   </motion.li>

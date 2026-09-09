@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaFacebook,
@@ -38,6 +38,8 @@ const ContactPage = () => {
   const [chatInput, setChatInput] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
 
+  const chatEndRef = useRef(null);
+
   const [chatMessages, setChatMessages] = useState([
     {
       id: 1,
@@ -45,6 +47,23 @@ const ContactPage = () => {
       text: "Hi! I am your support assistant. Ask anything about counseling, appointments, or pricing.",
     },
   ]);
+
+  const chatSuggestions = [
+    "How do I book an appointment?",
+    "What are your prices?",
+    "I need breakup support",
+    "I want to talk to a therapist",
+  ];
+
+  // Keep the newest message visible whenever the conversation grows.
+  useEffect(() => {
+    if (isChatOpen && chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [chatMessages, isChatLoading, isChatOpen]);
 
   useEffect(() => {
     const icons = [];
@@ -87,21 +106,7 @@ const ContactPage = () => {
     setActiveField(null);
   };
 
-  const handleChatSubmit = async (e) => {
-    e.preventDefault();
-
-    const trimmed = chatInput.trim();
-
-    if (!trimmed || isChatLoading) return;
-
-    const userMessage = {
-      id: Date.now(),
-      role: "user",
-      text: trimmed,
-    };
-
-    setChatMessages((prev) => [...prev, userMessage]);
-    setChatInput("");
+  const requestChatReply = async (text) => {
     setIsChatLoading(true);
 
     try {
@@ -111,7 +116,7 @@ const ContactPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message: trimmed,
+          message: text,
         }),
       });
 
@@ -145,6 +150,41 @@ const ContactPage = () => {
     } finally {
       setIsChatLoading(false);
     }
+  };
+
+  const handleChatSubmit = async (e) => {
+    e.preventDefault();
+
+    const trimmed = chatInput.trim();
+
+    if (!trimmed || isChatLoading) return;
+
+    setChatMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        role: "user",
+        text: trimmed,
+      },
+    ]);
+    setChatInput("");
+
+    await requestChatReply(trimmed);
+  };
+
+  const handleSuggestionClick = async (suggestion) => {
+    if (isChatLoading) return;
+
+    setChatMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        role: "user",
+        text: suggestion,
+      },
+    ]);
+
+    await requestChatReply(suggestion);
   };
 
   const handleSubmit = async (e) => {
@@ -1187,7 +1227,26 @@ const ContactPage = () => {
                   Typing...
                 </div>
               )}
+
+              {/* Auto-scroll anchor */}
+              <div ref={chatEndRef} />
             </div>
+
+            {/* Quick replies for first-time visitors */}
+            {chatMessages.length <= 1 && !isChatLoading && (
+              <div className="px-3 py-2 flex flex-wrap gap-2 bg-white dark:bg-gray-900 border-t border-pink-100 dark:border-gray-800">
+                {chatSuggestions.map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    type="button"
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    className="text-xs px-3 py-1.5 rounded-full border border-pink-200 dark:border-pink-900/60 bg-pink-50 dark:bg-pink-950/40 text-pink-600 dark:text-pink-300 hover:bg-pink-100 dark:hover:bg-pink-900/50 transition-colors"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
 
             <form
               onSubmit={handleChatSubmit}

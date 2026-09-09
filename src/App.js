@@ -3,20 +3,20 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
 } from "react-router-dom";
 
 import HomePage from "./pages/HomePage.jsx";
 import ServicesPage from "./pages/ServicesPage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
-import Navbar from "./components/Navbar.jsx";
+import AuthChrome from "./components/AuthChrome.jsx";
 import BookAppointment from "./pages/BookAppointment.jsx";
 import BlogPage from "./pages/BlogPage.jsx";
 import FAQPage from "./pages/FAQPage.jsx";
 import PersonalPage from "./pages/PersonalPage.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import TermsOfService from "./pages/TermsofService.jsx";
-import Footer from "./components/Footer.jsx";
 import DoctorsListPage from "./pages/DoctorsListPage.jsx";
 
 import SignInPage from "./pages/SignInPage.jsx";
@@ -57,7 +57,7 @@ const App = () => {
             : "theme-light"
         }`}
       >
-        <Navbar />
+        <AuthChrome>
 
         <Routes>
 
@@ -215,13 +215,15 @@ const App = () => {
 
           {/* ================= USER DASHBOARD ================= */}
 
+          {/* The questionnaire is a signup-only onboarding flow now, so the
+              old /user-dashboard URL simply returns users to the home page. */}
           <Route
             path="/user-dashboard"
             element={
               <ProtectedRoute
                 allowedRoles={[ROLES.USER]}
               >
-                <UserDashboard />
+                <Navigate to="/" replace />
               </ProtectedRoute>
             }
           />
@@ -307,7 +309,7 @@ const App = () => {
 
         </Routes>
 
-        <Footer />
+        </AuthChrome>
       </div>
     </Router>
   );

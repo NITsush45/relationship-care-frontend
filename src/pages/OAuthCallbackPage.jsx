@@ -61,6 +61,8 @@ const OAuthCallbackPage = () => {
 
         window.dispatchEvent(new Event("authUserUpdated"));
 
+        const authAction = localStorage.getItem("google_auth_action"); // "signup" | "login"
+
         const pendingRedirect = localStorage.getItem(
           "pending_google_redirect"
         );
@@ -102,8 +104,12 @@ const OAuthCallbackPage = () => {
             return;
           }
           navigate("/therapist-dashboard", { replace: true });
+        } else if (authAction === "signup" && !data.user?.hasCompletedQuestionnaire) {
+          // Questionnaire runs only during new account registration.
+          navigate("/questionnaire", { replace: true });
         } else {
-          navigate("/user-dashboard", { replace: true });
+          // Returning users land on the home page without the questionnaire.
+          navigate("/", { replace: true });
         }
       } catch (err) {
         console.error("OAuth callback error:", err);

@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaUserMd, FaSpinner, FaCheckCircle, FaHeart, FaBrain, FaHandsHelping } from "react-icons/fa";
+import { FaUserMd, FaSpinner, FaCheckCircle, FaHeart, FaBrain, FaHandsHelping, FaArrowRight } from "react-icons/fa";
 import { API_BASE } from "../config";
 import { useAuth } from "../context/AuthContext";
 
 const SPECIALIZATIONS = [
-  { id: "relationship-counseling", name: "Relationship Counseling", icon: "💕", description: "Help couples build stronger connections" },
-  { id: "breakup-recovery", name: "Breakup Recovery", icon: "💔", description: "Support clients through heartbreak" },
-  { id: "marriage-guidance", name: "Marriage Guidance", icon: "💍", description: "Guide couples through marital challenges" },
-  { id: "pre-marital-coaching", name: "Pre-Marital Coaching", icon: "💒", description: "Prepare couples for marriage" },
-  { id: "yoga", name: "Yoga & Breathing Sessions", icon: "🧘", description: "Teach mindful movement and breathing" },
-  { id: "mind-relaxation", name: "Mind Relaxation Techniques", icon: "🧠", description: "Help clients find mental peace" },
-  { id: "diet-wellness", name: "Diet & Wellness Consultation", icon: "🥗", description: "Guide holistic wellness journeys" },
-  { id: "stress-anxiety", name: "Stress & Anxiety Relaxation", icon: "😌", description: "Help clients manage stress" },
-  { id: "sleep-mindfulness", name: "Sleep & Mindfulness Sessions", icon: "😴", description: "Improve sleep quality" },
-  { id: "depression-emotional-wellness", name: "Depression Support / Emotional Wellness", icon: "🌈", description: "Support emotional healing" },
+  { id: "relationship-counseling", name: "Relationship Counseling", icon: "/images/rel.jpg", description: "Help couples build stronger connections" },
+  { id: "breakup-recovery", name: "Breakup Recovery", icon: "/images/break.jpg", description: "Support clients through heartbreak" },
+  { id: "marriage-guidance", name: "Marriage Guidance", icon: "/images/patch.jpg", description: "Guide couples through marital challenges" },
+  { id: "pre-marital-coaching", name: "Pre-Marital Coaching", icon: "/images/rel.jpg", description: "Prepare couples for marriage" },
+  { id: "yoga", name: "Yoga & Breathing Sessions", icon: "/images/gdoc.jpg", description: "Teach mindful movement and breathing" },
+  { id: "mind-relaxation", name: "Mind Relaxation Techniques", icon: "/images/fdoc.jpg", description: "Help clients find mental peace" },
+  { id: "diet-wellness", name: "Diet & Wellness Consultation", icon: "/images/femdoc.jpg", description: "Guide holistic wellness journeys" },
+  { id: "stress-anxiety", name: "Stress & Anxiety Relaxation", icon: "/images/mdoc.png", description: "Help clients manage stress" },
+  { id: "sleep-mindfulness", name: "Sleep & Mindfulness Sessions", icon: "/images/doc.jpg", description: "Improve sleep quality" },
+  { id: "depression-emotional-wellness", name: "Depression Support / Emotional Wellness", icon: "/images/patch.jpg", description: "Support emotional healing" },
 ];
 
 const MOOD_OPTIONS = [
-  { id: "energetic", label: "Energetic & Ready", emoji: "⚡", color: "from-yellow-400 to-orange-500" },
-  { id: "calm", label: "Calm & Focused", emoji: "🧘", color: "from-blue-400 to-cyan-500" },
-  { id: "compassionate", label: "Compassionate & Empathetic", emoji: "💜", color: "from-purple-400 to-pink-500" },
-  { id: "motivated", label: "Motivated & Inspired", emoji: "🔥", color: "from-red-400 to-pink-500" },
-  { id: "reflective", label: "Reflective & Thoughtful", emoji: "🌙", color: "from-indigo-400 to-purple-500" },
+  { id: "energetic", label: "Energetic & Ready", emoji: "/images/gdoc.jpg", color: "from-yellow-400 to-orange-500" },
+  { id: "calm", label: "Calm & Focused", emoji: "/images/femdoc.jpg", color: "from-blue-400 to-cyan-500" },
+  { id: "compassionate", label: "Compassionate & Empathetic", emoji: "/images/fdoc.jpg", color: "from-purple-400 to-pink-500" },
+  { id: "motivated", label: "Motivated & Inspired", emoji: "/images/doc.jpg", color: "from-red-400 to-pink-500" },
+  { id: "reflective", label: "Reflective & Thoughtful", emoji: "/images/mdoc.png", color: "from-indigo-400 to-purple-500" },
 ];
 
 const TherapistOnboarding = () => {
@@ -146,7 +146,7 @@ const TherapistOnboarding = () => {
             transition={{ delay: 0.6 }}
             className="text-4xl md:text-6xl font-bold text-gray-800 dark:text-white mb-4"
           >
-            Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">Dr. {therapistName}</span>! 🎉
+            Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">Dr. {therapistName}</span>! 
           </motion.h1>
 
           <motion.p
@@ -220,7 +220,7 @@ const TherapistOnboarding = () => {
             transition={{ delay: 0.4 }}
             className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4"
           >
-            All Set, <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">Dr. {therapistName}</span>! 🎉
+            All Set, <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">Dr. {therapistName}</span>! 
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -285,7 +285,11 @@ const TherapistOnboarding = () => {
                       : "border-gray-200 dark:border-gray-700 hover:border-pink-300 hover:bg-pink-50/50 dark:hover:bg-gray-700"
                   }`}
                 >
-                  <span className="text-2xl mr-2">{spec.icon}</span>
+                  <img
+                      src={spec.icon}
+                      alt={spec.name}
+                      className="w-9 h-9 rounded-full object-cover mr-2 flex-shrink-0"
+                    />
                   <span className="font-medium text-gray-700 dark:text-gray-200">{spec.name}</span>
                 </button>
               ))}
@@ -328,7 +332,11 @@ const TherapistOnboarding = () => {
                     : "border-gray-200 dark:border-gray-700 hover:border-pink-300 hover:bg-pink-50/50 dark:hover:bg-gray-700"
                 }`}
               >
-                <span className="text-2xl mr-2">{m.emoji}</span>
+                <img
+                    src={m.emoji}
+                    alt={m.label}
+                    className="w-9 h-9 rounded-full object-cover mr-2 flex-shrink-0"
+                  />
                 <span className="font-medium text-gray-700 dark:text-gray-200">{m.label}</span>
               </button>
             ))}
@@ -356,7 +364,9 @@ const TherapistOnboarding = () => {
               Saving...
             </span>
           ) : (
-            "Complete Setup →"
+            <span className="flex items-center justify-center gap-2">
+              Complete Setup <FaArrowRight />
+            </span>
           )}
         </button>
         </form>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaImage,
+  FaHeart,
   FaClipboardList,
   FaChartLine,
   FaKey,
@@ -367,7 +368,7 @@ const Navbar = () => {
           </span>
 
           <span className="text-blue-400 mx-1 inline-block animate-heartbeat">
-            ♥
+            <FaHeart />
           </span>
 
           <span className="inline-block transition-transform duration-300 group-hover:scale-105">

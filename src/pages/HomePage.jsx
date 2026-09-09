@@ -14,6 +14,8 @@ import {
   FaHeart,
   FaClock,
   FaStar,
+  FaCheck,
+  FaArrowRight,
 } from "react-icons/fa";
 import { FaWandMagicSparkles as FaSparkles } from "react-icons/fa6";
 import { API_BASE } from "../config";
@@ -57,10 +59,22 @@ const ServiceCard = ({ service, index }) => {
       <motion.div className="absolute inset-0 bg-gradient-to-br from-white via-pink-50/50 to-purple-50/50 dark:from-gray-900 dark:via-gray-900 dark:to-purple-950/40 rounded-3xl shadow-xl group-hover:shadow-2xl transition-all duration-500 border border-pink-100/50 dark:border-purple-900/50" />
 
       <div className="relative p-8 h-full">
-        <div
-          className={`inline-flex p-5 rounded-2xl bg-gradient-to-r ${service.color} text-white mb-6 text-5xl shadow-lg`}
-        >
-          {service.icon}
+        {/* Service photo (replaces the old emoji icon box) */}
+        <div className="mb-6 overflow-hidden rounded-2xl shadow-lg">
+          <img
+            src={service.image || "/images/rel.jpg"}
+            alt={service.title}
+            onError={(event) => {
+              if (event.currentTarget.dataset.fallbackApplied) {
+                return;
+              }
+
+              event.currentTarget.dataset.fallbackApplied = "true";
+              event.currentTarget.src = "/images/rel.jpg";
+            }}
+            className="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
         </div>
 
         <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">
@@ -87,7 +101,7 @@ const ServiceCard = ({ service, index }) => {
               className="flex items-center text-gray-700 dark:text-gray-300"
             >
               <span className="text-green-500 mr-3 text-xl flex-shrink-0">
-                ✓
+                <FaCheck />
               </span>
               <span className="text-sm font-medium">{feature}</span>
             </motion.div>
@@ -107,7 +121,9 @@ const ServiceCard = ({ service, index }) => {
             className="inline-flex items-center text-pink-600 dark:text-pink-400 font-bold group-hover:text-pink-700 dark:group-hover:text-pink-300 transition-colors"
           >
             Learn More
-            <span className="ml-2 inline-block">→</span>
+            <span className="ml-2 inline-block">
+              <FaArrowRight />
+            </span>
           </a>
         </div>
       </div>
@@ -466,7 +482,7 @@ const HomePage = () => {
               >
                 Begin Your Journey
                 <span className="ml-2 inline-block">
-                  →
+                  <FaArrowRight />
                 </span>
               </motion.button>
             </motion.a>
@@ -822,9 +838,22 @@ const HomePage = () => {
                     }}
                     className="md:w-1/3 text-center mb-8 md:mb-0"
                   >
-                    <div className="text-9xl mb-6">
-                      {testimonials[activeTestimonial].image}
-                    </div>
+                    <img
+                      src={
+                        testimonials[activeTestimonial].image ||
+                        "/images/rel.jpg"
+                      }
+                      alt={testimonials[activeTestimonial].name}
+                      onError={(event) => {
+                        if (event.currentTarget.dataset.fallbackApplied) {
+                          return;
+                        }
+
+                        event.currentTarget.dataset.fallbackApplied = "true";
+                        event.currentTarget.src = "/images/rel.jpg";
+                      }}
+                      className="mx-auto mb-6 h-56 w-56 rounded-full object-cover ring-4 ring-pink-200 dark:ring-purple-900 shadow-2xl"
+                    />
 
                     <div className="flex justify-center gap-1">
                       {[...Array(5)].map((_, i) => (

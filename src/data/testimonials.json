@@ -5,21 +5,21 @@
       "role": "Married 7 years",
       "content": "Relationship Care saved our marriage. We learned to communicate effectively and rediscovered our love.",
       "rating": 5,
-      "image": "👫"
+      "image": "/images/patch.jpg"
     },
     {
       "name": "Jessica",
       "role": "Post-breakup recovery",
       "content": "The guidance I received helped me heal and grow into a stronger, more confident person.",
       "rating": 5,
-      "image": "💖"
+      "image": "/images/break.jpg"
     },
     {
       "name": "David & Alex",
       "role": "Engaged couple",
       "content": "Pre-marital coaching gave us the tools to build a strong foundation for our future together.",
       "rating": 5,
-      "image": "💍"
+      "image": "/images/rel.jpg"
     }
   ],
   "servicesPage": [

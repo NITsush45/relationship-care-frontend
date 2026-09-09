@@ -2,20 +2,36 @@ import React, { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { FaCommentDots } from "react-icons/fa";
 import { API_BASE } from "../config";
+import { useAuth } from "../context/AuthContext";
 
-const socketBase =
+const getOrigin = () =>
+  typeof window !== "undefined" && window.location
+    ? window.location.origin
+    : "";
+
+const socketBase = (
   process.env.REACT_APP_SOCKET_URL?.trim() ||
   API_BASE ||
-  "http://localhost:5000";
+  getOrigin() ||
+  "http://localhost:5000"
+).replace(/\/+$/, "");
 
 const PersonalPage = () => {
+  const { user } = useAuth();
+
   const socketRef = useRef(null);
   const joinedRoomRef = useRef(null);
+  const joinedProfileRef = useRef("");
   const profileRef = useRef({ name: "", role: "customer" });
 
   const [connected, setConnected] = useState(false);
-  const [name, setName] = useState("");
-  const [role, setRole] = useState("customer");
+  const [connectionError, setConnectionError] = useState("");
+  const [name, setName] = useState(
+    user?.name || user?.username || user?.email?.split("@")[0] || ""
+  );
+  const [role, setRole] = useState(
+    user?.role === "therapist" ? "therapist" : "customer"
+  );
   const [roomId, setRoomId] = useState("confess-room");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -23,13 +39,133 @@ const PersonalPage = () => {
   // Keep the latest name/role reachable from long-lived socket handlers.
   profileRef.current = { name, role };
 
+  /*
+   * Create the socket exactly once. Polling is tried first because it
+   * is the most reliable handshake across hosting platforms and
+   * proxies; socket.io then upgrades to websocket automatically.
+   */
+  const ensureSocket = () => {
+    if (socketRef.current) {
+      return socketRef.current;
+    }
+
+    const socket = io(socketBase, {
+      transports: ["polling", "websocket"],
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 8000,
+      timeout: 20000,
+    });
+
+    socket.on("connect", () => {
+      setConnected(true);
+      setConnectionError("");
+
+      // Server-side rooms are per-connection: join (or re-join) with
+      // the latest profile after every (re)connection.
+      if (joinedRoomRef.current) {
+        joinedProfileRef.current = `${
+          profileRef.current.name.trim() || "Anonymous"
+        }|${profileRef.current.role}`;
+
+        socket.emit("join-room", {
+          roomId: joinedRoomRef.current,
+          name: profileRef.current.name.trim() || "Anonymous",
+          role: profileRef.current.role,
+        });
+      }
+    });
+
+    socket.on("disconnect", (reason) => {
+      setConnected(false);
+
+      // The server intentionally closed the socket (e.g. it restarted):
+      // ask the client to reconnect instead of waiting for the timer.
+      if (reason === "io server disconnect") {
+        socket.connect();
+      }
+    });
+
+    socket.on("connect_error", (error) => {
+      setConnected(false);
+      setConnectionError(
+        "Unable to reach the chat server right now. Retrying - if this persists, the backend may be waking up or offline."
+      );
+      console.error("Confess socket error:", error?.message || error);
+    });
+
+    socket.on("reconnect_attempt", () => {
+      setConnectionError("Reconnecting to the chat server...");
+    });
+
+    socket.on("chat:system", (payload) => {
+      const text = payload?.message || "System message";
+
+      setMessages((prev) => {
+        // Guard against duplicate system announcements: reconnects can
+        // replay joins on flaky networks.
+        if (
+          prev.length > 0 &&
+          prev[prev.length - 1].type === "system" &&
+          prev[prev.length - 1].message === text
+        ) {
+          return prev;
+        }
+
+        return [
+          ...prev,
+          {
+            id: payload?.at
+              ? `system-${payload.at}-${text}`
+              : `${Date.now()}-system-${Math.random()}`,
+            type: "system",
+            message: text,
+            at: payload?.at,
+          },
+        ];
+      });
+    });
+
+    socket.on("chat:message", (payload) => {
+      setMessages((prev) => {
+        const id = payload?.id || `${Date.now()}-${Math.random()}`;
+
+        // Never render the same message twice.
+        if (prev.some((item) => item.id === id)) {
+          return prev;
+        }
+
+        return [
+          ...prev,
+          {
+            ...payload,
+            id,
+            type: "chat",
+          },
+        ];
+      });
+    });
+
+    socketRef.current = socket;
+
+    return socket;
+  };
+
   useEffect(() => {
     return () => {
       if (socketRef.current) {
+        socketRef.current.removeAllListeners();
         socketRef.current.disconnect();
         socketRef.current = null;
       }
     };
+  }, []);
+
+  // Confession chat is a live space: connect and join the default room
+  // automatically so users can start talking right away.
+  useEffect(() => {
+    handleJoin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleJoin = () => {
@@ -39,82 +175,42 @@ const PersonalPage = () => {
       return;
     }
 
-    // Already connected and sitting in this room? Nothing to do.
+    const socket = ensureSocket();
+
+    const profileKey = `${name.trim() || "Anonymous"}|${role}`;
+
+    // Already connected, sitting in this room, with this identity?
+    // Nothing to do.
     if (
-      socketRef.current &&
-      socketRef.current.connected &&
-      joinedRoomRef.current === safeRoom
+      socket.connected &&
+      joinedRoomRef.current === safeRoom &&
+      joinedProfileRef.current === profileKey
     ) {
       return;
     }
 
-    if (!socketRef.current) {
-      socketRef.current = io(socketBase, {
-        transports: ["websocket"],
-      });
-
-      socketRef.current.on("connect", () => {
-        setConnected(true);
-
-        // Server-side rooms are per-connection: re-join after any reconnect.
-        if (joinedRoomRef.current) {
-          socketRef.current.emit("join-room", {
-            roomId: joinedRoomRef.current,
-            name: profileRef.current.name.trim() || "Anonymous",
-            role: profileRef.current.role,
-          });
-        }
-      });
-
-      socketRef.current.on("disconnect", () => {
-        setConnected(false);
-      });
-
-      socketRef.current.on("connect_error", () => {
-        setConnected(false);
-      });
-
-      socketRef.current.on("chat:system", (payload) => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `${Date.now()}-system-${Math.random()}`,
-            type: "system",
-            message: payload?.message || "System message",
-            at: payload?.at,
-          },
-        ]);
-      });
-
-      socketRef.current.on("chat:message", (payload) => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            ...payload,
-            id: payload?.id || `${Date.now()}-${Math.random()}`,
-            type: "chat",
-          },
-        ]);
-      });
-    }
-
     // Switching rooms? Leave the previous one and clear its history.
     if (
-      socketRef.current.connected &&
+      socket.connected &&
       joinedRoomRef.current &&
       joinedRoomRef.current !== safeRoom
     ) {
-      socketRef.current.emit("leave-room");
+      socket.emit("leave-room");
       setMessages([]);
     }
 
     joinedRoomRef.current = safeRoom;
+    joinedProfileRef.current = profileKey;
 
-    socketRef.current.emit("join-room", {
-      roomId: safeRoom,
-      name: name.trim() || "Anonymous",
-      role,
-    });
+    if (socket.connected) {
+      socket.emit("join-room", {
+        roomId: safeRoom,
+        name: name.trim() || "Anonymous",
+        role,
+      });
+    }
+    // When the socket is still connecting, the "connect" handler
+    // performs the join as soon as the connection is ready.
   };
 
   const handleSend = (event) => {
@@ -268,6 +364,12 @@ const PersonalPage = () => {
                       />
                       {connected ? "Connected" : "Not connected"}
                     </span>
+
+                    {connectionError && (
+                      <p className="w-full text-xs leading-relaxed text-red-500 dark:text-red-400">
+                        {connectionError}
+                      </p>
+                    )}
                   </div>
                 </div>
 

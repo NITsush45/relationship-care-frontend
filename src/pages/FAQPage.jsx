@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   FaQuestionCircle,
   FaChevronDown,
+  FaTimes,
   FaChevronUp,
   FaSearch,
   FaLightbulb,
@@ -319,7 +320,7 @@ const FAQPage = () => {
                 onClick={() => setSearchQuery("")}
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
               >
-                ✕
+                <FaTimes />
               </motion.button>
             )}
           </div>
@@ -598,7 +599,9 @@ const FAQPage = () => {
             </div>
 
             <div className="text-center">
-              <div className="text-4xl font-bold mb-2">4.9★</div>
+              <div className="text-4xl font-bold mb-2 flex items-center justify-center gap-1">
+                4.9 <FaStar className="text-yellow-400 text-2xl" />
+              </div>
               <div className="text-lg">Satisfaction Rate</div>
             </div>
           </div>

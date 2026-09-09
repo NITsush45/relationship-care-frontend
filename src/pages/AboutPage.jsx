@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaStar } from "react-icons/fa";
 import doctorsData from "../data/doctors.json";
 import { API_BASE } from "../config";
 
@@ -81,7 +82,7 @@ const AboutPage = () => {
               : "text-gray-300 dark:text-gray-600"
           }
         >
-          ★
+          <FaStar />
         </span>
       );
     }

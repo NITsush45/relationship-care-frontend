@@ -5,6 +5,8 @@ import {
   FaUser,
   FaStethoscope,
   FaExclamationTriangle,
+  FaCheck,
+  FaArrowRight,
 } from "react-icons/fa";
 import { ROLES, ROLE_LABELS } from "../utils/roles";
 import { useAuth } from "../context/AuthContext";
@@ -59,7 +61,8 @@ const SignUpPage = () => {
       if (data.user?.role === ROLES.THERAPIST) {
         navigate("/therapist-onboarding", { replace: true });
       } else {
-        navigate("/user-dashboard", { replace: true });
+        // New user accounts complete the questionnaire once during signup.
+        navigate("/questionnaire", { replace: true });
       }
     } catch (err) {
       setError(err?.message || "Signup failed. Please try again.");
@@ -99,8 +102,15 @@ const SignUpPage = () => {
     /*
      * Backend route:
      * GET /api/auth/google
+     *
+     * `client` tells the backend which frontend started the flow so
+     * the OAuth callback returns here instead of the production site.
      */
-    window.location.assign(`${API_BASE}/api/auth/google?role=${selectedRole}`);
+    window.location.assign(
+      `${API_BASE}/api/auth/google?role=${selectedRole}&client=${encodeURIComponent(
+        window.location.origin
+      )}`
+    );
   };
 
   return (
@@ -195,7 +205,7 @@ const SignUpPage = () => {
 
                 {selectedRole === ROLES.USER && (
                   <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-pink-500 flex items-center justify-center">
-                    <span className="text-white text-xs">✓</span>
+                    <FaCheck className="text-white text-xs" />
                   </div>
                 )}
               </button>
@@ -236,7 +246,7 @@ const SignUpPage = () => {
 
                 {selectedRole === ROLES.THERAPIST && (
                   <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center">
-                    <span className="text-white text-xs">✓</span>
+                    <FaCheck className="text-white text-xs" />
                   </div>
                 )}
               </button>
@@ -416,8 +426,8 @@ const SignUpPage = () => {
               />
 
               {confirmPassword && password === confirmPassword && (
-                <p className="mt-2 text-xs text-green-600 dark:text-green-400 font-medium">
-                  ✓ Passwords match
+                <p className="mt-2 text-xs text-green-600 dark:text-green-400 font-medium flex items-center gap-1">
+                  <FaCheck /> Passwords match
                 </p>
               )}
             </div>
@@ -437,7 +447,7 @@ const SignUpPage = () => {
                 ) : (
                   <>
                     Create Account
-                    <span>→</span>
+                    <FaArrowRight />
                   </>
                 )}
               </span>

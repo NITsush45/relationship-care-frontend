@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaBriefcase, FaUsers } from "react-icons/fa";
+import { FaBriefcase, FaUsers, FaStar, FaArrowLeft } from "react-icons/fa";
 import doctorsData from "../data/doctors.json";
 import { API_BASE } from "../config";
 
@@ -119,7 +119,7 @@ const DoctorsListPage = () => {
 
                   {/* Rating */}
                   <div className="absolute top-4 right-4 bg-white/95 dark:bg-gray-900/95 rounded-full px-3 py-1 flex items-center gap-1 shadow-md">
-                    <span className="text-yellow-400">★</span>
+                    <FaStar className="text-yellow-400" />
                     <span className="font-semibold text-gray-800 dark:text-white">
                       {doctor.rating}
                     </span>
@@ -195,7 +195,8 @@ const DoctorsListPage = () => {
             whileTap={{ scale: 0.95 }}
             className="px-8 py-3 border-2 border-pink-400 dark:border-pink-500 text-pink-600 dark:text-pink-400 font-bold rounded-lg hover:bg-pink-50 dark:hover:bg-pink-950/40 transition-all duration-300"
           >
-            ← Back to Services
+            <FaArrowLeft className="mr-2 inline" />
+            Back to Services
           </motion.button>
         </motion.div>
       </div>

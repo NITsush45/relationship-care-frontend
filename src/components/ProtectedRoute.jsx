@@ -34,7 +34,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
       const fallback =
         role === "therapist"
           ? "/therapist-dashboard"
-          : "/user-dashboard";
+          : "/";
 
       return <Navigate to={fallback} replace />;
     }

@@ -61,7 +61,7 @@ const RoleRedirect = () => {
     return <Navigate to="/therapist-dashboard" replace />;
   }
 
-  return <Navigate to="/user-dashboard" replace />;
+  return <Navigate to="/" replace />;
 };
 
 export default RoleRedirect;

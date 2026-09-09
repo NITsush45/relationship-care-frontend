@@ -9,9 +9,12 @@ import {
   FaEnvelope,
   FaCheckCircle,
   FaWallet,
+  FaLock,
   FaCommentDots,
   FaPhoneAlt,
   FaVideo,
+  FaArrowRight,
+  FaArrowLeft,
 } from "react-icons/fa";
 import bookingServicesData from "../data/bookingServices.json";
 import timeSlotsData from "../data/timeSlots.json";
@@ -324,7 +327,7 @@ const BookAppointment = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-rose-50 to-pink-50 py-20 px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-white via-rose-50 to-pink-50 dark:from-gray-950 dark:via-gray-900 dark:to-pink-950/40 py-20 px-4 relative overflow-hidden transition-colors duration-300">
       {/* Floating Hearts Background */}
       <div className="fixed inset-0 pointer-events-none z-0">
         {hearts.map((heart) => (
@@ -420,8 +423,21 @@ const BookAppointment = () => {
                   <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity duration-500`} />
                   
                   <div className="relative">
-                    <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-r ${service.color} text-white mb-4 text-5xl group-hover:scale-110 transition-transform duration-300`}>
-                      {service.icon}
+                    {/* Service photo (replaces the old emoji icon box) */}
+                    <div className={`mb-4 h-36 w-36 overflow-hidden rounded-2xl bg-gradient-to-r ${service.color} p-1 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                      <img
+                        src={service.image || "/images/rel.jpg"}
+                        alt={service.name}
+                        onError={(event) => {
+                          if (event.currentTarget.dataset.fallbackApplied) {
+                            return;
+                          }
+
+                          event.currentTarget.dataset.fallbackApplied = "true";
+                          event.currentTarget.src = "/images/rel.jpg";
+                        }}
+                        className="h-full w-full rounded-xl object-cover"
+                      />
                     </div>
                     
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -434,7 +450,9 @@ const BookAppointment = () => {
                     
                     <div className="mt-6 flex items-center text-pink-600 font-semibold">
                       <span>Select Service</span>
-                      <span className="ml-2 group-hover:translate-x-2 transition-transform">→</span>
+                      <span className="ml-2 group-hover:translate-x-2 transition-transform">
+                        <FaArrowRight />
+                      </span>
                     </div>
                   </div>
                 </button>
@@ -453,8 +471,9 @@ const BookAppointment = () => {
                   <button
                     onClick={handlePrevMonth}
                     className="p-2 hover:bg-pink-100 dark:hover:bg-pink-900/20 rounded-full transition-colors"
+                    aria-label="Previous month"
                   >
-                    <span className="text-2xl">←</span>
+                    <FaArrowLeft className="text-2xl" />
                   </button>
                   
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -464,8 +483,9 @@ const BookAppointment = () => {
                   <button
                     onClick={handleNextMonth}
                     className="p-2 hover:bg-pink-100 dark:hover:bg-pink-900/20 rounded-full transition-colors"
+                    aria-label="Next month"
                   >
-                    <span className="text-2xl">→</span>
+                    <FaArrowRight className="text-2xl" />
                   </button>
                 </div>
 
@@ -542,7 +562,7 @@ const BookAppointment = () => {
                     onClick={() => setStep(3)}
                     className="w-full mt-8 px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                   >
-                    Continue to Details →
+                    Continue to Details <FaArrowRight className="ml-2 inline" />
                   </button>
                 )}
               </div>
@@ -594,7 +614,8 @@ const BookAppointment = () => {
               onClick={() => setStep(1)}
               className="mt-6 px-6 py-3 border-2 border-pink-300 dark:border-pink-500 text-pink-600 dark:text-pink-400 font-semibold rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-300"
             >
-              ← Back to Services
+              <FaArrowLeft className="mr-2 inline" />
+              Back to Services
             </button>
           </div>
         )}
@@ -699,7 +720,8 @@ const BookAppointment = () => {
                     type="submit"
                     className="w-full px-8 py-5 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Confirm &amp; Continue to Payment →
+                    Confirm &amp; Continue to Payment{" "}
+                    <FaArrowRight className="ml-1 inline" />
                   </button>
                   
                   <button
@@ -707,7 +729,8 @@ const BookAppointment = () => {
                     onClick={() => setStep(2)}
                     className="w-full px-6 py-3 border-2 border-pink-300 dark:border-pink-500 text-pink-600 dark:text-pink-400 font-semibold rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-300"
                   >
-                    ← Back to Date & Time
+                    <FaArrowLeft className="mr-2 inline" />
+                    Back to Date &amp; Time
                   </button>
                 </div>
               </form>
@@ -823,8 +846,8 @@ const BookAppointment = () => {
                 </button>
               )}
 
-              <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-6">
-                🔒 Payments are processed securely by NovaPay directly to the counselor's
+              <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-6 flex items-center justify-center gap-1.5">
+                <FaLock className="text-sm" /> Payments are processed securely by NovaPay directly to the counselor's
                 UPI account.
               </p>
 
@@ -833,7 +856,8 @@ const BookAppointment = () => {
                 onClick={() => setStep(3)}
                 className="w-full mt-6 px-6 py-3 border-2 border-pink-300 dark:border-pink-500 text-pink-600 dark:text-pink-400 font-semibold rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-300"
               >
-                ← Back to Details
+                <FaArrowLeft className="mr-2 inline" />
+                Back to Details
               </button>
             </div>
           </div>

@@ -10,10 +10,14 @@ import {
   FaEyeSlash,
   FaHeart,
   FaGoogle,
+  FaInfoCircle,
   FaLock,
+  FaUser,
+  FaUserMd,
 } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { API_BASE } from "../config";
+import { ROLES } from "../utils/roles";
 import {
   getOAuthErrorMessage,
   isSafeInternalPath,
@@ -27,8 +31,11 @@ const SignInPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [accountType, setAccountType] = useState(ROLES.USER);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const from = location.state?.from;
@@ -38,7 +45,7 @@ const SignInPage = () => {
     typeof from === "string" &&
     !from.startsWith("/sign-")
       ? from
-      : "/dashboard";
+      : "/";
 
   useEffect(() => {
     const oauthError = searchParams.get("error");
@@ -55,6 +62,7 @@ const SignInPage = () => {
       const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setNotice("");
 
     const trimmedEmail = email.trim();
 
@@ -68,13 +76,24 @@ const SignInPage = () => {
 
       const data = await login(trimmedEmail, password);
 
+      const actualRole = data?.user?.role || ROLES.USER;
+
+      // The login screen asks whether you are signing in as a User
+      // or a Therapist. If the pick does not match the account, we
+      // do NOT block the user - we tell them what the account is
+      // and take them where that account lives.
+      if (actualRole !== accountType) {
+        setNotice(
+          actualRole === ROLES.THERAPIST
+            ? "This account is registered as a Therapist. Taking you to your therapist workspace..."
+            : "This account is registered as a User. Taking you to your home feed..."
+        );
+      }
+
       // Therapists must finish onboarding (expertise segment + age +
       // mood + Welcome Doctor splash) before seeing patients.
-      // Route via /dashboard role-redirect OR check profile directly
-      // so the requested flow always holds after login.
-      try {
-        const role = data?.user?.role;
-        if (role === "therapist") {
+      if (actualRole === ROLES.THERAPIST) {
+        try {
           const token = localStorage.getItem("authToken");
           const profileRes = await fetch(`${API_BASE}/api/therapist/profile`, {
             headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -85,14 +104,23 @@ const SignInPage = () => {
               navigate("/therapist-onboarding", { replace: true });
               return;
             }
+          } else {
+            // Profile could not be read: onboarding is the safe route
+            // (it forwards to the dashboard on its own success paths).
+            navigate("/therapist-onboarding", { replace: true });
+            return;
           }
+        } catch (_) {
           navigate("/therapist-dashboard", { replace: true });
           return;
         }
-      } catch (_) {
-        // Fall through to default redirect on profile-check failure.
+
+        navigate("/therapist-dashboard", { replace: true });
+        return;
       }
 
+      // Users land on their destination directly. The questionnaire is
+      // signup-only, so it is never shown during a normal login.
       navigate(redirectUrl, { replace: true });
     } catch (err) {
       setError(err?.message || "Invalid email or password.");
@@ -102,10 +130,17 @@ const SignInPage = () => {
   };
 
   const handleGoogleLogin = () => {
+    if (loading || googleLoading) return;
+
+    setError("");
+    setNotice("");
+    setGoogleLoading(true);
+
     try {
       // The browser leaves the app during the Google redirect,
       // so remember the context in localStorage for the callback.
-      localStorage.setItem("pending_google_role", "user");
+      // Role + new/existing choice travels in the signed OAuth state.
+      localStorage.setItem("pending_google_role", accountType);
       localStorage.setItem("google_auth_action", "login");
 
       if (isSafeInternalPath(redirectUrl)) {
@@ -118,7 +153,12 @@ const SignInPage = () => {
       // to the role-aware dashboard redirect.
     }
 
-    window.location.href = `${API_BASE}/api/auth/google?role=user`;
+    // `client` tells the backend which frontend started the flow so
+    // the callback returns here (allowlisted server-side) instead of
+    // always bouncing to the production site.
+    window.location.href = `${API_BASE}/api/auth/google?role=${accountType}&mode=login&client=${encodeURIComponent(
+      window.location.origin
+    )}`;
   };
 
   return (
@@ -186,8 +226,64 @@ const SignInPage = () => {
               </div>
             )}
 
+            {/* Role-mismatch notice: informational, never blocking */}
+            {notice && (
+              <div
+                role="status"
+                className="mb-5 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-300"
+              >
+                <FaInfoCircle className="mt-0.5 flex-shrink-0" />
+
+                <span>{notice}</span>
+              </div>
+            )}
+
             {/* Sign In Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
+
+              {/* Account type: User or Therapist enters accordingly */}
+              <div>
+                <span className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-200">
+                  I am signing in as
+                </span>
+                <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Account type">
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={accountType === ROLES.USER}
+                    onClick={() => setAccountType(ROLES.USER)}
+                    disabled={loading || googleLoading}
+                    className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-bold transition-all ${
+                      accountType === ROLES.USER
+                        ? "border-pink-500 bg-pink-50 text-pink-700 shadow-sm dark:border-pink-500 dark:bg-pink-950/40 dark:text-pink-300"
+                        : "border-gray-200 bg-white text-gray-600 hover:border-pink-300 hover:bg-pink-50/50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                    }`}
+                  >
+                    <FaUser />
+                    User
+                  </button>
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={accountType === ROLES.THERAPIST}
+                    onClick={() => setAccountType(ROLES.THERAPIST)}
+                    disabled={loading || googleLoading}
+                    className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-bold transition-all ${
+                      accountType === ROLES.THERAPIST
+                        ? "border-purple-500 bg-purple-50 text-purple-700 shadow-sm dark:border-purple-500 dark:bg-purple-950/40 dark:text-purple-300"
+                        : "border-gray-200 bg-white text-gray-600 hover:border-purple-300 hover:bg-purple-50/50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                    }`}
+                  >
+                    <FaUserMd />
+                    Therapist
+                  </button>
+                </div>
+                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  {accountType === ROLES.THERAPIST
+                    ? "Therapists continue to onboarding, then the patient list."
+                    : "Users go straight to their home feed."}
+                </p>
+              </div>
 
               {/* Email */}
               <div>
@@ -318,12 +414,18 @@ const SignInPage = () => {
             <button
               type="button"
               onClick={handleGoogleLogin}
-              disabled={loading}
+              disabled={loading || googleLoading}
               className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white py-3.5 font-semibold text-gray-700 transition-all hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-gray-500/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-750"
             >
-              <FaGoogle className="text-red-500" />
+              {googleLoading ? (
+                <span className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-red-500" />
+              ) : (
+                <FaGoogle className="text-red-500" />
+              )}
 
-              Continue with Google
+              {googleLoading
+                ? "Redirecting to Google..."
+                : `Continue with Google as ${accountType === ROLES.THERAPIST ? "Therapist" : "User"}`}
             </button>
 
             {/* Terms */}

@@ -3,13 +3,13 @@ import { motion } from 'framer-motion';
 
 const PrivacyPolicy = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-10">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900 py-10 transition-colors duration-300">
       <div className="max-w-4xl mx-auto px-4">
         <motion.h1
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="text-4xl font-bold text-gray-800"
+          className="text-4xl font-bold text-gray-800 dark:text-white"
         >
           Privacy Policy
         </motion.h1>
@@ -18,7 +18,7 @@ const PrivacyPolicy = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="text-gray-600 mt-6"
+          className="text-gray-600 dark:text-gray-300 mt-6"
         >
           Your privacy is important to us. We are committed to protecting your personal information and ensuring transparency in our data practices.
         </motion.p>
@@ -29,11 +29,11 @@ const PrivacyPolicy = () => {
           transition={{ delay: 0.6, duration: 0.8 }}
           className="mt-8"
         >
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Information We Collect</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Information We Collect</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
             We collect information to provide and improve our services. The types of data we may collect include:
           </p>
-          <ul className="list-disc pl-6 text-gray-600">
+          <ul className="list-disc pl-6 text-gray-600 dark:text-gray-300">
             <motion.li
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -67,11 +67,11 @@ const PrivacyPolicy = () => {
           transition={{ delay: 1.4, duration: 0.8 }}
           className="mt-8"
         >
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">How We Use Your Information</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">How We Use Your Information</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
             The information we collect is used to:
           </p>
-          <ul className="list-disc pl-6 text-gray-600">
+          <ul className="list-disc pl-6 text-gray-600 dark:text-gray-300">
             <motion.li
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -105,11 +105,11 @@ const PrivacyPolicy = () => {
           transition={{ delay: 2.2, duration: 0.8 }}
           className="mt-8"
         >
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Your Rights</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Your Rights</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
             As a user, you have the right to:
           </p>
-          <ul className="list-disc pl-6 text-gray-600">
+          <ul className="list-disc pl-6 text-gray-600 dark:text-gray-300">
             <motion.li
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -143,11 +143,11 @@ const PrivacyPolicy = () => {
           transition={{ delay: 3.0, duration: 0.8 }}
           className="mt-8"
         >
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Contact Us</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Contact Us</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
             If you have any questions, concerns, or requests regarding your privacy, please contact us at:
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             <strong>Email:</strong> relationshipcare1212@gmail.com
           </p>
         </motion.div>
@@ -156,7 +156,7 @@ const PrivacyPolicy = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 3.3, duration: 0.8 }}
-          className="text-gray-600 mt-10"
+          className="text-gray-600 dark:text-gray-300 mt-10"
         >
           By using our services, you agree to the terms outlined in this Privacy Policy. Thank you for trusting us with your data.
         </motion.p>

@@ -228,3 +228,113 @@ body {
   margin-top: auto;
 }
 
+/* =========================================================
+   DARK MODE COVERAGE – PAGE-WIDE OVERRIDES
+
+   The theme toggling adds both `.theme-dark` and Tailwind's
+   `dark` class, but many components use light-only utilities
+   without a `dark:` variant. These overrides keep every page
+   readable in dark mode.
+========================================================= */
+
+.app-theme.theme-dark .bg-white\/60 {
+  background-color: rgba(36, 21, 68, 0.75) !important;
+}
+
+.app-theme.theme-dark .bg-white\/70 {
+  background-color: rgba(36, 21, 68, 0.85) !important;
+}
+
+.app-theme.theme-dark .bg-white\/90 {
+  background-color: rgba(23, 13, 43, 0.92) !important;
+}
+
+.app-theme.theme-dark .bg-white\/95 {
+  background-color: rgba(23, 13, 43, 0.95) !important;
+}
+
+.app-theme.theme-dark .bg-pink-50\/40,
+.app-theme.theme-dark .bg-pink-50\/50 {
+  background-color: rgba(42, 21, 77, 0.55) !important;
+}
+
+.app-theme.theme-dark .bg-pink-500\/10 {
+  background-color: rgba(236, 72, 153, 0.12) !important;
+}
+
+.app-theme.theme-dark .bg-pink-100\/50 {
+  background-color: rgba(50, 24, 95, 0.7) !important;
+}
+
+.app-theme.theme-dark .bg-purple-50 {
+  background-color: #241243 !important;
+}
+
+.app-theme.theme-dark .bg-indigo-50 {
+  background-color: #1d1740 !important;
+}
+
+.app-theme.theme-dark .bg-cyan-50 {
+  background-color: #16233f !important;
+}
+
+.app-theme.theme-dark .bg-green-50 {
+  background-color: #12301f !important;
+}
+
+.app-theme.theme-dark .bg-red-50 {
+  background-color: #33141c !important;
+}
+
+.app-theme.theme-dark .bg-amber-50 {
+  background-color: #322410 !important;
+}
+
+.app-theme.theme-dark .bg-yellow-50 {
+  background-color: #322a10 !important;
+}
+
+.app-theme.theme-dark .bg-orange-50 {
+  background-color: #322010 !important;
+}
+
+.app-theme.theme-dark .border-white\/70 {
+  border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+.app-theme.theme-dark .border-white\/10 {
+  border-color: rgba(148, 163, 184, 0.12) !important;
+}
+
+.app-theme.theme-dark .border-gray-50 {
+  border-color: rgba(148, 163, 184, 0.12) !important;
+}
+
+/* `dark:hover:bg-gray-750` is not a real Tailwind color – map it to
+   the elevated card tone used across the app. */
+.app-theme.theme-dark .dark\:hover\:bg-gray-750:hover {
+  background-color: #2b1b52 !important;
+}
+
+/* Success / error / warning text on tinted panels */
+.app-theme.theme-dark .text-green-700 {
+  color: #6ee7a0 !important;
+}
+
+.app-theme.theme-dark .text-red-700 {
+  color: #fda4af !important;
+}
+
+.app-theme.theme-dark .text-amber-700 {
+  color: #fcd34d !important;
+}
+
+/* Chat bubbles + tinted message rows (contact / confess) */
+.app-theme.theme-dark .bg-pink-600 {
+  background-color: #db2777 !important;
+}
+
+.app-theme.theme-dark img {
+  filter: brightness(0.92);
+}
+
